@@ -67,8 +67,7 @@ namespace DSharpPlusBase.Core
                 this._discordClient.SocketClosed += async e => await e.Client.ConnectAsync();
             }
 
-            var services = this.BotBaseCommandsNextConfiguration.Services;
-            this._commandsNextExtension = this._discordClient.UseCommandsNext(new CommandsNextConfiguration
+            var commandsNextConfiguration = new CommandsNextConfiguration
             {
                 CaseSensitive = this.BotBaseCommandsNextConfiguration.CaseSensitive,
                 DefaultHelpChecks = this.BotBaseCommandsNextConfiguration.DefaultHelpChecks,
@@ -80,18 +79,27 @@ namespace DSharpPlusBase.Core
                 PrefixResolver = this.BotBaseCommandsNextConfiguration.PrefixResolver,
                 StringPrefixes = this.BotBaseCommandsNextConfiguration.Prefixes,
                 UseDefaultCommandHandler = this.BotBaseCommandsNextConfiguration.UseDefaultCommandHandler,
-                Services = services != null ? new ServiceCollection()
-                                              .AddSingleton(services.GetServices<Type>())
-                                              .AddSingleton(botClassOrAssembly)
-                                              .BuildServiceProvider(true) :
-                                              new ServiceCollection()
-                                              .AddSingleton(botClassOrAssembly)
-                                              .BuildServiceProvider(true)
-            });
+            };
 
             var objectType = botClassOrAssembly.GetType();
-            this._commandsNextExtension.RegisterCommands(objectType.IsClass && objectType.Name != "RuntimeAssembly" ? objectType.Assembly : (Assembly)botClassOrAssembly);
+            bool checkClassAndName = objectType.IsClass && objectType.Name != "RuntimeAssembly";
+            var typeClass = checkClassAndName ? objectType : null;
 
+            var services = this.BotBaseCommandsNextConfiguration.Services;
+            commandsNextConfiguration.Services = services == null ? (typeClass != null ? new ServiceCollection().AddSingleton(typeClass)
+                                                                                                                .BuildServiceProvider(true) :
+                                                                                         new ServiceCollection().BuildServiceProvider(true)) : 
+                                                                    (typeClass != null ? new ServiceCollection().AddSingleton(services)
+                                                                                                                .AddSingleton(typeClass)
+                                                                                                                .BuildServiceProvider(true) :
+                                                                                         new ServiceCollection().AddSingleton(services)
+                                                                                                                .BuildServiceProvider(true));
+            this._commandsNextExtension = this._discordClient.UseCommandsNext(commandsNextConfiguration);
+
+            this._commandsNextExtension.RegisterCommands(checkClassAndName ? objectType.Assembly : (Assembly)botClassOrAssembly);
+
+            if (this.BotBaseInteractivityConfiguration == null)
+                this.BotBaseInteractivityConfiguration = new BotBaseInteractivityConfiguration();
             this._discordClient.UseInteractivity(new InteractivityConfiguration
             {
                 PaginationBehaviour = this.BotBaseInteractivityConfiguration.PaginationBehaviour,
@@ -100,6 +108,8 @@ namespace DSharpPlusBase.Core
                 PollBehaviour = this.BotBaseInteractivityConfiguration.PollBehaviour,
                 Timeout = this.BotBaseInteractivityConfiguration.Timeout
             });
+
+            this._discordClient.DebugLogger.LogMessage(LogLevel.Info, "DSharpPlusBase", "DSharpPlusBase started successfully", DateTime.Now);
 
             if (this.BotBaseConfiguration.ConnectAfterInitialize)
                 await this._discordClient.ConnectAsync();

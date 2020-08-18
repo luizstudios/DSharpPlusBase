@@ -17,7 +17,15 @@ namespace DSharpPlusBase.Core.Settings
     public sealed class BotBaseDiscordConfiguration
     {
         public bool AutoReconnect { get; set; } = false;
-        public string DateTimeFormat { get; set; } = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+        public string DateTimeFormat
+        {
+            get
+            {
+                var pcDateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
+
+                return $"{pcDateTimeFormat.ShortDatePattern} {pcDateTimeFormat.ShortTimePattern}";
+            }
+        }
         public GatewayCompressionLevel GatewayCompressionLevel { get; set; } = GatewayCompressionLevel.Stream;
         public TimeSpan HttpTimeout { get; set; } = TimeSpan.FromSeconds(10);
         public int LargeThreshold { get; set; } = 1000;
