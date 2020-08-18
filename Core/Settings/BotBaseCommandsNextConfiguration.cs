@@ -6,6 +6,9 @@ using System.Text;
 
 namespace DSharpPlusBase.Core.Settings
 {
+    /// <summary>
+    /// Class where CommandsNext settings are set.
+    /// </summary>
     public sealed class BotBaseCommandsNextConfiguration
     {
         public bool CaseSensitive { get; set; } = false;

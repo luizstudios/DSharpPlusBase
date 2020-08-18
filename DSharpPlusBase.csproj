@@ -2,14 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>1.0.29.0</AssemblyVersion>
-    <FileVersion>1.0.29.0</FileVersion>
+    <AssemblyVersion>1.0.36.0</AssemblyVersion>
+    <FileVersion>1.0.36.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00711" />
     <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00711" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00711" />
+    <PackageReference Include="DSharpPlus.Lavalink" Version="4.0.0-nightly-00711" />
   </ItemGroup>
 
 </Project>

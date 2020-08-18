@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace DSharpPlusBase.Core.Settings
 {
-    public sealed class BotBaseDiscordConfiguration
+    public sealed class BotBaseDiscordConfiguration 
     {
         public bool AutoReconnect { get; set; } = false;
         public string DateTimeFormat
@@ -25,6 +25,7 @@ namespace DSharpPlusBase.Core.Settings
 
                 return $"{pcDateTimeFormat.ShortDatePattern} {pcDateTimeFormat.ShortTimePattern}";
             }
+            set => this.DateTimeFormat = value;
         }
         public GatewayCompressionLevel GatewayCompressionLevel { get; set; } = GatewayCompressionLevel.Stream;
         public TimeSpan HttpTimeout { get; set; } = TimeSpan.FromSeconds(10);
