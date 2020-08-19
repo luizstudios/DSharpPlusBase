@@ -1,16 +1,15 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
-using DSharpPlusBase.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace DSharpPlusBase.Utilities
+namespace Entity.Base.Utilities
 {
-    public static class BotBaseUtilities
+    public static class EntityBaseUtilities
     {
         public static DiscordColor RandomColorEmbed()
         {
@@ -37,7 +36,7 @@ namespace DSharpPlusBase.Utilities
                     return emojiFind;
             }
 
-            throw new EmojiNotFoundException(oldNameEmoji);
+            return null;
         }
 
         public static ulong MentionToMemberId(string memberMention) 
@@ -62,7 +61,7 @@ namespace DSharpPlusBase.Utilities
                     return role;
             }
 
-            throw new RoleNotFoundException(oldNameRole);
+            return null;
         }
     }
 }

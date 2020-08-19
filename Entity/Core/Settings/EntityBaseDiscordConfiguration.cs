@@ -12,9 +12,9 @@ using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace DSharpPlusBase.Core.Settings
+namespace Entity.Base.Core.Settings
 {
-    public sealed class BotBaseDiscordConfiguration 
+    public sealed class EntityBaseDiscordConfiguration 
     {
         public bool AutoReconnect { get; set; } = false;
         public string DateTimeFormat

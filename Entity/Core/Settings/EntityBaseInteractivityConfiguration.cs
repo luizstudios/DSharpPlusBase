@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DSharpPlusBase.Core.Settings
+namespace Entity.Base.Core.Settings
 {
-    public sealed class BotBaseInteractivityConfiguration
+    public sealed class EntityBaseInteractivityConfiguration
     {
         public PaginationBehaviour PaginationBehaviour { get; set; } = PaginationBehaviour.WrapAround;
         public PaginationDeletion PaginationDeletion { get; set; } = PaginationDeletion.DeleteEmojis;
