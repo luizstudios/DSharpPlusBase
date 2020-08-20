@@ -44,12 +44,14 @@ namespace Entity.Base.Core
         /// </summary>
         public EntityBaseInteractivityConfiguration EntityBaseInteractivityConfiguration { get; set; }
 
+        internal static EntityBaseDiscordConfiguration _entityBaseDiscordConfiguration;
+
         internal static DiscordClient _discordClient;
         private CommandsNextExtension _commandsNextExtension;
         private InteractivityExtension _interactivityExtension;
 
         private readonly object _botClassOrAssembly;
-        
+
         /// <summary>
         /// Constructor of EntityBase.
         /// </summary>
@@ -63,8 +65,7 @@ namespace Entity.Base.Core
         { 
             #region DiscordClient
             var entityBaseDiscordConfiguration = this.EntityBaseDiscordConfiguration;
-            if (entityBaseDiscordConfiguration == null)
-                throw new NullReferenceException("Instantiate the EntityBaseDiscordConfiguration class!");
+            _entityBaseDiscordConfiguration = entityBaseDiscordConfiguration ?? throw new NullReferenceException("Instantiate the EntityBaseDiscordConfiguration class!");
             var autoReconnect = entityBaseDiscordConfiguration.AutoReconnect;
             var udpClientFactory = entityBaseDiscordConfiguration.UdpClientFactory;
             var webSocketClientFactory = entityBaseDiscordConfiguration.WebSocketClientFactory;
