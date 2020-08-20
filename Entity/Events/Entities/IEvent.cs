@@ -28,7 +28,7 @@ namespace Entity.Base.Events.Entities
         /// Method that activates the event.
         /// </summary>
         /// <param name="discordClient">DiscordClient to set the event internally.</param>
-        void Activate(EntityBaseEventsConfiguration entityBaseEventsConfiguration, DiscordClient discordClient);
+        void Activate(DiscordClient discordClient);
 
         /// <summary>
         /// Method that disables the event.

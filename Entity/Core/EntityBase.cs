@@ -44,29 +44,23 @@ namespace Entity.Base.Core
         /// </summary>
         public EntityBaseInteractivityConfiguration EntityBaseInteractivityConfiguration { get; set; }
 
-        /// <summary>
-        /// Class where the Discord and CommandsNext events are configured.
-        /// </summary>
-        public EntityBaseEventsConfiguration EntityBaseEventsConfiguration { get; set; }
-
-        private DiscordClient _discordClient;
+        internal static DiscordClient _discordClient;
         private CommandsNextExtension _commandsNextExtension;
         private InteractivityExtension _interactivityExtension;
-        private LavalinkExtension _lavalinkExtension;
 
-        private IReadOnlyDictionary<IEvent, Type> _registeredEvents;
-
+        private readonly object _botClassOrAssembly;
+        
         /// <summary>
         /// Constructor of EntityBase.
         /// </summary>
-        public EntityBase() { }
+        /// <param name="botClassOrAssembly">Bot class (Use the "this" keyword if the class where you are instantiating the bot is not static) or the assembly (Use Assembly.GetEntryAssembly()) to register commands in CommandsNext.</param>
+        public EntityBase(object botClassOrAssembly) => this._botClassOrAssembly = botClassOrAssembly;
 
         /// <summary>
         /// Method where the bot settings previously defined are applied.
         /// </summary>
-        /// <param name="botClassOrAssembly">Bot class (Use the "this" keyword if the class where you are instantiating the bot is not static) or the assembly (Use Assembly.GetEntryAssembly()) to register commands in CommandsNext.</param>
-        public async Task InitializeAsync(object botClassOrAssembly)
-        {
+        public void Initialize()
+        { 
             #region DiscordClient
             var entityBaseDiscordConfiguration = this.EntityBaseDiscordConfiguration;
             if (entityBaseDiscordConfiguration == null)
@@ -98,31 +92,18 @@ namespace Entity.Base.Core
             if (webSocketClientFactory != null)
                 discordConfiguration.WebSocketClientFactory = webSocketClientFactory;
 
-            this._discordClient = new DiscordClient(discordConfiguration);
+            _discordClient = new DiscordClient(discordConfiguration);
 
             if (this.EntityBaseConfiguration == null)
                 this.EntityBaseConfiguration = new EntityBaseConfiguration();
-
             var entityBaseConfiguration = this.EntityBaseConfiguration;
             if (entityBaseConfiguration.AutoReconnect)
             {
                 if (autoReconnect)
                     throw new InvalidOperationException("To use the base AutoReconnect, set the DSharpPlus AutoReconnect to false!");
 
-                this._discordClient.SocketClosed += async e => await e.Client.ConnectAsync();
+                _discordClient.SocketClosed += async e => await e.Client.ConnectAsync();
             }
-            
-            var registeredEvents = new Dictionary<IEvent, Type>();
-            foreach (var eventType in typeof(EntityBase).Assembly.GetTypes().Where(i => i.GetInterfaces().Contains(typeof(IEvent))))
-            {
-                var iEvent = (IEvent)Activator.CreateInstance(eventType);
-                iEvent.Activate(this.EntityBaseEventsConfiguration, this._discordClient);
-
-                if (iEvent.IsActived)
-                    if (!registeredEvents.Contains(new KeyValuePair<IEvent, Type>(iEvent, eventType)))
-                        registeredEvents.TryAdd(iEvent, eventType);
-            }
-            this._registeredEvents = new Dictionary<IEvent, Type>(registeredEvents);
             #endregion
 
             #region CommandsNext
@@ -142,8 +123,9 @@ namespace Entity.Base.Core
                 Services = entityBaseCommandsNextConfiguration.Services
             };
 
-            this._commandsNextExtension = this._discordClient.UseCommandsNext(commandsNextConfiguration);
-            
+            this._commandsNextExtension = _discordClient.UseCommandsNext(commandsNextConfiguration);
+
+            var botClassOrAssembly = this._botClassOrAssembly;
             var objectType = botClassOrAssembly.GetType();
             this._commandsNextExtension.RegisterCommands(objectType.IsClass && objectType.Name != "RuntimeAssembly" ? objectType.Assembly : (Assembly)botClassOrAssembly);
             #endregion
@@ -153,7 +135,7 @@ namespace Entity.Base.Core
                 this.EntityBaseInteractivityConfiguration = new EntityBaseInteractivityConfiguration();
 
             var entityBaseInteractivityConfiguration = this.EntityBaseInteractivityConfiguration;
-            this._interactivityExtension = this._discordClient.UseInteractivity(new InteractivityConfiguration
+            this._interactivityExtension = _discordClient.UseInteractivity(new InteractivityConfiguration
             {
                 PaginationBehaviour = entityBaseInteractivityConfiguration.PaginationBehaviour,
                 PaginationDeletion = entityBaseInteractivityConfiguration.PaginationDeletion,
@@ -163,10 +145,7 @@ namespace Entity.Base.Core
             });
             #endregion
 
-            this._discordClient.DebugLogger.LogMessage(LogLevel.Info, "EntityBase", "The EntityBase was started successfully! By: luizfernandonb", DateTime.Now);
-
-            if (entityBaseConfiguration.ConnectAfterInitialize)
-                await this._discordClient.ConnectAsync();
+            _discordClient.DebugLogger.LogMessage(LogLevel.Info, "EntityBase", $"The EntityBase was started successfully! By: luizfernandonb | Version: {typeof(EntityBase).Assembly.GetName().Version}", DateTime.Now);
         }
 
         /// <summary>
@@ -174,11 +153,7 @@ namespace Entity.Base.Core
         /// </summary>
         public async Task ConnectToDiscordAsync()
         {
-            await this._discordClient.ConnectAsync();
-
-            if (this.EntityBaseConfiguration.ConnectAfterInitialize)
-                throw new InvalidOperationException("To use this method, set the ConnectAfterInitialize property of BotBaseConfiguration to false!");
-
+            await _discordClient.ConnectAsync();
             await Task.Delay(-1);
         }
 
@@ -187,7 +162,7 @@ namespace Entity.Base.Core
         /// </summary>
         /// <returns>The DiscordClient.</returns>
         /// <exception cref="NullReferenceException"></exception>
-        public DiscordClient GetDiscordClient() => this._discordClient ?? throw new NullReferenceException("The DiscordClient is null, initialize the bot!");
+        public DiscordClient GetDiscordClient() => _discordClient ?? throw new NullReferenceException("The DiscordClient is null, initialize the bot!");
 
         /// <summary>
         /// Get the CommandsNext.
@@ -208,13 +183,6 @@ namespace Entity.Base.Core
         /// </summary>
         /// <returns>The Lavalink.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public LavalinkExtension GetLavalink() => this._lavalinkExtension ?? throw new NotImplementedException("The Lavalink has not yet been implemented!");
-
-        /// <summary>
-        /// It takes all the events that were registered in the bot.
-        /// </summary>
-        /// <returns>An IReadOnlyDictionary with all events logged.</returns>
-        public IReadOnlyDictionary<IEvent, Type> GetRegisteredEvents() 
-            => this._registeredEvents ?? throw new NullReferenceException("The dictionary of registered events is null.");
+        //public LavalinkExtension GetLavalink() => this._lavalinkExtension ?? throw new NotImplementedException("The Lavalink has not yet been implemented!");
     }
 }

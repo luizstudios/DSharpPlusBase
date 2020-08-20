@@ -1,8 +1,10 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
+using Entity.Base.Core;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,57 +13,45 @@ namespace Entity.Base.Utilities
 {
     public static class EntityBaseUtilities
     {
-        public static DiscordColor RandomColorEmbed()
+        public static DiscordColor RandomColor()
         {
             var rgbColor = new Random();
             return new DiscordColor((byte)rgbColor.Next(0, 255), (byte)rgbColor.Next(0, 255), (byte)rgbColor.Next(0, 255));
         }
 
-        public static DiscordEmoji FindEmoji(DiscordClient discordClient, string emojiName)
+        internal static DiscordEmoji FindEmoji(string emojiNameOrId)
         {
-            if (discordClient == null)
-                throw new ArgumentNullException("The DiscordClient can't be null!");
-            else if (string.IsNullOrWhiteSpace(emojiName))
-                throw new ArgumentNullException("The emoji can't be null!");
+            if (string.IsNullOrWhiteSpace(emojiNameOrId))
+                throw new ArgumentNullException("The emoji name or Id can't be null!");
 
-            string oldNameEmoji = emojiName;
-            emojiName = emojiName.ToLower();
-            ulong.TryParse(emojiName, out ulong emojiId);
+            var discordClient = EntityBase._discordClient;
+
+            string oldNameEmoji = emojiNameOrId;
+            emojiNameOrId = emojiNameOrId.ToLower();
+            ulong.TryParse(emojiNameOrId, out ulong emojiId);
 
             foreach (var guild in discordClient.Guilds.Values)
             {
-                var emojiFind = guild.Emojis.Values.FirstOrDefault(e => e.Name.ToLower() == emojiName.Replace(":", "") || e.Id == emojiId || 
-                                                                        e.ToString().ToLower() == emojiName);
-                if (emojiFind != null)
-                    return emojiFind;
+                var emoji = guild.Emojis.Values.FirstOrDefault(e => e.Name.ToLower() == emojiNameOrId.Replace(":", "") || e.Id == emojiId ||
+                                                                    e.ToString().ToLower() == emojiNameOrId);
+                if (emoji != null)
+                    return emoji;
             }
 
-            return null;
-        }
-
-        public static ulong MentionToMemberId(string memberMention) 
-            => !string.IsNullOrWhiteSpace(memberMention) ? ulong.Parse(string.Join(string.Empty, Regex.Split(memberMention, @"[^\d]"))) :
-                                                           throw new ArgumentNullException("The member mention can't be null!");
-
-        public static DiscordRole FindRole(DiscordClient discordClient, string roleName)
-        {
-            if (discordClient == null)
-                throw new ArgumentNullException("The DiscordClient can't be null!");
-            else if (string.IsNullOrWhiteSpace(roleName))
-                throw new ArgumentNullException("The emoji can't be null!");
-
-            string oldNameRole = roleName;
-            roleName = roleName.ToLower();
-            ulong.TryParse(roleName, out ulong roleId);
-
-            foreach (var guild in discordClient.Guilds.Values)
+            try
             {
-                var role = guild.Roles.Values.FirstOrDefault(r => r.Name.ToLower() == roleName || r.Mention.ToLower() == roleName || r.Id == roleId);
-                if (role != null)
-                    return role;
+                var emojiFromDiscord = DiscordEmoji.FromName(discordClient,
+                                                             $"{(emojiNameOrId.StartsWith(":") && emojiNameOrId.EndsWith(":") ? emojiNameOrId : $":{emojiNameOrId}:")}");
+                return emojiFromDiscord;
             }
+            catch { }
 
-            return null;
+            //UnicodeCategory? unicodeCategory = null;
+            //if (char.TryParse(stringEmojiOrId, out char resultChar))
+            //    unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(resultChar);
+            
+            return !string.IsNullOrWhiteSpace(emojiNameOrId) && CharUnicodeInfo.GetUnicodeCategory(emojiNameOrId, 0) == UnicodeCategory.OtherSymbol ?
+                   DiscordEmoji.FromUnicode(discordClient, emojiNameOrId) : null;
         }
     }
 }
