@@ -11,10 +11,16 @@ namespace Entity.Base.Entity.Utilities.Extensions
 {
     public static class DiscordClientExtensions
     {
-        public static DiscordEmoji FindEmoji(this DiscordClient _, string emojiNameOrId) => EntityBaseUtilities.FindEmoji(emojiNameOrId);
+        public static DiscordEmoji FindEmoji(this DiscordClient discordClient, string emojiNameOrId)
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : 
+                                       string.IsNullOrWhiteSpace(emojiNameOrId) ? throw new ArgumentNullException("The emoji name or Id can't be null!") :
+                                                                                  EntityBaseUtilities.FindEmoji(emojiNameOrId);
 
         public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId)
         {
+            if (discordClient == null)
+                throw new ArgumentNullException("The DiscordClient can't be null!");
+
             if (string.IsNullOrWhiteSpace(roleNameOrId))
                 throw new ArgumentNullException("The role name or Id can't be null!");
 

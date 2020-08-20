@@ -15,6 +15,9 @@ namespace Entity.Base.Entity.Utilities.Extensions
     {
         public static DiscordMember ToDiscordMember(this string stringMemberOrId)
         {
+            if (string.IsNullOrWhiteSpace(stringMemberOrId))
+                throw new ArgumentNullException("The member mention or Id can't be null!");
+
             stringMemberOrId = stringMemberOrId.ToLower();
 
             ulong memberId = 0;
@@ -36,6 +39,9 @@ namespace Entity.Base.Entity.Utilities.Extensions
 
         public static DiscordRole ToDiscordRole(this string stringRoleOrId)
         {
+            if (string.IsNullOrWhiteSpace(stringRoleOrId))
+                throw new ArgumentNullException("The member mention or Id can't be null!");
+
             ulong memberId = 0;
             if (ulong.TryParse(string.Join(string.Empty, Regex.Split(stringRoleOrId, @"[^\d]")), out ulong resultMemberId))
                 memberId = resultMemberId;

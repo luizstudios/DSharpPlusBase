@@ -10,6 +10,9 @@ namespace Entity.Base.Entity.Utilities.Extensions
     {
         public static DiscordEmoji FindEmoji(this DiscordGuild guild, string emojiNameOrId)
         {
+            if (guild == null)
+                throw new ArgumentNullException("The guild can't be null!");
+
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
                 throw new ArgumentNullException("The emoji name or Id can't be null!");
 
@@ -22,6 +25,9 @@ namespace Entity.Base.Entity.Utilities.Extensions
 
         public static DiscordRole FindRole(this DiscordGuild guild, string roleNameOrId)
         {
+            if (guild == null)
+                throw new ArgumentNullException("The guild can't be null!");
+
             if (string.IsNullOrWhiteSpace(roleNameOrId))
                 throw new ArgumentNullException("The emoji name or Id can't be null!");
 
@@ -30,11 +36,13 @@ namespace Entity.Base.Entity.Utilities.Extensions
             return guild.Roles.Values.FirstOrDefault(r => r.Name.ToLower() == roleNameOrId.ToLower() || r.Id == resultId);
         }
 
-        public static IReadOnlyList<DiscordRole> GetOrganizedRoles(this DiscordGuild guild) => guild.Roles.Values.OrderByDescending(r => r.Position).ToList();
+        public static IReadOnlyList<DiscordRole> GetOrganizedRoles(this DiscordGuild guild) 
+            => guild == null ? throw new ArgumentNullException("The guild can't be null!") : guild.Roles.Values.OrderByDescending(r => r.Position).ToList();
 
-        public static DiscordRole GetHighestRole(this DiscordGuild guild) => guild.GetOrganizedRoles().FirstOrDefault();
+        public static DiscordRole GetHighestRole(this DiscordGuild guild) 
+            => guild == null ? throw new ArgumentNullException("The guild can't be null!") : guild.GetOrganizedRoles().FirstOrDefault();
 
         public static DiscordRole GetLowestRoleAfterEveryone(this DiscordGuild guild) 
-            => guild.GetOrganizedRoles().Where(r => r.Name.ToLower() != "@everyone").LastOrDefault();
+            => guild == null ? throw new ArgumentNullException("The guild can't be null!") : guild.GetOrganizedRoles().Where(r => r.Name.ToLower() != "@everyone").LastOrDefault();
     }
 }
