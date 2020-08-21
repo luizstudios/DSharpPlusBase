@@ -41,6 +41,6 @@ namespace Entity.Base.Core.Settings
         public bool UseRelativeRatelimit { get; set; } = true;
         public bool UseInternalLogHandler { get; set; } = true;
         public IWebProxy WebProxy { get; set; } = null;
-        public WebSocketClientFactoryDelegate WebSocketClientFactory { get; set; } = null;
+        public WebSocketClientFactoryDelegate WebSocketClientFactory { get; set; } = WebSocketClient.CreateNew;
     }
 }

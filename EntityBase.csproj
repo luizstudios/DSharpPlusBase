@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>1.0.95.0</AssemblyVersion>
-    <FileVersion>1.0.95.0</FileVersion>
+    <AssemblyVersion>1.0.121.0</AssemblyVersion>
+    <FileVersion>1.0.121.0</FileVersion>
     <RootNamespace>Entity.Base</RootNamespace>
   </PropertyGroup>
 
@@ -12,10 +12,6 @@
     <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00711" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00711" />
     <PackageReference Include="DSharpPlus.Lavalink" Version="4.0.0-nightly-00711" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Entity\Events\Entities\" />
   </ItemGroup>
 
 </Project>

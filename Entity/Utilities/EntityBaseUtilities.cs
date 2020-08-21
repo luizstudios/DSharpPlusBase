@@ -40,9 +40,7 @@ namespace Entity.Base.Utilities
 
             try
             {
-                var emojiFromDiscord = DiscordEmoji.FromName(discordClient,
-                                                             $"{(emojiNameOrId.StartsWith(":") && emojiNameOrId.EndsWith(":") ? emojiNameOrId : $":{emojiNameOrId}:")}");
-                return emojiFromDiscord;
+                return DiscordEmoji.FromName(discordClient, $"{(emojiNameOrId.StartsWith(":") && emojiNameOrId.EndsWith(":") ? emojiNameOrId : $":{emojiNameOrId}:")}");
             }
             catch { }
 
@@ -52,6 +50,20 @@ namespace Entity.Base.Utilities
             
             return !string.IsNullOrWhiteSpace(emojiNameOrId) && CharUnicodeInfo.GetUnicodeCategory(emojiNameOrId, 0) == UnicodeCategory.OtherSymbol ?
                    DiscordEmoji.FromUnicode(discordClient, emojiNameOrId) : null;
+        }
+
+        internal static string RemoveAccents(string text)
+        {
+            var sbReturn = new StringBuilder();
+
+            var arrayText = text.Normalize(NormalizationForm.FormD).ToCharArray();
+            foreach (char letter in arrayText)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
+                    sbReturn.Append(letter);
+            }
+
+            return sbReturn.ToString();
         }
     }
 }

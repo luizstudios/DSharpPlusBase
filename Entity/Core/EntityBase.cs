@@ -6,7 +6,6 @@ using DSharpPlus.Lavalink;
 using DSharpPlus.Net.Udp;
 using DSharpPlus.Net.WebSocket;
 using Entity.Base.Core.Settings;
-using Entity.Base.Events.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -68,7 +67,6 @@ namespace Entity.Base.Core
             _entityBaseDiscordConfiguration = entityBaseDiscordConfiguration ?? throw new NullReferenceException("Instantiate the EntityBaseDiscordConfiguration class!");
             var autoReconnect = entityBaseDiscordConfiguration.AutoReconnect;
             var udpClientFactory = entityBaseDiscordConfiguration.UdpClientFactory;
-            var webSocketClientFactory = entityBaseDiscordConfiguration.WebSocketClientFactory;
             var discordConfiguration = new DiscordConfiguration
             {
                 AutoReconnect = autoReconnect,
@@ -86,12 +84,11 @@ namespace Entity.Base.Core
                 TokenType = entityBaseDiscordConfiguration.TokenType,
                 UseInternalLogHandler = entityBaseDiscordConfiguration.UseInternalLogHandler,
                 UseRelativeRatelimit = entityBaseDiscordConfiguration.UseRelativeRatelimit,
+                WebSocketClientFactory = entityBaseDiscordConfiguration.WebSocketClientFactory 
             };
 
             if (udpClientFactory != null)
                 discordConfiguration.UdpClientFactory = udpClientFactory;
-            if (webSocketClientFactory != null)
-                discordConfiguration.WebSocketClientFactory = webSocketClientFactory;
 
             _discordClient = new DiscordClient(discordConfiguration);
 

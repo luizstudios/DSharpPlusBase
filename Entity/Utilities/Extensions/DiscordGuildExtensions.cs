@@ -39,10 +39,19 @@ namespace Entity.Base.Entity.Utilities.Extensions
         public static IReadOnlyList<DiscordRole> GetOrganizedRoles(this DiscordGuild guild) 
             => guild == null ? throw new ArgumentNullException("The guild can't be null!") : guild.Roles.Values.OrderByDescending(r => r.Position).ToList();
 
-        public static DiscordRole GetHighestRole(this DiscordGuild guild) 
-            => guild == null ? throw new ArgumentNullException("The guild can't be null!") : guild.GetOrganizedRoles().FirstOrDefault();
+        public static DiscordRole GetHighestRole(this DiscordGuild guild, Func<DiscordRole, bool> predicate = null)
+        {
+            var organizedRoles = guild.GetOrganizedRoles();
+            return guild == null ? throw new ArgumentNullException("The guild can't be null!") : predicate == null ? organizedRoles.FirstOrDefault() : 
+                                                                                                                     organizedRoles.FirstOrDefault(predicate);
+        }
 
-        public static DiscordRole GetLowestRoleAfterEveryone(this DiscordGuild guild) 
-            => guild == null ? throw new ArgumentNullException("The guild can't be null!") : guild.GetOrganizedRoles().Where(r => r.Name.ToLower() != "@everyone").LastOrDefault();
+        public static DiscordRole GetLowestRoleAfterEveryone(this DiscordGuild guild, Func<DiscordRole, bool> predicate = null)
+        {
+            var organizedRoles = guild.GetOrganizedRoles();
+            return guild == null ? throw new ArgumentNullException("The guild can't be null!") : 
+                                   predicate == null ? organizedRoles.Where(r => r.Name.ToLower() != "@everyone").LastOrDefault() :
+                                                       organizedRoles.Where(r => r.Name.ToLower() != "@everyone").LastOrDefault(predicate);
+        }
     }
 }

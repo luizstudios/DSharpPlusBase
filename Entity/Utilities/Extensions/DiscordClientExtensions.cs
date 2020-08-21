@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Entity.Base.Entity.Utilities.Extensions
 {
@@ -16,22 +17,42 @@ namespace Entity.Base.Entity.Utilities.Extensions
                                        string.IsNullOrWhiteSpace(emojiNameOrId) ? throw new ArgumentNullException("The emoji name or Id can't be null!") :
                                                                                   EntityBaseUtilities.FindEmoji(emojiNameOrId);
 
-        public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId)
+        public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId) 
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : string.IsNullOrWhiteSpace(roleNameOrId) ?
+                                       throw new ArgumentNullException("The role name or Id can't be null!") : StringExtensions.ToDiscordRole(roleNameOrId);
+
+        public static async Task SendSameMessageToMultipleChannelsAsync(this DiscordClient discordClient, string content = null, bool tts = false, DiscordEmbed embed = null, 
+                                                                        IEnumerable<IMention> mentions = null, params DiscordChannel[] channels)
         {
             if (discordClient == null)
                 throw new ArgumentNullException("The DiscordClient can't be null!");
 
-            if (string.IsNullOrWhiteSpace(roleNameOrId))
-                throw new ArgumentNullException("The role name or Id can't be null!");
+            foreach (var channel in channels)
+                await channel.SendMessageAsync(content, tts, embed, mentions);
+        }
 
-            foreach (var guild in discordClient.Guilds.Values)
-            {
-                var role = guild.Roles.Values.FirstOrDefault(r => r.Name == roleNameOrId.ToLower() || r.Id == roleNameOrId.ToDiscordRole()?.Id);
-                if (role != null)
-                    return role;
-            }
+        public static DiscordMember FindMember(this DiscordClient discordClient, string memberNameOrId) 
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : string.IsNullOrWhiteSpace(memberNameOrId) ?
+                                       throw new ArgumentNullException("The member name or Id can't be null!") : StringExtensions.ToDiscordMember(memberNameOrId);
 
-            return null;
+        public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordMember member, Permissions allow = Permissions.None, 
+                                                                     Permissions deny = Permissions.None, string reason = null, params DiscordChannel[] channels)
+        {
+            if (discordClient == null)
+                throw new ArgumentNullException("The DiscordClient can't be null!");
+
+            foreach (var channel in channels)
+                await channel.AddOverwriteAsync(member, allow, deny, reason);
+        }
+
+        public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordRole role, Permissions allow = Permissions.None,
+                                                                     Permissions deny = Permissions.None, string reason = null, params DiscordChannel[] channels)
+        {
+            if (discordClient == null)
+                throw new ArgumentNullException("The DiscordClient can't be null!");
+
+            foreach (var channel in channels)
+                await channel.AddOverwriteAsync(role, allow, deny, reason);
         }
     }
 }
