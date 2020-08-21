@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Entity.Base.Entity.Utilities.Extensions
+namespace Entity.Base.Utilities.Extensions
 {
     public static class DiscordRoleExtensions
     {

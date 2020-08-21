@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Base.Attributes
+namespace Entity.Base.Utilities.Attributes
 {
     /// <summary>
     /// Defines whether the command is restricted to these servers only.

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Base.Entity.Utilities.Extensions
+namespace Entity.Base.Utilities.Extensions
 {
     public static class DiscordClientExtensions
     {

@@ -2,6 +2,7 @@
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
 using Entity.Base.Core;
+using Entity.Base.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,12 +14,6 @@ namespace Entity.Base.Utilities
 {
     public static class EntityBaseUtilities
     {
-        public static DiscordColor RandomColor()
-        {
-            var rgbColor = new Random();
-            return new DiscordColor((byte)rgbColor.Next(0, 255), (byte)rgbColor.Next(0, 255), (byte)rgbColor.Next(0, 255));
-        }
-
         internal static DiscordEmoji FindEmoji(string emojiNameOrId)
         {
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
@@ -44,26 +39,11 @@ namespace Entity.Base.Utilities
             }
             catch { }
 
-            //UnicodeCategory? unicodeCategory = null;
-            //if (char.TryParse(stringEmojiOrId, out char resultChar))
-            //    unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(resultChar);
-            
             return !string.IsNullOrWhiteSpace(emojiNameOrId) && CharUnicodeInfo.GetUnicodeCategory(emojiNameOrId, 0) == UnicodeCategory.OtherSymbol ?
                    DiscordEmoji.FromUnicode(discordClient, emojiNameOrId) : null;
         }
 
         internal static string RemoveAccents(string text)
-        {
-            var sbReturn = new StringBuilder();
-
-            var arrayText = text.Normalize(NormalizationForm.FormD).ToCharArray();
-            foreach (char letter in arrayText)
-            {
-                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
-                    sbReturn.Append(letter);
-            }
-
-            return sbReturn.ToString();
-        }
+            => text.Normalize(NormalizationForm.FormD).ToCharArray().Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark).ToReadableString();
     }
 }

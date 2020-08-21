@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Entity.Base.Entity.Utilities.Extensions
+namespace Entity.Base.Utilities.Extensions
 {
     public static class DateTimeExtensions
     {
