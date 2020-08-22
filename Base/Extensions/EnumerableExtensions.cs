@@ -1,10 +1,8 @@
-﻿using DSharpPlus.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Entity.Base.Utilities.Extensions
+namespace DiscordBotBase.Extensions
 {
     public static class EnumerableExtensions
     {
@@ -50,25 +48,6 @@ namespace Entity.Base.Utilities.Extensions
             var list = enumerable.ToList();
             return list == null ? throw new ArgumentNullException("The list can't be null!") : element == null ?
                                   throw new ArgumentNullException("The element can't be null!") : list.FindIndex(startIndex, e => e.Equals(element)) + 1 == list.Count;
-        }
-
-
-        public static string ToReadableString(this char[] charArray)
-        {
-            var stringBuilder = new StringBuilder();
-            foreach (char c in charArray)
-                stringBuilder.Append(c);
-
-            return stringBuilder.ToString();
-        }
-
-        public static string ToReadableString(this IEnumerable<char> charEnumerable)
-        {
-            var stringBuilder = new StringBuilder();
-            foreach (char c in charEnumerable)
-                stringBuilder.Append(c);
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -1,20 +1,14 @@
 ﻿using DSharpPlus;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Interactivity;
 using DSharpPlus.Net.Udp;
 using DSharpPlus.Net.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
-using System.Threading.Tasks;
 
-namespace Entity.Base.Core.Settings
+namespace DiscordBotBase.Core.Settings
 {
-    public sealed class EntityBaseDiscordConfiguration 
+    public sealed class DiscordConfiguration
     {
         public bool AutoReconnect { get; set; } = false;
         public string DateTimeFormat

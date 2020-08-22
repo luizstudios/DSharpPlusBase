@@ -3,14 +3,13 @@ using DSharpPlus.CommandsNext.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Entity.Base.Core.Settings
+namespace DiscordBotBase.Core.Settings
 {
     /// <summary>
     /// Class where CommandsNext settings are set.
     /// </summary>
-    public sealed class EntityBaseCommandsNextConfiguration
+    public sealed class CommandsConfiguration
     {
         /// <summary>
         /// <para>Sets whether strings should be matched in a case-sensitive manner.</para>

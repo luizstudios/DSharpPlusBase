@@ -1,25 +1,20 @@
-﻿using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.Exceptions;
-using Entity.Base.Core;
-using Entity.Base.Utilities.Extensions;
+﻿using DSharpPlus.Entities;
+using DiscordBotBase.Core;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
-namespace Entity.Base.Utilities
+namespace DiscordBotBase.Utilities
 {
-    public static class EntityBaseUtilities
+    public static class BaseUtilities
     {
         internal static DiscordEmoji FindEmoji(string emojiNameOrId)
         {
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
                 throw new ArgumentNullException("The emoji name or Id can't be null!");
 
-            var discordClient = EntityBase._discordClient;
+            var discordClient = BotBase._discordClient;
 
             string oldNameEmoji = emojiNameOrId;
             emojiNameOrId = emojiNameOrId.ToLower();
@@ -44,6 +39,12 @@ namespace Entity.Base.Utilities
         }
 
         internal static string RemoveAccents(string text)
-            => text.Normalize(NormalizationForm.FormD).ToCharArray().Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark).ToReadableString();
+        {
+            var stringBuilder = new StringBuilder();
+            foreach (char c in text.Normalize(NormalizationForm.FormD).ToCharArray().Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark))
+                stringBuilder.Append(c);
+
+            return stringBuilder.ToString();
+        }
     }
 }

@@ -1,27 +1,24 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
-using Entity.Base.Core;
-using Entity.Base.Utilities;
+using DiscordBotBase.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Base.Utilities.Extensions
+namespace DiscordBotBase.Extensions
 {
     public static class DiscordClientExtensions
     {
         public static DiscordEmoji FindEmoji(this DiscordClient discordClient, string emojiNameOrId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : 
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") :
                                        string.IsNullOrWhiteSpace(emojiNameOrId) ? throw new ArgumentNullException("The emoji name or Id can't be null!") :
-                                                                                  EntityBaseUtilities.FindEmoji(emojiNameOrId);
+                                                                                  BaseUtilities.FindEmoji(emojiNameOrId);
 
-        public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId) 
+        public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId)
             => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : string.IsNullOrWhiteSpace(roleNameOrId) ?
                                        throw new ArgumentNullException("The role name or Id can't be null!") : StringExtensions.ToDiscordRole(roleNameOrId);
 
-        public static async Task SendSameMessageToMultipleChannelsAsync(this DiscordClient discordClient, string content = null, bool tts = false, DiscordEmbed embed = null, 
+        public static async Task SendSameMessageToMultipleChannelsAsync(this DiscordClient discordClient, string content = null, bool tts = false, DiscordEmbed embed = null,
                                                                         IEnumerable<IMention> mentions = null, params DiscordChannel[] channels)
         {
             if (discordClient == null)
@@ -31,11 +28,11 @@ namespace Entity.Base.Utilities.Extensions
                 await channel.SendMessageAsync(content, tts, embed, mentions);
         }
 
-        public static DiscordMember FindMember(this DiscordClient discordClient, string memberNameOrId) 
+        public static DiscordMember FindMember(this DiscordClient discordClient, string memberNameOrId)
             => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : string.IsNullOrWhiteSpace(memberNameOrId) ?
                                        throw new ArgumentNullException("The member name or Id can't be null!") : StringExtensions.ToDiscordMember(memberNameOrId);
 
-        public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordMember member, Permissions allow = Permissions.None, 
+        public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordMember member, Permissions allow = Permissions.None,
                                                                      Permissions deny = Permissions.None, string reason = null, params DiscordChannel[] channels)
         {
             if (discordClient == null)

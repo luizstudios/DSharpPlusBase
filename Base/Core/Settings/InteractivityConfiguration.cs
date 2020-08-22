@@ -1,12 +1,10 @@
 ﻿using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Entity.Base.Core.Settings
+namespace DiscordBotBase.Core.Settings
 {
-    public sealed class EntityBaseInteractivityConfiguration
+    public sealed class InteractivityConfiguration
     {
         public PaginationBehaviour PaginationBehaviour { get; set; } = PaginationBehaviour.WrapAround;
         public PaginationDeletion PaginationDeletion { get; set; } = PaginationDeletion.DeleteEmojis;
