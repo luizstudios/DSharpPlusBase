@@ -28,6 +28,7 @@ namespace DiscordBotBase.Extensions
         public static bool CanBeBanned(this DiscordMember discordMember)
             => !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsAbove(BotBase._discordClient.CurrentUser.GetHighestRole());
 
-        public static bool IsAdministrator(this DiscordMember discordMember) => discordMember.GetHighestRole().Permissions.HasPermission(Permissions.Administrator);
+        public static bool IsAdministrator(this DiscordMember discordMember) 
+            => discordMember.GetHighestRole().Permissions.HasPermission(Permissions.Administrator);
     }
 }

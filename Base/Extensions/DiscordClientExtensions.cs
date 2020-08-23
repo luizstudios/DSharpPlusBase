@@ -4,6 +4,7 @@ using DiscordBotBase.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DiscordBotBase.Core;
 
 namespace DiscordBotBase.Extensions
 {
@@ -51,5 +52,9 @@ namespace DiscordBotBase.Extensions
             foreach (var channel in channels)
                 await channel.AddOverwriteAsync(role, allow, deny, reason);
         }
+
+        public static void LogMessage(this DiscordClient discordClient, string application, string message, LogLevel logLevel = LogLevel.Info, 
+                                      DateTime? dateTime = null, Exception exception = null) 
+            => discordClient.DebugLogger.LogMessage(logLevel, application, message, dateTime == null ? DateTime.Now : (DateTime)dateTime, exception);
     }
 }
