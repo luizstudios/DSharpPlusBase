@@ -32,51 +32,48 @@ namespace DiscordBotBase.Core
         /// 
         /// </summary>
         public BaseConfiguration BaseConfiguration { get; private set; }
-        
+
         /// <summary>
         /// 
         /// </summary>
-        public DiscordClient DiscordClient
-        {
-            get => _discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!");
-            private set { }
-        }
+        public DiscordClient DiscordClient => _discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!");
         internal static DiscordClient _discordClient;
-        
+
         /// <summary>
         /// 
         /// </summary>
-        public CommandsNextExtension CommandsNext
-        {
-            get => this._commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
-            private set { }
-        }
+        public CommandsNextExtension CommandsNext 
+            => this._commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
         private CommandsNextExtension _commandsNext;
 
         /// <summary>
         /// 
         /// </summary>
-        public InteractivityExtension Interactivity
-        {
-            get => this._interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
-            private set { }
-        }
+        public InteractivityExtension Interactivity 
+            => this._interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
         private InteractivityExtension _interactivity;
-        
+
         /// <summary>
         /// 
         /// </summary>
-        public IReadOnlyList<Event> ScheduledEvents { get; private set; }
+        public IReadOnlyList<Event> ScheduledEvents => _scheduledEvents;
+        private static List<Event> _scheduledEvents;
+
+        private object _instance;
 
         private CommandsNextConfiguration _commandsNextConfiguration;
         private InteractivityConfiguration _interactivityConfiguration;
+        private readonly DateTimeFormatInfo _dateTimeFormatInfo;
         private readonly object _botClassOrAssembly;
+        private const string discordBotBaseApplication = "DiscordBotBase";
 
         internal static DiscordConfiguration _discordConfiguration;
         internal static string _dateTimeFormat;
 
-        private const string discordBotBaseApplication = "DiscordBotBase";
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="botClassOrAssembly"></param>
         public BotBase(object botClassOrAssembly) => this._botClassOrAssembly = botClassOrAssembly;
 
         #region BaseSetup
@@ -106,8 +103,7 @@ namespace DiscordBotBase.Core
             _discordConfiguration = discordConfiguration;
             _discordConfiguration.AutoReconnect = !(this.BaseConfiguration ?? new BaseConfiguration()).AutoReconnect;
             
-            var dateTimeFormatPC = CultureInfo.CurrentCulture.DateTimeFormat;
-            _discordConfiguration.DateTimeFormat = _dateTimeFormat = $"{dateTimeFormatPC.ShortDatePattern} {dateTimeFormatPC.ShortTimePattern}";
+            _discordConfiguration.DateTimeFormat = _dateTimeFormat = $"{this._dateTimeFormatInfo.ShortDatePattern} {this._dateTimeFormatInfo.ShortTimePattern}";
             _discordConfiguration.HttpTimeout = TimeSpan.FromSeconds(10);
             _discordConfiguration.LargeThreshold = 1000;
             _discordConfiguration.UseInternalLogHandler = true;
@@ -156,9 +152,8 @@ namespace DiscordBotBase.Core
             _discordConfiguration.UseInternalLogHandler = useInternalLogHandler;
             _discordConfiguration.UseRelativeRatelimit = useRelativeRateLimit;
 
-            var dateTimeFormatPC = CultureInfo.CurrentCulture.DateTimeFormat;
-            _discordConfiguration.DateTimeFormat = string.IsNullOrWhiteSpace(dateTimeFormat) ? $"{dateTimeFormatPC.ShortDatePattern} " +
-                                                                                               $"{dateTimeFormatPC.ShortTimePattern}" : string.Empty;
+            _discordConfiguration.DateTimeFormat = string.IsNullOrWhiteSpace(dateTimeFormat) ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
+                                                                                               $"{this._dateTimeFormatInfo.ShortTimePattern}" : string.Empty;
             _discordConfiguration.LargeThreshold = largeThreshold;
             _discordConfiguration.AutoReconnect = autoReconnect;
             _discordConfiguration.ShardId = shardId;
@@ -242,8 +237,8 @@ namespace DiscordBotBase.Core
         /// 
         /// </summary>
         /// <param name="interactivityConfiguration"></param>
-        public void InteractivitySetup(InteractivityConfiguration interactivityConfiguration) 
-            => this.Interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
+        public void InteractivitySetup(InteractivityConfiguration interactivityConfiguration)
+            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
                                     .UseInteractivity(this._interactivityConfiguration = interactivityConfiguration);
 
         /// <summary>
@@ -254,50 +249,91 @@ namespace DiscordBotBase.Core
         /// <param name="paginationEmojis"></param>
         /// <param name="paginationBehaviour"></param>
         /// <param name="paginationDeletion"></param>
-        public void InteractivitySetup(TimeSpan? timeout = null, PollBehaviour pollBehaviour = PollBehaviour.DeleteEmojis, 
+        public void InteractivitySetup(TimeSpan? timeout = null, PollBehaviour pollBehaviour = PollBehaviour.DeleteEmojis,
                                        PaginationEmojis paginationEmojis = null, PaginationBehaviour paginationBehaviour = PaginationBehaviour.WrapAround,
-                                       PaginationDeletion paginationDeletion = PaginationDeletion.DeleteEmojis)
-        {
-            this._interactivityConfiguration = new InteractivityConfiguration
-            {
-                Timeout = timeout ?? TimeSpan.FromMinutes(5),
-                PollBehaviour = pollBehaviour,
-                PaginationEmojis = paginationEmojis ?? new PaginationEmojis(),
-                PaginationBehaviour = paginationBehaviour,
-                PaginationDeletion = paginationDeletion
-            };
-
-            this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
-                                  .UseInteractivity(this._interactivityConfiguration);
-        }
+                                       PaginationDeletion paginationDeletion = PaginationDeletion.DeleteEmojis) 
+            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
+                                     .UseInteractivity(this._interactivityConfiguration = new InteractivityConfiguration
+                                     {
+                                         Timeout = timeout ?? TimeSpan.FromMinutes(5),
+                                         PollBehaviour = pollBehaviour,
+                                         PaginationEmojis = paginationEmojis ?? new PaginationEmojis(),
+                                         PaginationBehaviour = paginationBehaviour,
+                                         PaginationDeletion = paginationDeletion
+                                     });
         #endregion
 
-        #region ScheduledEventsSetup
+        #region ScheduledEventsSetup and static methods of scheduled events
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="events"></param>
         public void ScheduledEventsSetup(params Event[] events)
         {
-            var scheduledEvents = new List<Event>();
-            
-            int iEvent = 0;
+            _scheduledEvents = new List<Event>();
 
-            foreach (var scheduledEvent in events)
+            var iEvent = 0;
+
+            foreach (Event scheduledEvent in events)
             {
-                if (!scheduledEvents.Contains(scheduledEvent))
-                    scheduledEvents.Add(scheduledEvent);
+                if (!_scheduledEvents.Contains(scheduledEvent))
+                    _scheduledEvents.Add(scheduledEvent);
 
                 ++iEvent;
             }
             
-            this.ScheduledEvents = scheduledEvents;
-
             _discordClient.LogMessage(discordBotBaseApplication, $"{(iEvent > 1 ? $"A total of {iEvent} scheduled events were recorded." : $"A total of {iEvent} scheduled event were recorded.")}", LogLevel.Debug);
         }
-        #endregion
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="scheduledEvents"></param>
+        public static void AddScheduledEvents(params Event[] scheduledEvents)
+        {
+            if (scheduledEvents.Any(e => e == null))
+                throw new NullReferenceException("The scheduled event can't be null!");
+            
+            if (_scheduledEvents == null)
+                _scheduledEvents = new List<Event>();
+
+            _scheduledEvents.AddRange(scheduledEvents);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="scheduledEvents"></param>
+        public static void RemoveScheduledEvents(params Event[] scheduledEvents)
+        {
+            if (scheduledEvents.Any(e => e == null))
+                throw new NullReferenceException("The scheduled event can't be null!");
+
+            if (_scheduledEvents == null)
+                throw new NullReferenceException("Add an event before removing!");
+
+            foreach (Event scheduledEvent in scheduledEvents)
+            {
+                _scheduledEvents.Remove(_scheduledEvents.FirstOrDefault(e => e == scheduledEvent) ?? 
+                                        throw new InvalidOperationException("An event was not found in the list of events scheduled to be removed."));
+            }
+        }
+        #endregion
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="discordActivity"></param>
+        /// <param name="userStatus"></param>
+        /// <param name="idleSince"></param>
+        /// <returns></returns>
         public async Task StartAsync(DiscordActivity discordActivity = null, UserStatus? userStatus = null, DateTime? idleSince = null)
         {
+            if (this._instance != null)
+                throw new InvalidOperationException("An instance of a bot is already running!");
+
+            this._instance = new object();
+
             if (this._interactivityConfiguration == null)
                 this.InteractivitySetup(new InteractivityConfiguration { PollBehaviour = PollBehaviour.DeleteEmojis, Timeout = TimeSpan.FromMinutes(5) });
 
