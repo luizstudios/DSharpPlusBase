@@ -3,8 +3,15 @@ using System;
 
 namespace DiscordBotBase.Classes
 {
+    /// <summary>
+    /// Color of embeds.
+    /// </summary>
     public static class DiscordEmbedColor
     {
+        /// <summary>
+        /// Generates a random color for an embed.
+        /// </summary>
+        /// <returns>A <see cref="DiscordColor"/> with color.</returns>
         public static DiscordColor RandomColor()
         {
             var rgbColor = new Random();

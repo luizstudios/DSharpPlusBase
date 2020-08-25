@@ -6,42 +6,45 @@ using System.Timers;
 
 namespace DiscordBotBase.Classes
 {
+    /// <summary>
+    /// Build a scheduled event.
+    /// </summary>
     public sealed class Event
     {
         /// <summary>
-        /// 
+        /// Name of event.
         /// </summary>
         public string Name { get; private set; } 
 
         /// <summary>
-        /// 
+        /// Description of event.
         /// </summary>
-        public string Description { get; private set; } 
+        public string Description { get; private set; }
 
         /// <summary>
-        /// 
+        /// Code that will be executed when the event is called.
         /// </summary>
         public Action Action { get; }
 
         /// <summary>
-        /// 
+        /// Time interval for the event to be called.
         /// </summary>
         public TimeSpan Interval { get; private set; }
 
         /// <summary>
-        /// 
+        /// Indicates whether the event is active.
         /// </summary>
         public bool IsActived { get; private set; }
 
         private readonly Timer _timer;
 
         /// <summary>
-        /// 
+        /// Class constructor to create a new event.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="interval"></param>
-        /// <param name="description"></param>
+        /// <param name="name">Name of event.</param>
+        /// <param name="action">Code that will be executed when the event is called.</param>
+        /// <param name="interval">Time interval for the event to be called.</param>
+        /// <param name="description"> Description of event.</param>
         public Event(string name, Action action, TimeSpan interval, string description = null)
         {
             this.Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentException("The Name of scheduled event can't be null!") : name;
@@ -60,7 +63,7 @@ namespace DiscordBotBase.Classes
         }
 
         /// <summary>
-        /// 
+        /// Activate the event.
         /// </summary>
         public void Activate()
         {
@@ -71,7 +74,7 @@ namespace DiscordBotBase.Classes
         }
 
         /// <summary>
-        /// 
+        /// Disables the event.
         /// </summary>
         public void Deactivate()
         {
@@ -82,11 +85,11 @@ namespace DiscordBotBase.Classes
         }
 
         /// <summary>
-        /// 
+        /// Changes the event settings.
         /// </summary>
-        /// <param name="newName"></param>
-        /// <param name="newInterval"></param>
-        /// <param name="newDescription"></param>
+        /// <param name="newName">New event name.</param>
+        /// <param name="newInterval">New time interval for the event to be activated.</param>
+        /// <param name="newDescription">New event description.</param>
         public void ChangeSettings(string newName = null, TimeSpan? newInterval = null, string newDescription = null)
         {
             if (!string.IsNullOrWhiteSpace(newName))

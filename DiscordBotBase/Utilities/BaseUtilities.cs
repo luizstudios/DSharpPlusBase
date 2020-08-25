@@ -4,6 +4,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using DSharpPlus;
 
 namespace DiscordBotBase.Utilities
 {
@@ -14,13 +15,13 @@ namespace DiscordBotBase.Utilities
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
                 throw new ArgumentNullException("The emoji name or Id can't be null!");
 
-            var discordClient = BotBase._discordClient;
+            DiscordClient discordClient = BotBase._discordClient;
 
             string oldNameEmoji = emojiNameOrId;
             emojiNameOrId = emojiNameOrId.ToLower();
             ulong.TryParse(emojiNameOrId, out ulong emojiId);
 
-            foreach (var guild in discordClient.Guilds.Values)
+            foreach (DiscordGuild guild in discordClient.Guilds.Values)
             {
                 var emoji = guild.Emojis.Values.FirstOrDefault(e => e.Name.ToLower() == emojiNameOrId.Replace(":", "") || e.Id == emojiId ||
                                                                     e.ToString().ToLower() == emojiNameOrId);
@@ -30,7 +31,8 @@ namespace DiscordBotBase.Utilities
 
             try
             {
-                return DiscordEmoji.FromName(discordClient, $"{(emojiNameOrId.StartsWith(":") && emojiNameOrId.EndsWith(":") ? emojiNameOrId : $":{emojiNameOrId}:")}");
+                return DiscordEmoji.FromName(discordClient, 
+                                             $"{(emojiNameOrId.StartsWith(":") && emojiNameOrId.EndsWith(":") ? emojiNameOrId : $":{emojiNameOrId}:")}");
             }
             catch { }
 
