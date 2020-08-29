@@ -6,8 +6,16 @@ using System.Linq;
 
 namespace DiscordBotBase.Extensions
 {
+    /// <summary>
+    /// Class to extend the standard <see cref="DiscordUser"/> methods.
+    /// </summary>
     public static class DiscordUserExtensions
     {
+        /// <summary>
+        /// Convert <see cref="DiscordUser"/> to <see cref="DiscordMember"/>.
+        /// </summary>
+        /// <param name="discordUser"></param>
+        /// <returns>The <see cref="DiscordMember"/>.</returns>
         public static DiscordMember ToDiscordMember(this DiscordUser discordUser)
         {
             if (discordUser == null)
@@ -23,6 +31,12 @@ namespace DiscordBotBase.Extensions
             }
         }
 
+        /// <summary>
+        /// Get the highest role of this user in relation to the hierarchy of the Discord server.
+        /// </summary>
+        /// <param name="discordUser"></param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <returns>The highest <see cref="DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
         public static DiscordRole GetHighestRole(this DiscordUser discordUser, Func<DiscordRole, bool> predicate = null)
         {
             if (discordUser == null)
@@ -32,6 +46,12 @@ namespace DiscordBotBase.Extensions
             return predicate == null ? memberRolesOrdered.FirstOrDefault() : memberRolesOrdered.FirstOrDefault(predicate);
         }
 
+        /// <summary>
+        /// Get the lowest role of this user in relation to the hierarchy of the Discord server.
+        /// </summary>
+        /// <param name="discordUser"></param>
+        /// <param name="predicate"></param>
+        /// <returns>The lowest <see cref="DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
         public static DiscordRole GetLowestRole(this DiscordUser discordUser, Func<DiscordRole, bool> predicate = null)
         {
             if (discordUser == null)
@@ -41,12 +61,22 @@ namespace DiscordBotBase.Extensions
             return predicate == null ? memberRolesOrded.LastOrDefault() : memberRolesOrded.LastOrDefault(predicate);
         }
 
+        /// <summary>
+        /// Returns a <see langword="bool"/> that says whether the user can be banned from the server.
+        /// </summary>
+        /// <param name="discordUser"></param>
+        /// <returns>A <see langword="bool"/>.</returns>
         public static bool CanBeBanned(this DiscordUser discordUser)
         {
             var discordMember = discordUser.ToDiscordMember();
             return !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsAbove(BotBase._discordClient.CurrentUser.GetHighestRole());
         }
 
+        /// <summary>
+        /// Returns a <see langword="bool"/> that says whether the user is a server administrator.
+        /// </summary>
+        /// <param name="discordUser"></param>
+        /// <returns>A <see langword="bool"/>.</returns>
         public static bool IsAdministrator(this DiscordUser discordUser) => discordUser.GetHighestRole().Permissions.HasPermission(Permissions.Administrator);
     }
 }

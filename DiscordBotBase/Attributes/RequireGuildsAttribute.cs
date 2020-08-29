@@ -20,7 +20,6 @@ namespace DiscordBotBase.Attributes
         public RequireGuildsAttribute(params ulong[] guildsId) => this._serversId = guildsId;
 
         public override async Task<bool> ExecuteCheckAsync(CommandContext ctx, bool help)
-            => this._serversId.Count() == 0 ? throw new InvalidOperationException("Put the id of a server!") :
-                                              await Task.FromResult(this._serversId.Contains(ctx.Guild.Id));
+            => !this._serversId.Any() ? throw new InvalidOperationException("Put the id of a server!") : await Task.FromResult(this._serversId.Contains(ctx.Guild.Id));
     }
 }

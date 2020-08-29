@@ -33,7 +33,6 @@ namespace DiscordBotBase.MongoDB.Extensions
         /// </summary>
         /// <param name="_"></param>
         /// <returns></returns>
-        public static MongoClient GetMongoClient(this BotBase _) => _mongoClient ?? 
-                                                                    throw new NullReferenceException("The MongoClient is null! Call the MongoClientSetup!");
+        public static MongoClient GetMongoClient(this BotBase _) => _mongoClient ?? throw new NullReferenceException("The MongoClient is null! Call the MongoClientSetup!");
     }
 }

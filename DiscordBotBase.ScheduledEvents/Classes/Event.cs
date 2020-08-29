@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Timers;
 
-namespace DiscordBotBase.Classes
+namespace DiscordBotBase.ScheduledEvents.Classes
 {
     /// <summary>
     /// Build a scheduled event.
@@ -15,7 +15,7 @@ namespace DiscordBotBase.Classes
         /// Name of event.
         /// </summary>
         public string Name { get; private set; } 
-
+        
         /// <summary>
         /// Description of event.
         /// </summary>

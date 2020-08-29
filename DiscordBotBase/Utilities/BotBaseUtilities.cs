@@ -8,12 +8,20 @@ using DSharpPlus;
 
 namespace DiscordBotBase.Utilities
 {
-    public static class BaseUtilities
+    /// <summary>
+    /// DiscordBotBase utility class.
+    /// </summary>
+    internal static class BotBaseUtilities
     {
+        /// <summary>
+        /// Internal method to search for emojis.
+        /// </summary>
+        /// <param name="emojiNameOrId"></param>
+        /// <returns>A <see cref="DiscordEmoji"/> or <see langword="null"/> if the bot finds nothing.</returns>
         internal static DiscordEmoji FindEmoji(string emojiNameOrId)
         {
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
-                throw new ArgumentNullException("The emoji name or Id can't be null!");
+                throw new ArgumentNullException("The emoji name or id can't be null!");
 
             DiscordClient discordClient = BotBase._discordClient;
 
@@ -31,22 +39,12 @@ namespace DiscordBotBase.Utilities
 
             try
             {
-                return DiscordEmoji.FromName(discordClient, 
-                                             $"{(emojiNameOrId.StartsWith(":") && emojiNameOrId.EndsWith(":") ? emojiNameOrId : $":{emojiNameOrId}:")}");
+                return DiscordEmoji.FromName(discordClient, $"{(emojiNameOrId.StartsWith(":") && emojiNameOrId.EndsWith(":") ? emojiNameOrId : $":{emojiNameOrId}:")}");
             }
             catch { }
 
             return !string.IsNullOrWhiteSpace(emojiNameOrId) && CharUnicodeInfo.GetUnicodeCategory(emojiNameOrId, 0) == UnicodeCategory.OtherSymbol ?
                    DiscordEmoji.FromUnicode(discordClient, emojiNameOrId) : null;
-        }
-
-        internal static string RemoveAccents(string text)
-        {
-            var stringBuilder = new StringBuilder();
-            foreach (char c in text.Normalize(NormalizationForm.FormD).ToCharArray().Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark))
-                stringBuilder.Append(c);
-
-            return stringBuilder.ToString();
         }
     }
 }

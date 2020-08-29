@@ -1,25 +1,25 @@
-﻿using DiscordBotBase.Core.Settings;
+﻿using DiscordBotBase.Classes;
+using DiscordBotBase.Core.Settings;
+using DiscordBotBase.Extensions;
+using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
+using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Net.Udp;
+using DSharpPlus.Net.WebSocket;
 using DSharpPlus;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Globalization;
-using System.Diagnostics;
-using DSharpPlus.Interactivity.Enums;
-using DSharpPlus.Entities;
-using System.Net;
-using DSharpPlus.Net.WebSocket;
-using DSharpPlus.Net.Udp;
-using System.Collections.Generic;
-using DSharpPlus.CommandsNext.Attributes;
-using DiscordBotBase.Extensions;
-using DiscordBotBase.Classes;
 using System.Threading;
-using TimerClass = System.Timers.Timer;
+using System;
+using Microsoft.Extensions.Logging;
 
 namespace DiscordBotBase.Core
 {
@@ -28,6 +28,7 @@ namespace DiscordBotBase.Core
     /// </summary>
     public sealed class BotBase
     {
+        #region Public Properties
         /// <summary>
         /// Get the current settings from the base.
         /// </summary>
@@ -42,36 +43,33 @@ namespace DiscordBotBase.Core
         /// <summary>
         /// Get the DSharpPlus <see cref="CommandsNextExtension"/>.
         /// </summary>
-        public CommandsNextExtension CommandsNext 
-            => this._commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
+        public CommandsNextExtension CommandsNext => _commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
         private CommandsNextExtension _commandsNext;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="InteractivityExtension"/>.
         /// </summary>
-        public InteractivityExtension Interactivity 
-            => this._interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
+        public InteractivityExtension Interactivity => _interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
         private InteractivityExtension _interactivity;
-
-        /// <summary>
-        /// Get a list of all scheduled events.
-        /// </summary>
-        public IReadOnlyList<Event> ScheduledEvents => _scheduledEvents;
-        private static List<Event> _scheduledEvents;
+        #endregion
 
         private readonly DateTimeFormatInfo _dateTimeFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
-        private object _instance;
         private readonly object _botClassOrAssembly;
-        private const string discordBotBaseApplication = "DiscordBotBase";
 
         internal static DiscordConfiguration _discordConfiguration;
-        internal static string _dateTimeFormat;
+        internal static string _logTimestampFormat;
 
         /// <summary>
         /// Constructor of the DiscordBotBase class.
         /// </summary>
         /// <param name="botClassOrAssembly">Use the keyword <see langword="this"/> or call the <see cref="Assembly.GetEntryAssembly()"/> method.</param>
-        public BotBase(object botClassOrAssembly) => this._botClassOrAssembly = botClassOrAssembly;
+        public BotBase(object botClassOrAssembly)
+        {
+            if (_discordClient != null)
+                throw new InvalidOperationException("A bot instance has already been instantiated!");
+
+            this._botClassOrAssembly = botClassOrAssembly;
+        }
 
         #region BaseSetup
         /// <summary>
@@ -83,7 +81,7 @@ namespace DiscordBotBase.Core
         /// <summary>
         /// Method for configuring <see cref="Settings.BaseConfiguration"/>, accessing each configuration individually.
         /// </summary>
-        /// <param name="autoReconnect">Set whether the bot will use DiscordBotBase's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false. The default is true, so the DSharpPlus <see cref="DiscordConfiguration"/> comes standard with AutoReconnect as false.</param>
+        /// <param name="autoReconnect">Set whether the bot will use DiscordBotBase's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false in <see cref="DiscordConfiguration"/> for DiscordBotBase's AutoReconnect to take effect.</param>
         public void BaseSetup(bool autoReconnect = true) => this.BaseConfiguration = new BaseConfiguration
         {
             AutoReconnect = autoReconnect
@@ -98,15 +96,15 @@ namespace DiscordBotBase.Core
         public void DiscordClientSetup(DiscordConfiguration discordConfiguration)
         {
             _discordConfiguration = discordConfiguration;
-            _discordConfiguration.AutoReconnect = !(this.BaseConfiguration ?? new BaseConfiguration()).AutoReconnect;
-            
-            _discordConfiguration.DateTimeFormat = _dateTimeFormat = $"{this._dateTimeFormatInfo.ShortDatePattern} {this._dateTimeFormatInfo.ShortTimePattern}";
-            _discordConfiguration.HttpTimeout = TimeSpan.FromSeconds(10);
-            _discordConfiguration.LargeThreshold = 1000;
-            _discordConfiguration.UseInternalLogHandler = true;
-            _discordConfiguration.LogLevel = Debugger.IsAttached ? LogLevel.Debug : LogLevel.Info;
 
             _discordClient = new DiscordClient(_discordConfiguration);
+
+            //_discordConfiguration.AutoReconnect = !(this.BaseConfiguration ?? new BaseConfiguration()).AutoReconnect;
+            //_discordConfiguration.DateTimeFormat = _dateTimeFormat = $"{this._dateTimeFormatInfo.ShortDatePattern} {this._dateTimeFormatInfo.ShortTimePattern}";
+            //_discordConfiguration.HttpTimeout = TimeSpan.FromSeconds(10);
+            //_discordConfiguration.LargeThreshold = 1000;
+            //_discordConfiguration.UseInternalLogHandler = true;
+            //_discordConfiguration.LogLevel = Debugger.IsAttached ? LogLevel.Debug : LogLevel.Info;
         }
 
         /// <summary>
@@ -114,11 +112,10 @@ namespace DiscordBotBase.Core
         /// </summary>
         /// <param name="token">Sets the token used to identify the client.</param>
         /// <param name="tokenType">Sets the type of the token used to identify the client. Defaults to <see cref="TokenType.Bot"/>.</param>
-        /// <param name="logLevel">Sets the maximum logging level for messages. If left as <see langword="null"/>, and the <paramref name="logLevelDebugOnDebugging"/> property as <see langword="true"/>, the bot will use <see cref="LogLevel.Debug"/> when debugging Visual Studio and will <see cref="LogLevel.Info"/> when it starts without debugging.</param>
+        /// <param name="minimumLogLevel">Sets the maximum logging level for messages. If left as <see langword="null"/>, and the <paramref name="logLevelDebugOnDebugging"/> property as <see langword="true"/>, the bot will use <see cref="LogLevel.Debug"/> when debugging Visual Studio and will <see cref="LogLevel.Information"/> when it starts without debugging.</param>
         /// <param name="logLevelDebugOnDebugging">Set if the bot will start using <see cref="LogLevel.Debug"/> when debugging Visual Studio, if <see langword="false"/>, the bot will always start at <see cref="LogLevel.Info"/></param>
-        /// <param name="useInternalLogHandler">Set if the bot will use the C# console as a log. Defaults to <see langword="true"/>.</param>
         /// <param name="useRelativeRateLimit">Sets whether to rely on Discord for NTP (Network Time Protocol) synchronization with the "X-Ratelimit-Reset-After" header. If the system clock is unsynced, setting this to true will ensure ratelimits are synced with Discord and reduce the risk of hitting one. This should only be set to <see langword="false"/> if the system clock is synced with NTP. Defaults to <see langword="true"/>.</param>
-        /// <param name="dateTimeFormat">Allows you to overwrite the time format used by the internal debug logger. Only applicable when <paramref name="useInternalLogHandler"/> is set to true. The default is the format of your PC's date.</param>
+        /// <param name="logTimestampFormat">Allows you to overwrite the time format used by the internal debug logger. The default is the format of your PC's date.</param>
         /// <param name="largeThreshold">Sets the member count threshold at which guilds are considered large. Defaults to 1000.></param>
         /// <param name="autoReconnect">Sets whether to automatically reconnect in case a connection is lost. Defaults to <see langword="false"/>.</param>
         /// <param name="shardId">Sets the ID of the shard to connect to. If not sharding, or sharding automatically, this value should be left with the default value of 0.</param>
@@ -128,14 +125,16 @@ namespace DiscordBotBase.Core
         /// <param name="webProxy">Sets the proxy to use for HTTP and WebSocket connections to Discord. Defaults to <see langword="null"/>.</param>
         /// <param name="httpTimeout">Sets the timeout for HTTP requests. Set to <see cref="Timeout.InfiniteTimeSpan"/> to disable timeouts. Defaults to 10 seconds.</param>
         /// <param name="reconnectIndefinitely">Defines that the client should attempt to reconnect indefinitely. This is typically a very bad idea to set to <see langword="true"/>, as it will swallow all connection errors. Defaults to <see langword="false"/>.</param>
+        /// <param name="discordIntents">Sets the gateway intents for this client. If set, the client will only receive events that they specify with intents. Defaults to <see langword="null"/>.</param>
         /// <param name="webSocketClientFactory">Sets the factory method used to create instances of WebSocket clients. Use <see cref="WebSocketClient.CreateNew(IWebProxy)"/> and equivalents on other implementations to switch out client implementations. Defaults to <see cref="WebSocketClient.CreateNew(IWebProxy)"/></param>
         /// <param name="udpClientFactory">Sets the factory method used to create instances of UDP clients. Use <see cref="DspUdpClient.CreateNew"/> and equivalents on other implementations to switch out client implementations. Defaults to <see cref="DspUdpClient.CreateNew"/>.</param>
-        public void DiscordClientSetup(string token, TokenType tokenType = TokenType.Bot, LogLevel? logLevel = null, bool logLevelDebugOnDebugging = true,
-                                       bool useInternalLogHandler = true, bool useRelativeRateLimit = true, string dateTimeFormat = null, 
-                                       int largeThreshold = 1000, bool autoReconnect = false, int shardId = 0, int shardCount = 1, 
-                                       GatewayCompressionLevel gatewayCompressionLevel = GatewayCompressionLevel.Stream, int messageCacheSize = 1024, 
-                                       IWebProxy webProxy = null, TimeSpan? httpTimeout = null, bool reconnectIndefinitely = false,
-                                       WebSocketClientFactoryDelegate webSocketClientFactory = null, UdpClientFactoryDelegate udpClientFactory = null)
+        /// <param name="loggerFactory">Sets the logger implementation to use. To create your own logger, implement the <see cref="ILoggerFactory"/> instance. Defaults to built-in implementation.</param>
+        public void DiscordClientSetup(string token, TokenType tokenType = TokenType.Bot, LogLevel? minimumLogLevel = null, bool logLevelDebugOnDebugging = true,
+                                       bool useRelativeRateLimit = true, string logTimestampFormat = null, int largeThreshold = 1000, bool autoReconnect = false,
+                                       int shardId = 0, int shardCount = 1, GatewayCompressionLevel gatewayCompressionLevel = GatewayCompressionLevel.Stream,
+                                       int messageCacheSize = 1024, IWebProxy webProxy = null, TimeSpan? httpTimeout = null, bool reconnectIndefinitely = false,
+                                       DiscordIntents? discordIntents = null, WebSocketClientFactoryDelegate webSocketClientFactory = null,
+                                       UdpClientFactoryDelegate udpClientFactory = null, ILoggerFactory loggerFactory = null)
 
         {
             _discordConfiguration = new DiscordConfiguration();
@@ -145,14 +144,18 @@ namespace DiscordBotBase.Core
 
             _discordConfiguration.Token = token;
             _discordConfiguration.TokenType = tokenType;
-            _discordConfiguration.LogLevel = logLevelDebugOnDebugging ? (Debugger.IsAttached ? LogLevel.Debug : LogLevel.Info) : (logLevel ?? LogLevel.Info);
-            _discordConfiguration.UseInternalLogHandler = useInternalLogHandler;
+            _discordConfiguration.MinimumLogLevel = logLevelDebugOnDebugging ? (Debugger.IsAttached ? LogLevel.Debug : LogLevel.Information) : (minimumLogLevel ??
+                                                                                                                                                LogLevel.Information);
             _discordConfiguration.UseRelativeRatelimit = useRelativeRateLimit;
-
-            _discordConfiguration.DateTimeFormat = string.IsNullOrWhiteSpace(dateTimeFormat) ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
-                                                                                               $"{this._dateTimeFormatInfo.ShortTimePattern}" : string.Empty;
+            _discordConfiguration.LogTimestampFormat = _logTimestampFormat = string.IsNullOrWhiteSpace(logTimestampFormat) ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
+                                                                                                                             $"{this._dateTimeFormatInfo.ShortTimePattern}" :
+                                                                                                                             logTimestampFormat;
             _discordConfiguration.LargeThreshold = largeThreshold;
+
             _discordConfiguration.AutoReconnect = autoReconnect;
+            if (!autoReconnect)
+                this.BaseConfiguration = new BaseConfiguration();
+
             _discordConfiguration.ShardId = shardId;
             _discordConfiguration.ShardCount = shardCount;
             _discordConfiguration.GatewayCompressionLevel = gatewayCompressionLevel;
@@ -160,7 +163,9 @@ namespace DiscordBotBase.Core
             _discordConfiguration.Proxy = webProxy;
             _discordConfiguration.HttpTimeout = httpTimeout ?? TimeSpan.FromSeconds(10);
             _discordConfiguration.ReconnectIndefinitely = reconnectIndefinitely;
+            _discordConfiguration.Intents = discordIntents;
             _discordConfiguration.WebSocketClientFactory = webSocketClientFactory ?? WebSocketClient.CreateNew;
+            _discordConfiguration.LoggerFactory = loggerFactory;
 
             _discordClient = new DiscordClient(_discordConfiguration);
         }
@@ -173,8 +178,7 @@ namespace DiscordBotBase.Core
         /// <param name="commandsNextConfiguration"><see cref="CommandsNextConfiguration"/> class for configuring <see cref="CommandsNextExtension"/> settings.</param>
         public void CommandsNextSetup(CommandsNextConfiguration commandsNextConfiguration)
         {
-            this._commandsNext = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
-                                 .UseCommandsNext(commandsNextConfiguration);
+            this._commandsNext = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseCommandsNext(commandsNextConfiguration);
 
             this.RegisterCommands();
         }
@@ -194,150 +198,86 @@ namespace DiscordBotBase.Core
         /// <param name="ignoreExtraArguments">Sets whether any extra arguments passed to commands should be ignored or not. If this is set to <see langword="false"/>, extra arguments will throw, otherwise they will be ignored. Defaults to <see langword="false"/>.</param>
         /// <param name="useDefaultCommandHandler">Sets whether to automatically enable handling commands. If this is set to <see langword="false"/>, you will need to manually handle each incoming message and pass it to <see cref="CommandsNextExtension"/>. Defaults to <see langword="true"/>.</param>
         public void CommandsNextSetup(IEnumerable<string> prefixes, PrefixResolverDelegate prefixResolver = null, bool enableMentionPrefix = true,
-                                      bool caseSensitive = false, bool enableDefaultHelp = true, bool directMessageHelp = true, 
-                                      IEnumerable<CheckBaseAttribute> defaultHelpChecks = null, bool directMessageCommands = false, 
+                                      bool caseSensitive = false, bool enableDefaultHelp = true, bool directMessageHelp = true,
+                                      IEnumerable<CheckBaseAttribute> defaultHelpChecks = null, bool directMessageCommands = false,
                                       IServiceCollection services = null, bool ignoreExtraArguments = false, bool useDefaultCommandHandler = true)
         {
-            this._commandsNext = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
-                                 .UseCommandsNext(new CommandsNextConfiguration
-                                 {
-                                     StringPrefixes = prefixes,
-                                     PrefixResolver = prefixResolver,
-                                     EnableMentionPrefix = enableMentionPrefix,
-                                     CaseSensitive = caseSensitive,
-                                     EnableDefaultHelp = enableDefaultHelp,
-                                     DmHelp = directMessageHelp,
-                                     DefaultHelpChecks = defaultHelpChecks,
-                                     EnableDms = directMessageCommands,
-                                     Services = services?.BuildServiceProvider(true) ?? new ServiceCollection().BuildServiceProvider(true),
-                                     IgnoreExtraArguments = ignoreExtraArguments,
-                                     UseDefaultCommandHandler = useDefaultCommandHandler
-                                 });
+            this._commandsNext = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseCommandsNext(new CommandsNextConfiguration
+            {
+                StringPrefixes = prefixes,
+                PrefixResolver = prefixResolver,
+                EnableMentionPrefix = enableMentionPrefix,
+                CaseSensitive = caseSensitive,
+                EnableDefaultHelp = enableDefaultHelp,
+                DmHelp = directMessageHelp,
+                DefaultHelpChecks = defaultHelpChecks,
+                EnableDms = directMessageCommands,
+                Services = services?.AddSingleton(this).BuildServiceProvider(true) ?? new ServiceCollection().AddSingleton(this).BuildServiceProvider(true),
+                IgnoreExtraArguments = ignoreExtraArguments,
+                UseDefaultCommandHandler = useDefaultCommandHandler
+            });
 
             this.RegisterCommands();
         }
-        
+
         private void RegisterCommands()
         {
             object botClassOrAssembly = this._botClassOrAssembly;
             Type objectType = botClassOrAssembly.GetType();
-            this._commandsNext.RegisterCommands(objectType.IsClass && objectType.Name != "RuntimeAssembly" ? objectType.Assembly : (Assembly)botClassOrAssembly);
+            _commandsNext.RegisterCommands(objectType.IsClass && objectType.Name != "RuntimeAssembly" ? objectType.Assembly : (Assembly)botClassOrAssembly);
         }
         #endregion
 
         #region InteractivitySetup
         /// <summary>
-        /// 
+        /// Method for configuring the base settings in relation to the DSharpPlus <see cref="InteractivityExtension"/>.
         /// </summary>
         /// <param name="interactivityConfiguration"></param>
         public void InteractivitySetup(InteractivityConfiguration interactivityConfiguration)
-            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
-                                     .UseInteractivity(interactivityConfiguration);
+            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseInteractivity(interactivityConfiguration);
 
         /// <summary>
-        /// 
+        /// Method for configuring <see cref="InteractivityExtension"/>, accessing each configuration individually.
         /// </summary>
-        /// <param name="timeout"></param>
-        /// <param name="pollBehaviour"></param>
-        /// <param name="paginationEmojis"></param>
-        /// <param name="paginationBehaviour"></param>
-        /// <param name="paginationDeletion"></param>
+        /// <param name="timeout">Sets the default interactivity action timeout. Defaults to 5 minutes.</param>
+        /// <param name="pollBehaviour">What to do after the poll ends. Defaults to <see cref="PollBehaviour.DeleteEmojis"/>.</param>
+        /// <param name="paginationEmojis">Emojis to use for pagination. Defaults to <see langword="null"/>.</param>
+        /// <param name="paginationBehaviour">How to handle pagination. Defaults to <see cref="PaginationBehaviour.WrapAround"/>.</param>
+        /// <param name="paginationDeletion">How to handle pagination deletion. Defaults to <see cref="PaginationDeletion.DeleteEmojis"/>.</param>
         public void InteractivitySetup(TimeSpan? timeout = null, PollBehaviour pollBehaviour = PollBehaviour.DeleteEmojis,
                                        PaginationEmojis paginationEmojis = null, PaginationBehaviour paginationBehaviour = PaginationBehaviour.WrapAround,
-                                       PaginationDeletion paginationDeletion = PaginationDeletion.DeleteEmojis) 
-            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!"))
-                                     .UseInteractivity(new InteractivityConfiguration
-                                     {
-                                         Timeout = timeout ?? TimeSpan.FromMinutes(5),
-                                         PollBehaviour = pollBehaviour,
-                                         PaginationEmojis = paginationEmojis ?? new PaginationEmojis(),
-                                         PaginationBehaviour = paginationBehaviour,
-                                         PaginationDeletion = paginationDeletion
-                                     });
+                                       PaginationDeletion paginationDeletion = PaginationDeletion.DeleteEmojis)
+            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseInteractivity(new InteractivityConfiguration
+            {
+                Timeout = timeout ?? TimeSpan.FromMinutes(5),
+                PollBehaviour = pollBehaviour,
+                PaginationEmojis = paginationEmojis ?? new PaginationEmojis(),
+                PaginationBehaviour = paginationBehaviour,
+                PaginationDeletion = paginationDeletion
+            });
         #endregion
 
-        #region ScheduledEventsSetup and static methods of scheduled events
         /// <summary>
-        /// 
+        /// Method to start the base and connect the bot to Discord.
         /// </summary>
-        /// <param name="events"></param>
-        public void ScheduledEventsSetup(params Event[] events)
+        /// <param name="discordActivity">Represents a game that a user is playing. When the bot connects to the gateway, it will go online with the presence passed in that parameter, if it is null, it will only go online. Defaults to <see langword="null"/>.</param>
+        /// <param name="userStatus">Represents user status. Defaults to <see cref="UserStatus.Online"/>.</param>
+        /// <param name="idleSince">Since when is the client performing the specified activity. Defaults to <see langword="null"/>.</param>
+        public async Task StartAsync(DiscordActivity discordActivity = null, UserStatus userStatus = UserStatus.Online, DateTime? idleSince = null)
         {
-            _scheduledEvents = new List<Event>();
-
-            var iEvent = 0;
-
-            foreach (Event scheduledEvent in events)
-            {
-                if (!_scheduledEvents.Contains(scheduledEvent))
-                    _scheduledEvents.Add(scheduledEvent);
-
-                ++iEvent;
-            }
-            
-            _discordClient.LogMessage(discordBotBaseApplication, $"{(iEvent > 1 ? $"A total of {iEvent} scheduled events were recorded." : $"A total of {iEvent} scheduled event were recorded.")}", LogLevel.Debug);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scheduledEvents"></param>
-        public static void AddScheduledEvents(params Event[] scheduledEvents)
-        {
-            if (scheduledEvents.Any(e => e == null))
-                throw new NullReferenceException("The scheduled event can't be null!");
-            
-            if (_scheduledEvents == null)
-                _scheduledEvents = new List<Event>();
-
-            _scheduledEvents.AddRange(scheduledEvents);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scheduledEvents"></param>
-        public static void RemoveScheduledEvents(params Event[] scheduledEvents)
-        {
-            if (scheduledEvents.Any(e => e == null))
-                throw new NullReferenceException("The scheduled event can't be null!");
-
-            if (_scheduledEvents == null)
-                throw new NullReferenceException("Add an event before removing!");
-
-            foreach (Event scheduledEvent in scheduledEvents)
-            {
-                _scheduledEvents.Remove(_scheduledEvents.FirstOrDefault(e => e == scheduledEvent) ?? 
-                                        throw new InvalidOperationException("An event was not found in the list of events scheduled to be removed."));
-            }
-        }
-        #endregion
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="discordActivity"></param>
-        /// <param name="userStatus"></param>
-        /// <param name="idleSince"></param>
-        /// <returns></returns>
-        public async Task StartAsync(DiscordActivity discordActivity = null, UserStatus? userStatus = null, DateTime? idleSince = null)
-        {
-            if (this._instance != null)
-                throw new InvalidOperationException("An instance of a bot is already running!");
-
-            this._instance = new object();
-
             if (this._interactivity == null)
                 this.InteractivitySetup();
 
-            _discordClient.LogMessage(discordBotBaseApplication, $"The DiscordBotBase was started successfully! By: luizfernandonb | Version: " +
-                                                                 $"{typeof(BotBase).Assembly.GetName().Version}");
-            _discordClient.LogMessage(discordBotBaseApplication, $"Connecting do Discord...");
-            
+            if (this.BaseConfiguration?.AutoReconnect == true)
+                _discordClient.SocketClosed += async e => await e.Client.ConnectAsync(discordActivity, userStatus, idleSince);
+
+            _discordClient.LogMessage($"The DiscordBotBase was started successfully! Version: {typeof(BotBase).Assembly.GetName().Version}");
+            _discordClient.LogMessage("Connecting to Discord...");
+
             await _discordClient.ConnectAsync(discordActivity, userStatus, idleSince);
-            
-            _discordClient.LogMessage(discordBotBaseApplication, "Connection successful!");
-            
+
+            _discordClient.LogMessage("Connection successful!");
+
             await Task.Delay(-1);
         }
     }
