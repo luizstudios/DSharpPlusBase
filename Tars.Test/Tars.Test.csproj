@@ -7,7 +7,7 @@
 
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
 
-    <FileVersion>1.0.0.0</FileVersion>
+    <FileVersion>1.0.6.0</FileVersion>
     <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
   </PropertyGroup>
 
