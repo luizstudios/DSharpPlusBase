@@ -17,7 +17,7 @@ namespace Tars.Test
         public async Task TestInitialize()
         {
             this._bot = new TarsBotBase(this);
-            this._bot.DiscordClientSetup("NzQ5NzE3Njk0MzQ5MTgwOTU4.X0wDAw.hzMBVSS2XshngNHqBZoCR4Q_eOc");
+            this._bot.DiscordClientSetup("NzQ5NzE3Njk0MzQ5MTgwOTU4.X0wDAw._KLbRIOKsEntGGGlIfmH-_PKLKA");
             this._bot.CommandsNextSetup(new string[] { "tars" });
 
             _ = Task.Run(async () => await this._bot.StartAsync(new DiscordActivity { Name = "Running all tests..." }, UserStatus.DoNotDisturb));
