@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <RootNamespace>Base</RootNamespace>
+    <Version>1.0.0.0</Version>
+    <Authors>Luiz Fernando</Authors>
+    <Company>Luiz Studios</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Luiz Studios</Copyright>
+    <PackageProjectUrl>https://github.com/luizstudios/Tars</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/luizstudios/Tars</RepositoryUrl>
+    <PackageTags>DiscordBot, DSharpPlus, Discord bot, Discord, Tars</PackageTags>
+    <Description>A base to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.</Description>
+    <PackageId>Tars</PackageId>
+    <PackageReleaseNotes>First version. Still in development, feel free to contribute on GitHub ;)</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <NeutralLanguage />
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryType>OpenSource</RepositoryType>
+    <Product>Tars</Product>
+    <Nullable>disable</Nullable>
+    <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
+    <PackageIcon>TarsPhoto.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tars.MongoDB\**" />
+    <Compile Remove="Tars.ScheduledEvents\**" />
+    <Compile Remove="Tars.Test\**" />
+    <EmbeddedResource Remove="Tars.MongoDB\**" />
+    <EmbeddedResource Remove="Tars.ScheduledEvents\**" />
+    <EmbeddedResource Remove="Tars.Test\**" />
+    <None Remove="Tars.MongoDB\**" />
+    <None Remove="Tars.ScheduledEvents\**" />
+    <None Remove="Tars.Test\**" />
+    <None Include="LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="TarsPhoto.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00719" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00719" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00719" />
+  </ItemGroup>
+
+</Project>
