@@ -2,9 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
-    <FileVersion>1.0.4.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
+    <Version>1.0.0.0</Version>
+    <Authors>Luiz Fernando</Authors>
+    <Company>Luiz Studios</Company>
+    <Product>Tars.MongoDB</Product>
+    <Copyright>Luiz Studios</Copyright>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/luizstudios/Tars</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/luizstudios/Tars</RepositoryUrl>
+    <RepositoryType>OpenSource</RepositoryType>
+    <PackageIcon>TarsPhoto.png</PackageIcon>
+    <PackageTags>DiscordBot, DSharpPlus, Discord bot, Discord, Tars, Tars mongo db</PackageTags>
+    <Description>A base to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.
+
+Library that makes MongoDB compatible with the base.</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +29,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tars.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\TarsPhoto.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

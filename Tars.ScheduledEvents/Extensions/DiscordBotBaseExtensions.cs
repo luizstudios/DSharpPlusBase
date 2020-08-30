@@ -57,7 +57,7 @@ namespace Tars.ScheduledEvents.Extensions
 
             foreach (Event scheduledEvent in scheduledEvents)
             {
-                if (!_scheduledEvents.Any(e => e.Name == scheduledEvent.Name))
+                if (!_scheduledEvents.Contains(scheduledEvent))
                     _scheduledEvents.Add(scheduledEvent);
                 else
                     throw new InvalidOperationException("This scheduled event already exists on the list!");

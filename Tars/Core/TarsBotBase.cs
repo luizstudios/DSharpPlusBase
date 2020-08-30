@@ -52,7 +52,8 @@ namespace Tars.Core
         #endregion
 
         private readonly DateTimeFormatInfo _dateTimeFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
-        private readonly object _botClassOrAssembly;
+        private object _botClassOrAssembly;
+        private bool _disposed;
 
         internal static DiscordConfiguration _discordConfiguration;
         internal static string _logTimestampFormat;
@@ -253,6 +254,27 @@ namespace Tars.Core
                 PaginationBehaviour = paginationBehaviour,
                 PaginationDeletion = paginationDeletion
             });
+        #endregion
+
+        #region Base methods
+        /// <summary>
+        /// Dispose Tars and DSharpPlus.
+        /// </summary>
+        public void Dispose()
+        {
+            if (this._disposed)
+                throw new InvalidOperationException("The Tars is already disposed!");
+
+            _discordClient.Dispose();
+            _discordConfiguration = null;
+            _commandsNext = null;
+            _interactivity = null;
+            _discordClient = null;
+            _botClassOrAssembly = null;
+            _logTimestampFormat = string.Empty;
+
+            this._disposed = true;
+        }
         #endregion
 
         /// <summary>
