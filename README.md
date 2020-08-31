@@ -37,7 +37,7 @@ public static async Task Main(string[] args)
 - If you start the bot by another class and methods that are not static, you can put the bot class as a service, to access it via commands, this is how it is added:
 ```C#
 botBase.CommandsNextSetup(new string[] { "A prefix of your choice" },
-		      services: new ServiceCollection().AddSingleton(this));
+		          services: new ServiceCollection().AddSingleton(this));
 ```
 - And ready! If everything goes as expected, your bot will go online :)
 
