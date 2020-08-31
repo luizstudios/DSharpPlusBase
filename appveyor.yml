@@ -7,12 +7,4 @@ before_build:
 build:
   project: Tars.sln
   verbosity: minimal
-
-deploy:
-  provider: NuGet
-  server:                  # remove to push to NuGet.org
-  api_key:
-    secure: YvPwX46IFWy5U94Z6JrO4gjMloVhKgYbPulwd5zD1Lg=
-  skip_symbols: false
-  symbol_server:           # remove to push symbols to SymbolSource.org
-  artifact: /.*\.nupkg/
+  publish_nuget: true
