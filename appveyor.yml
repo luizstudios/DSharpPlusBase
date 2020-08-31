@@ -1,9 +1,18 @@
 configuration: Release
+image: Visual Studio 2019
 
 before_build:
   - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
 
 build:
   project: Tars.sln
-  verbosity: normal
-  publish_wap: true
+  verbosity: minimal
+
+deploy:
+  provider: NuGet
+  server:                  # remove to push to NuGet.org
+  api_key:
+    secure: YvPwX46IFWy5U94Z6JrO4gjMloVhKgYbPulwd5zD1Lg=
+  skip_symbols: false
+  symbol_server:           # remove to push symbols to SymbolSource.org
+  artifact: /.*(\.|\.s)nupkg/
