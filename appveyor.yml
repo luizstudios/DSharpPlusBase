@@ -18,10 +18,3 @@ deploy:
   api_key:
     secure: ct685cIFmObHfziMCNnIt+F3Cx2swIhOHfMNldh6XjGvq6hu6PYz6bKIL8Uio47A
   artifact: /.*(\.|\.s)nupkg/
-
-  - provider: NuGet
-    server: https://nuget.pkg.github.com/luizstudios/index.json
-    artifact: /.nupkg/
-    username: luizstudios 
-    api_key:
-      secure: IgASq0BP0NIAc5+5mYnKFKU6t/70Wq9mNDE4cmjOB90BEv2ncphl6qnnKNBBNmLN
