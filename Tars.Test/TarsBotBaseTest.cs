@@ -11,7 +11,7 @@ namespace Tars.Test
     [TestClass]
     public class TarsBotBaseTest
     {
-        private TarsBotBase _bot;
+        private TarsBase _bot;
 
         public TestContext TestContext { get; set; }
 
@@ -19,7 +19,7 @@ namespace Tars.Test
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this._bot = new TarsBotBase(this);
+            this._bot = new TarsBase(this);
 
             // This was done to escape Discord's warning that the bot's token is "unprotected".
             this._bot.DiscordClientSetup(Encoding.UTF8.GetString(new byte[] { 78, 122, 81, 53, 78, 122, 69, 51, 78, 106, 107, 48, 77, 122, 81, 53, 77, 84, 103, 119, 79, 84,

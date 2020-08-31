@@ -18,7 +18,7 @@ namespace Tars.ScheduledEvents.Extensions
         /// <param name="botBase"></param>
         /// <param name="events">Instantiate the scheduled events here.</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public static void ScheduledEventsSetup(this TarsBotBase botBase, params Event[] events)
+        public static void ScheduledEventsSetup(this TarsBase botBase, params Event[] events)
         {
             if (_scheduledEvents != null)
                 throw new InvalidOperationException("The event list has already been instantiated!");
@@ -44,7 +44,7 @@ namespace Tars.ScheduledEvents.Extensions
         /// <param name="scheduledEvents">Instantiate the scheduled events here.</param>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="NullReferenceException"></exception>
-        public static void AddScheduledEvents(this TarsBotBase _, params Event[] scheduledEvents)
+        public static void AddScheduledEvents(this TarsBase _, params Event[] scheduledEvents)
         {
             if (scheduledEvents == null)
                 throw new NullReferenceException("The scheduled events list can't be null!");
@@ -70,7 +70,7 @@ namespace Tars.ScheduledEvents.Extensions
         /// <param name="scheduledEvents">The scheduled events you want to remove.</param>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="NullReferenceException"></exception>
-        public static void RemoveScheduledEvents(this TarsBotBase _, params Event[] scheduledEvents)
+        public static void RemoveScheduledEvents(this TarsBase _, params Event[] scheduledEvents)
         {
             if (scheduledEvents == null)
                 throw new NullReferenceException("The scheduled events list can't be null!");
@@ -98,6 +98,6 @@ namespace Tars.ScheduledEvents.Extensions
         /// <summary>
         /// Get a list of all scheduled events.
         /// </summary>
-        public static IReadOnlyList<Event> GetScheduledEvents(this TarsBotBase _) => _scheduledEvents;
+        public static IReadOnlyList<Event> GetScheduledEvents(this TarsBase _) => _scheduledEvents;
     }
 }

@@ -52,7 +52,7 @@ namespace Tars.Extensions
         /// <param name="discordMember"></param>
         /// <returns>A <see langword="bool"/>.</returns>
         public static bool CanBeBanned(this DiscordMember discordMember)
-            => !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsAbove(TarsBotBase._discordClient.CurrentUser.GetHighestRole());
+            => !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsAbove(TarsBase._discordClient.CurrentUser.GetHighestRole());
 
         /// <summary>
         /// Returns a <see langword="bool"/> that says whether the member is a server administrator.

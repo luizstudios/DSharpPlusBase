@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Tars.MongoDB.Extensions
 {
     /// <summary>
-    /// Class to extend the standard <see cref="TarsBotBase"/> methods.
+    /// Class to extend the standard <see cref="TarsBase"/> methods.
     /// </summary>
     public static class TarsBotBaseExtensions
     {
@@ -24,7 +24,7 @@ namespace Tars.MongoDB.Extensions
         /// <param name="botBase"></param>
         /// <param name="mongoClient">Mongo class instance.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void MongoClientSetup(this TarsBotBase botBase, MongoClient mongoClient)
+        public static void MongoClientSetup(this TarsBase botBase, MongoClient mongoClient)
         {
             if (botBase == null)
                 throw new ArgumentNullException("The BotBase can't be null!");
@@ -38,6 +38,6 @@ namespace Tars.MongoDB.Extensions
         /// <param name="_"></param>
         /// <returns>The current instance of <see cref="MongoClient"/>.</returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static MongoClient GetMongoClient(this TarsBotBase _) => _mongoClient ?? throw new NullReferenceException("The MongoClient is null! Call the MongoClientSetup!");
+        public static MongoClient GetMongoClient(this TarsBase _) => _mongoClient ?? throw new NullReferenceException("The MongoClient is null! Call the MongoClientSetup!");
     }
 }

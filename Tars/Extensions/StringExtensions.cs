@@ -25,7 +25,7 @@ namespace Tars.Extensions
         /// <exception cref="NullReferenceException"></exception>
         public static DiscordMember ToDiscordMember(this string stringMemberOrId)
         {
-            DiscordClient discordClient = TarsBotBase._discordClient;
+            DiscordClient discordClient = TarsBase._discordClient;
             if (discordClient == null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
@@ -53,7 +53,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordEmoji"/> or <see langword="null"/> if the bot finds nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="NullReferenceException"></exception>
-        public static DiscordEmoji ToDiscordEmoji(this string stringEmojiOrId) => BotBaseUtilities.FindEmoji(stringEmojiOrId);
+        public static DiscordEmoji ToDiscordEmoji(this string stringEmojiOrId) => TarsBaseUtilities.FindEmoji(stringEmojiOrId);
 
         /// <summary>
         /// Convert a <see langword="string"/> to <see cref="DiscordRole"/>. Example: "Role id", "Role name"
@@ -64,7 +64,7 @@ namespace Tars.Extensions
         /// <exception cref="NullReferenceException"></exception>
         public static DiscordRole ToDiscordRole(this string stringRoleOrId)
         {
-            DiscordClient discordClient = TarsBotBase._discordClient;
+            DiscordClient discordClient = TarsBase._discordClient;
             if (discordClient == null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
@@ -92,7 +92,7 @@ namespace Tars.Extensions
         /// <exception cref="NullReferenceException"></exception>
         public static DiscordChannel ToDiscordChannel(this string stringChannelOrId)
         {
-            DiscordClient discordClient = TarsBotBase._discordClient;
+            DiscordClient discordClient = TarsBase._discordClient;
             if (discordClient == null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
@@ -130,7 +130,7 @@ namespace Tars.Extensions
         /// <exception cref="NullReferenceException"></exception>
         public static DiscordGuild ToDiscordGuild(this string stringGuildOrId)
         {
-            DiscordClient discordClient = TarsBotBase._discordClient;
+            DiscordClient discordClient = TarsBase._discordClient;
             if (discordClient == null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
@@ -165,7 +165,7 @@ namespace Tars.Extensions
         /// <exception cref="NullReferenceException"></exception>
         public static DiscordMessage ToDiscordMessage(this string stringMessageId)
         {
-            DiscordClient discordClient = TarsBotBase._discordClient;
+            DiscordClient discordClient = TarsBase._discordClient;
             if (discordClient == null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 

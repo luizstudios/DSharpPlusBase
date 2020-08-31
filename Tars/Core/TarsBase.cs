@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Net;
 using System.Reflection;
@@ -24,13 +23,13 @@ namespace Tars.Core
     /// <summary>
     /// Class where the bot is instantiated using Tars.
     /// </summary>
-    public sealed class TarsBotBase
+    public sealed class TarsBase
     {
         #region Public Properties
         /// <summary>
         /// Get the current settings from the base.
         /// </summary>
-        public BaseConfiguration BaseConfiguration { get; private set; }
+        public TarsBaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Get the DSharpPlus <see cref="DSharpPlus.DiscordClient"/>.
@@ -62,7 +61,7 @@ namespace Tars.Core
         /// Constructor of the Tars class.
         /// </summary>
         /// <param name="botClassOrAssembly">Use the keyword <see langword="this"/> or call the <see cref="Assembly.GetEntryAssembly()"/> method.</param>
-        public TarsBotBase(object botClassOrAssembly)
+        public TarsBase(object botClassOrAssembly)
         {
             if (_discordClient != null)
                 throw new InvalidOperationException("A bot instance has already been instantiated!");
@@ -75,13 +74,13 @@ namespace Tars.Core
         /// Method for configuring the base settings.
         /// </summary>
         /// <param name="baseConfiguration">Class of Tars configurations.</param>
-        public void BaseSetup(BaseConfiguration baseConfiguration) => this.BaseConfiguration = baseConfiguration;
+        public void BaseSetup(TarsBaseConfiguration baseConfiguration) => this.BaseConfiguration = baseConfiguration;
 
         /// <summary>
-        /// Method for configuring <see cref="Settings.BaseConfiguration"/>, accessing each configuration individually.
+        /// Method for configuring <see cref="Settings.TarsBaseConfiguration"/>, accessing each configuration individually.
         /// </summary>
         /// <param name="autoReconnect">Set whether the bot will use Tars's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false in <see cref="DiscordConfiguration"/> for Tars's AutoReconnect to take effect.</param>
-        public void BaseSetup(bool autoReconnect = true) => this.BaseConfiguration = new BaseConfiguration
+        public void BaseSetup(bool autoReconnect = true) => this.BaseConfiguration = new TarsBaseConfiguration
         {
             AutoReconnect = autoReconnect
         };
@@ -143,8 +142,12 @@ namespace Tars.Core
 
             _discordConfiguration.Token = token;
             _discordConfiguration.TokenType = tokenType;
-            _discordConfiguration.MinimumLogLevel = logLevelDebugOnDebugging ? (Debugger.IsAttached ? LogLevel.Debug : LogLevel.Information) : (minimumLogLevel ??
-                                                                                                                                                LogLevel.Information);
+
+#if DEBUG
+            _discordConfiguration.MinimumLogLevel = logLevelDebugOnDebugging ? LogLevel.Debug : LogLevel.Information;
+#else       // (Debugger.IsAttached ? LogLevel.Debug : LogLevel.Information) : (minimumLogLevel ?? LogLevel.Information);
+            _discordConfiguration.MinimumLogLevel = LogLevel.Information;
+#endif
             _discordConfiguration.UseRelativeRatelimit = useRelativeRateLimit;
             _discordConfiguration.LogTimestampFormat = _logTimestampFormat = string.IsNullOrWhiteSpace(logTimestampFormat) ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
                                                                                                                              $"{this._dateTimeFormatInfo.ShortTimePattern}" :
@@ -153,7 +156,7 @@ namespace Tars.Core
 
             _discordConfiguration.AutoReconnect = autoReconnect;
             if (!autoReconnect)
-                this.BaseConfiguration = new BaseConfiguration();
+                this.BaseConfiguration = new TarsBaseConfiguration();
 
             _discordConfiguration.ShardId = shardId;
             _discordConfiguration.ShardCount = shardCount;
@@ -291,7 +294,7 @@ namespace Tars.Core
             if (this.BaseConfiguration?.AutoReconnect == true)
                 _discordClient.SocketClosed += async e => await e.Client.ConnectAsync(discordActivity, userStatus, idleSince);
 
-            _discordClient.LogMessage($"The Tars was started successfully! Version: {typeof(TarsBotBase).Assembly.GetName().Version}");
+            _discordClient.LogMessage($"The Tars was started successfully! Version: {typeof(TarsBase).Assembly.GetName().Version}");
             _discordClient.LogMessage("Connecting to Discord...");
 
             await _discordClient.ConnectAsync(discordActivity, userStatus, idleSince);

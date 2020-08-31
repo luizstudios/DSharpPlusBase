@@ -70,7 +70,7 @@ namespace Tars.Extensions
         public static bool CanBeBanned(this DiscordUser discordUser)
         {
             var discordMember = discordUser.ToDiscordMember();
-            return !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsAbove(TarsBotBase._discordClient.CurrentUser.GetHighestRole());
+            return !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsAbove(TarsBase._discordClient.CurrentUser.GetHighestRole());
         }
 
         /// <summary>

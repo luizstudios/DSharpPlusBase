@@ -25,7 +25,6 @@ Switch ($STATUS) {
     Break
   }
 }
-$AVATAR="https://www.appveyor.com/assets/img/appveyor-logo-256.png"
 
 if (!$env:APPVEYOR_REPO_COMMIT) {
   $env:APPVEYOR_REPO_COMMIT="$(git log -1 --pretty="%H")"
@@ -55,7 +54,6 @@ $BUILD_VERSION = [uri]::EscapeDataString($env:APPVEYOR_BUILD_VERSION)
 $TIMESTAMP="$(Get-Date -format s)Z"
 $WEBHOOK_DATA="{
   ""username"": """",
-  ""avatar_url"": ""$AVATAR"",
   ""embeds"": [ {
     ""color"": $EMBED_COLOR,
     ""author"": {

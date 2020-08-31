@@ -50,7 +50,7 @@ namespace Tars.Extensions
 
             try
             {
-                return TarsBotBase._discordClient.GetChannelAsync(channelId).Result;
+                return TarsBase._discordClient.GetChannelAsync(channelId).Result;
             }
             catch
             {
@@ -71,7 +71,7 @@ namespace Tars.Extensions
 
             try
             {
-                return TarsBotBase._discordClient.GetGuildAsync(guildId).Result;
+                return TarsBase._discordClient.GetGuildAsync(guildId).Result;
             }
             catch
             {

@@ -22,7 +22,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordEmoji"/> with the found emoji or <see langword="null"/> if the bot found nothing..</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordEmoji FindEmoji(this DiscordClient discordClient, string emojiNameOrId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : BotBaseUtilities.FindEmoji(emojiNameOrId);
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : TarsBaseUtilities.FindEmoji(emojiNameOrId);
 
         /// <summary>
         /// Search for a role on all the servers the bot is on.

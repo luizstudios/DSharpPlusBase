@@ -10,7 +10,7 @@ namespace Tars.Utilities
     /// <summary>
     /// Tars utility class.
     /// </summary>
-    internal static class BotBaseUtilities
+    internal static class TarsBaseUtilities
     {
         /// <summary>
         /// Internal method to search for emojis.
@@ -24,7 +24,7 @@ namespace Tars.Utilities
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
                 throw new ArgumentNullException("The emoji name or id can't be null!");
 
-            DiscordClient discordClient = TarsBotBase._discordClient;
+            DiscordClient discordClient = TarsBase._discordClient;
 
             string oldNameEmoji = emojiNameOrId;
             emojiNameOrId = emojiNameOrId.ToLower();

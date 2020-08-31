@@ -21,7 +21,7 @@ namespace Tars.Extensions
             if (role == null)
                 throw new ArgumentNullException("The role can't be null!");
 
-            var guildRole = TarsBotBase._discordClient.Guilds.Values.FirstOrDefault(g => g.Roles.Values.Contains(role));
+            var guildRole = TarsBase._discordClient.Guilds.Values.FirstOrDefault(g => g.Roles.Values.Contains(role));
             return guildRole.Members.Values.Where(m => m.Roles.Contains(role)).ToList();
         }
 
@@ -55,7 +55,7 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static decimal GetPercentageOfMembers(this DiscordRole role)
             => role == null ? throw new ArgumentNullException("The role can't be null!") : Math.Round((decimal)GetMembers(role).Count * 100 /
-                                                                                                      (int)TarsBotBase._discordClient.Guilds.Values.FirstOrDefault(g =>
+                                                                                                      (int)TarsBase._discordClient.Guilds.Values.FirstOrDefault(g =>
                                                                                                       g.Roles.Values.Contains(role))?.MemberCount, 5);
     }
 }
