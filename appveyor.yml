@@ -4,5 +4,6 @@ before_build:
   - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
 
 build:
+  project: Tars.sln
   verbosity: normal
   publish_wap: true
