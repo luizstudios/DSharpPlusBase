@@ -3,7 +3,7 @@ configuration: Release
 image: Visual Studio 2019
 
 before_build:
-  - dotnet nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
+  - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
 
 build:
   project: Tars.sln
