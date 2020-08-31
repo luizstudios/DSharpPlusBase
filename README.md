@@ -1,6 +1,6 @@
 <p align="center">
 <a href="https://discord.gg/Z9BcKua">
-	<img src="https://cdn.discordapp.com/attachments/478612177511645212/750100798398267412/Tars.png"/>
+	<img src="https://cdn.discordapp.com/attachments/478612177511645212/750098134516105367/Tars.png"/>
 </a>
 
 <a href="https://ci.appveyor.com/project/luizferbr17/tars">
