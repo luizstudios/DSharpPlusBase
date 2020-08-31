@@ -10,12 +10,6 @@ build:
   verbosity: minimal
   publish_nuget: true
 
-after_build:
-  - dotnet nuget add source https://nuget.pkg.github.com/luizstudios/index.json -n github -u luizstudios -p 09888b7ca5fa54afec1c60cd309e2fe1443b4acb --store-password-in-clear-text
-  - dotnet nuget push ".\Tars.1.0.{build}.nupkg" --source "github"
-  - dotnet nuget push ".\Tars.MongoDB.1.0.{build}.nupkg" --source "github"
-  - dotnet nuget push ".\Tars.ScheduledEvents.1.0.{build}.nupkg" --source "github"
-
 nuget:
   project_feed: true
 
