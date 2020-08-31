@@ -5,6 +5,9 @@
 <a href="https://discord.gg/Z9BcKua">
 	<img alt="Discord" src="https://img.shields.io/discord/463752820026376202.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2">
 </a>
+<a href="https://www.nuget.org/packages?packagetype=&sortby=relevance&q=Tars&prerel=false">
+	<img src="https://img.shields.io/nuget/vpre/Tars.svg">
+</a>
 </p>
 
 # Tars

@@ -40,14 +40,26 @@ namespace Tars.Core
         /// <summary>
         /// Get the DSharpPlus <see cref="CommandsNextExtension"/>.
         /// </summary>
-        public CommandsNextExtension CommandsNext => _commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
+        public CommandsNextExtension CommandsNext => this._commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
         private CommandsNextExtension _commandsNext;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="InteractivityExtension"/>.
         /// </summary>
-        public InteractivityExtension Interactivity => _interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
+        public InteractivityExtension Interactivity => this._interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
         private InteractivityExtension _interactivity;
+
+        /// <summary>
+        /// Get <see cref="TarsBase"/> version.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                var assemblyVersion = typeof(TarsBase).Assembly.GetName().Version;
+                return $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
+            }
+        }
         #endregion
 
         private readonly DateTimeFormatInfo _dateTimeFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
@@ -144,7 +156,7 @@ namespace Tars.Core
             _discordConfiguration.TokenType = tokenType;
 
 #if DEBUG
-            _discordConfiguration.MinimumLogLevel = logLevelDebugOnDebugging ? LogLevel.Debug : LogLevel.Information;
+            _discordConfiguration.MinimumLogLevel = logLevelDebugOnDebugging ? LogLevel.Debug : minimumLogLevel ?? LogLevel.Information;
 #else       // (Debugger.IsAttached ? LogLevel.Debug : LogLevel.Information) : (minimumLogLevel ?? LogLevel.Information);
             _discordConfiguration.MinimumLogLevel = LogLevel.Information;
 #endif

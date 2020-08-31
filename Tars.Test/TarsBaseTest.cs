@@ -9,7 +9,7 @@ using Tars.Extensions;
 namespace Tars.Test
 {
     [TestClass]
-    public class TarsBotBaseTest
+    public class TarsBaseTest
     {
         private TarsBase _bot;
 
