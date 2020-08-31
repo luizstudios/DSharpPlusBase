@@ -1,5 +1,5 @@
 <a href="https://discord.gg/Z9BcKua">
-	<img src="https://cdn.discordapp.com/attachments/749719569731420181/750085520431775744/Tars.png"/>
+	<img src="https://cdn.discordapp.com/attachments/478612177511645212/750098134516105367/Tars.png"/>
 </a>
 
 <p align="center">
@@ -36,12 +36,14 @@ public static async Task Main(string[] args)
 ```
 - If you start the bot by another class and methods that are not static, you can put the bot class as a service, to access it via commands, this is how it is added:
 ```C#
-botBase.CommandsNextSetup(new string[] { "A prefix of your choice" }, services: new ServiceCollection().AddSingleton(this));
+botBase.CommandsNextSetup(new string[] { "A prefix of your choice" }, 
+					      services: new ServiceCollection().AddSingleton(this));
 ```
 - And ready! If everything goes as expected, your bot will go online :)
 
 # Doubts? Questions?
 - Open an issue or enter our Discord:
+
 [![Tars Chat](https://discord.com/api/guilds/749718492781215754/embed.png?style=banner1)](https://discord.gg/Z9BcKua)
 
 # Credits
