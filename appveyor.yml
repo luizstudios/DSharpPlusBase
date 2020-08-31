@@ -1,7 +1,7 @@
 configuration: Release
 
 before_build:
-  - nuget restore
+  - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json"
 
 build:
   verbosity: normal
