@@ -23,6 +23,7 @@ A base to facilitate the construction of bots for Discord using the [C#](https:/
 # Getting Started
 - Create a project in Visual Studio, preferably in .NET Core, and any version of your choice.
 - Change the *Main* method from __void__ to __async Task__
+- If red lines appear in the code, click on it and press ```Ctrl``` + ```.``` and add the missing usings, do it the other times you need.
 - In your bot's main, just write this:
 ```C#
 public static async Task Main(string[] args)
