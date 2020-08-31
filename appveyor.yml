@@ -3,7 +3,7 @@ configuration: Release
 image: Visual Studio 2019
 
 before_build:
-  - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
+  - dotnet nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
 
 build:
   project: Tars.sln
@@ -11,11 +11,11 @@ build:
   publish_nuget: true
 
 after_build:
-  - nuget add source https://nuget.pkg.github.com/luizstudios/index.json -n github -u luizstudios -p 09888b7ca5fa54afec1c60cd309e2fe1443b4acb
-  - nuget push "bin/Release/Tars.1.0.0.nupkg" --source "github"
-  - nuget push "bin/Release/Tars.MongoDB.1.0.0.nupkg" --source "github"
-  - nuget push "bin/Release/Tars.ScheduledEvents.1.0.0.nupkg" --source "github"
-  
+  - dotnet nuget add source https://nuget.pkg.github.com/luizstudios/index.json -n github -u luizstudios -p 09888b7ca5fa54afec1c60cd309e2fe1443b4acb --store-password-in-clear-text
+  - dotnet nuget push "bin/Release/Tars.1.0.0.nupkg" --source "github"
+  - dotnet nuget push "bin/Release/Tars.MongoDB.1.0.0.nupkg" --source "github"
+  - dotnet nuget push "bin/Release/Tars.ScheduledEvents.1.0.0.nupkg" --source "github"
+
 nuget:
   project_feed: true
 
