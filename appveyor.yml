@@ -1,6 +1,4 @@
-version: 1.0.{build}
-configuration: Release
-image: Visual Studio 2019
+version: 1.0.{build}.0
 
 before_build:
   - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
@@ -10,6 +8,15 @@ build:
   verbosity: minimal
   publish_nuget: true
 
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+
 nuget:
   project_feed: true
 
@@ -18,3 +25,10 @@ deploy:
   api_key:
     secure: ct685cIFmObHfziMCNnIt+F3Cx2swIhOHfMNldh6XjGvq6hu6PYz6bKIL8Uio47A
   artifact: /.*(\.|\.s)nupkg/
+
+on_success:
+  - ps: Invoke-RestMethod https://raw.githubusercontent.com/luizstudios/Tars/master/send.ps1 -o send.ps1
+  - ps: ./send.ps1 success $env:WEBHOOK_URL
+on_failure:
+  - ps: Invoke-RestMethod https://raw.githubusercontent.com/luizstudios/Tars/master/send.ps1 -o send.ps1
+  - ps: ./send.ps1 failure $env:WEBHOOK_URL
