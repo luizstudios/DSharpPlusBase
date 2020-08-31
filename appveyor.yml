@@ -8,3 +8,12 @@ build:
   project: Tars.sln
   verbosity: minimal
   publish_nuget: true
+
+nuget:
+  project_feed: true
+
+deploy:
+  provider: NuGet
+  api_key:
+    secure: oy2derj6lmqifdy3y23auhr5k6mm3g3enkmmm3ek4ou5gi
+  artifact: /.*\.nupkg/
