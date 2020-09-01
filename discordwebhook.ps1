@@ -16,7 +16,7 @@ Switch ($STATUS) {
     Break
   }
   "failure" {
-    $EMBED_COLOR=15158332
+    $EMBED_COLOR=15144192
     $STATUS_MESSAGE="Failed"
     Break
   }
