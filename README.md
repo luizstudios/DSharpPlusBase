@@ -28,11 +28,11 @@ A base to facilitate the construction of bots for Discord using the [C#](https:/
 ```C#
 public static async Task MainAsync(string[] args)
 {
-   var botBase = new TarsBase(Assembly.GetEntryAssembly());
-   botBase.DiscordClientSetup("Your bot's token");
-   botBase.CommandsNextSetup(new string[] { "A prefix of your choice" });
+    var botBase = new TarsBase(Assembly.GetEntryAssembly());
+    botBase.DiscordClientSetup("Your bot's token");
+    botBase.CommandsNextSetup(new string[] { "A prefix of your choice" });
 
-   await botBase.StartAsync();
+    await botBase.StartAsync();
 }
 ```
 - If you start the bot by another class and methods that are not static, you can put the bot class as a service, to access it via commands, this is how it is added:
