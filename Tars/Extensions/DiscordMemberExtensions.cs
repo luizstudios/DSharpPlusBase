@@ -1,8 +1,8 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
-using Tars.Core;
 using System;
 using System.Linq;
+using Tars.Core;
 
 namespace Tars.Extensions
 {
@@ -47,19 +47,18 @@ namespace Tars.Extensions
         }
 
         /// <summary>
-        /// Returns a <see langword="bool"/> that says whether the member can be banned from the server.
+        /// Returns a <see langword="bool"/> that says whether the member can be banned from the server. <c>Attention!</c> can be banned by the <c>bot</c>.
         /// </summary>
         /// <param name="discordMember"></param>
         /// <returns>A <see langword="bool"/>.</returns>
         public static bool CanBeBanned(this DiscordMember discordMember)
-            => !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsAbove(TarsBase._discordClient.CurrentUser.GetHighestRole());
+            => !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsBelow(TarsBase._discordClient.CurrentUser.GetHighestRole());
 
         /// <summary>
         /// Returns a <see langword="bool"/> that says whether the member is a server administrator.
         /// </summary>
         /// <param name="discordMember"></param>
         /// <returns>A <see langword="bool"/>.</returns>
-        public static bool IsAdministrator(this DiscordMember discordMember)
-            => discordMember.GetHighestRole().Permissions.HasPermission(Permissions.Administrator);
+        public static bool IsAdministrator(this DiscordMember discordMember) => discordMember.Roles.Any(r => r.Permissions.HasPermission(Permissions.Administrator));
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Tars.Extensions
 {
@@ -25,11 +26,11 @@ namespace Tars.Extensions
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
                 throw new ArgumentNullException("The emoji name or Id can't be null!");
 
-            string oldNameEmoji = emojiNameOrId;
             emojiNameOrId = emojiNameOrId.ToLower();
             ulong.TryParse(emojiNameOrId, out ulong emojiId);
 
-            return guild.Emojis.Values.FirstOrDefault(e => e.Name.ToLower() == emojiNameOrId.Replace(":", "") || e.Id == emojiId || e.ToString().ToLower() == emojiNameOrId);
+            return guild.Emojis.Values.FirstOrDefault(e => string.Equals(e.Name, emojiNameOrId.Replace(":", "")) ||
+                                                           string.Equals(e.ToString(), emojiNameOrId, StringComparison.CurrentCultureIgnoreCase) || e.Id == emojiId);
         }
 
         /// <summary>
@@ -82,9 +83,30 @@ namespace Tars.Extensions
         public static DiscordRole GetLowestRoleAfterEveryone(this DiscordGuild guild, Func<DiscordRole, bool> predicate = null)
         {
             var organizedRoles = guild.GetOrganizedRoles();
+
+            StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
+
             return guild == null ? throw new ArgumentNullException("The guild can't be null!") :
-                                   predicate == null ? organizedRoles.LastOrDefault(r => !string.Equals(r.Name, "@everyone", StringComparison.CurrentCultureIgnoreCase)) :
-                                                       organizedRoles.Where(r => !string.Equals(r.Name, "@everyone", StringComparison.CurrentCultureIgnoreCase)).LastOrDefault(predicate);
+                                   predicate == null ? organizedRoles.LastOrDefault(r => !string.Equals(r.Name, "@everyone", stringComparison)) :
+                                                       organizedRoles.Where(r => !string.Equals(r.Name, "@everyone", stringComparison)).LastOrDefault(predicate);
         }
+
+        /// <summary>
+        /// Deletes a channel.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="channelNameOrId">Channel name or id.</param>
+        /// <param name="reason">Reason for audit logs.</param>
+        /// <returns></returns>
+        public static async Task DeleteChannelAsync(this DiscordGuild _, string channelNameOrId, string reason = null) => await channelNameOrId.ToDiscordChannel().DeleteAsync(reason);
+
+        /// <summary>
+        /// Deletes a channel.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="channel">Channel object.</param>
+        /// <param name="reason">Reason for audit logs.</param>
+        /// <returns></returns>
+        public static async Task DeleteChannelAsync(this DiscordGuild _, DiscordChannel channel, string reason = null) => await channel.DeleteAsync(reason);
     }
 }

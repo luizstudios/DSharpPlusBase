@@ -1,11 +1,10 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
-using Tars.Utilities;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tars.Core;
-using Microsoft.Extensions.Logging;
+using Tars.Utilities;
 
 namespace Tars.Extensions
 {
@@ -32,7 +31,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordRole"/> with the found role or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : StringExtensions.ToDiscordRole(roleNameOrId);
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : roleNameOrId.ToDiscordRole();
 
         /// <summary>
         /// Sends the same message to different channels.
@@ -62,7 +61,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordMember"/> with the found member or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordMember FindMember(this DiscordClient discordClient, string memberNameOrId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : StringExtensions.ToDiscordMember(memberNameOrId);
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : memberNameOrId.ToDiscordMember();
 
         /// <summary>
         /// Adds the same permission on different channels.
@@ -122,6 +121,6 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordMessage"/> with the found message or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordMessage FindMessage(this DiscordClient discordClient, ulong messageId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : StringExtensions.ToDiscordMessage(messageId.ToString());
+            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : messageId.ToString().ToDiscordMessage();
     }
 }

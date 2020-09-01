@@ -27,9 +27,10 @@ namespace Tars.Core
     {
         #region Public Properties
         /// <summary>
-        /// Get the current settings from the base.
+        /// Get the current settings from the <see cref="TarsBaseConfiguration"/>.
         /// </summary>
-        public TarsBaseConfiguration BaseConfiguration { get; private set; }
+        public TarsBaseConfiguration Base => _baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the StartAsync!");
+        internal static TarsBaseConfiguration _baseConfiguration;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="DSharpPlus.DiscordClient"/>.
@@ -40,14 +41,14 @@ namespace Tars.Core
         /// <summary>
         /// Get the DSharpPlus <see cref="CommandsNextExtension"/>.
         /// </summary>
-        public CommandsNextExtension CommandsNext => this._commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
-        private CommandsNextExtension _commandsNext;
+        public CommandsNextExtension CommandsNext => _commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
+        internal static CommandsNextExtension _commandsNext;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="InteractivityExtension"/>.
         /// </summary>
-        public InteractivityExtension Interactivity => this._interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
-        private InteractivityExtension _interactivity;
+        public InteractivityExtension Interactivity => _interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
+        internal static InteractivityExtension _interactivity;
 
         /// <summary>
         /// Get <see cref="TarsBase"/> version.
@@ -66,7 +67,6 @@ namespace Tars.Core
         private object _botClassOrAssembly;
         private bool _disposed;
 
-        internal static DiscordConfiguration _discordConfiguration;
         internal static string _logTimestampFormat;
 
         /// <summary>
@@ -81,42 +81,7 @@ namespace Tars.Core
             this._botClassOrAssembly = botClassOrAssembly;
         }
 
-        #region BaseSetup
-        /// <summary>
-        /// Method for configuring the base settings.
-        /// </summary>
-        /// <param name="baseConfiguration">Class of Tars configurations.</param>
-        public void BaseSetup(TarsBaseConfiguration baseConfiguration) => this.BaseConfiguration = baseConfiguration;
-
-        /// <summary>
-        /// Method for configuring <see cref="Settings.TarsBaseConfiguration"/>, accessing each configuration individually.
-        /// </summary>
-        /// <param name="autoReconnect">Set whether the bot will use Tars's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false in <see cref="DiscordConfiguration"/> for Tars's AutoReconnect to take effect.</param>
-        public void BaseSetup(bool autoReconnect = true) => this.BaseConfiguration = new TarsBaseConfiguration
-        {
-            AutoReconnect = autoReconnect
-        };
-        #endregion
-
         #region DiscordClientSetup
-        /// <summary>
-        /// Method for configuring the base settings in relation to the DSharpPlus <see cref="DSharpPlus.DiscordClient"/>.
-        /// </summary>
-        /// <param name="discordConfiguration"><see cref="DiscordConfiguration"/> class for configuring <see cref="DSharpPlus.DiscordClient"/> settings.</param>
-        public void DiscordClientSetup(DiscordConfiguration discordConfiguration)
-        {
-            _discordConfiguration = discordConfiguration;
-
-            _discordClient = new DiscordClient(_discordConfiguration);
-
-            //_discordConfiguration.AutoReconnect = !(this.BaseConfiguration ?? new BaseConfiguration()).AutoReconnect;
-            //_discordConfiguration.DateTimeFormat = _dateTimeFormat = $"{this._dateTimeFormatInfo.ShortDatePattern} {this._dateTimeFormatInfo.ShortTimePattern}";
-            //_discordConfiguration.HttpTimeout = TimeSpan.FromSeconds(10);
-            //_discordConfiguration.LargeThreshold = 1000;
-            //_discordConfiguration.UseInternalLogHandler = true;
-            //_discordConfiguration.LogLevel = Debugger.IsAttached ? LogLevel.Debug : LogLevel.Info;
-        }
-
         /// <summary>
         /// Method for configuring <see cref="DSharpPlus.DiscordClient"/>, accessing each configuration individually.
         /// </summary>
@@ -147,56 +112,44 @@ namespace Tars.Core
                                        UdpClientFactoryDelegate udpClientFactory = null, ILoggerFactory loggerFactory = null)
 
         {
-            _discordConfiguration = new DiscordConfiguration();
+            var discordConfiguration = new DiscordConfiguration();
 
             if (udpClientFactory != null)
-                _discordConfiguration.UdpClientFactory = udpClientFactory;
+               discordConfiguration.UdpClientFactory = udpClientFactory;
 
-            _discordConfiguration.Token = token;
-            _discordConfiguration.TokenType = tokenType;
+            discordConfiguration.Token = token;
+            discordConfiguration.TokenType = tokenType;
 
 #if DEBUG
-            _discordConfiguration.MinimumLogLevel = logLevelDebugOnDebugging ? LogLevel.Debug : minimumLogLevel ?? LogLevel.Information;
-#else       // (Debugger.IsAttached ? LogLevel.Debug : LogLevel.Information) : (minimumLogLevel ?? LogLevel.Information);
-            _discordConfiguration.MinimumLogLevel = LogLevel.Information;
+            discordConfiguration.MinimumLogLevel = logLevelDebugOnDebugging ? LogLevel.Debug : minimumLogLevel ?? LogLevel.Information; // (Debugger.IsAttached ? LogLevel.Debug : LogLevel.Information) : (minimumLogLevel ?? LogLevel.Information);
+#else       
+            discordConfiguration.MinimumLogLevel = LogLevel.Information;
 #endif
-            _discordConfiguration.UseRelativeRatelimit = useRelativeRateLimit;
-            _discordConfiguration.LogTimestampFormat = _logTimestampFormat = string.IsNullOrWhiteSpace(logTimestampFormat) ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
-                                                                                                                             $"{this._dateTimeFormatInfo.ShortTimePattern}" :
-                                                                                                                             logTimestampFormat;
-            _discordConfiguration.LargeThreshold = largeThreshold;
-
-            _discordConfiguration.AutoReconnect = autoReconnect;
+            discordConfiguration.UseRelativeRatelimit = useRelativeRateLimit;
+            discordConfiguration.LogTimestampFormat = _logTimestampFormat = string.IsNullOrWhiteSpace(logTimestampFormat) ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
+                                                                                                                            $"{this._dateTimeFormatInfo.ShortTimePattern}" :
+                                                                                                                            logTimestampFormat;
+            discordConfiguration.LargeThreshold = largeThreshold;
+            discordConfiguration.AutoReconnect = autoReconnect;
             if (!autoReconnect)
-                this.BaseConfiguration = new TarsBaseConfiguration();
+                _baseConfiguration = new TarsBaseConfiguration();
 
-            _discordConfiguration.ShardId = shardId;
-            _discordConfiguration.ShardCount = shardCount;
-            _discordConfiguration.GatewayCompressionLevel = gatewayCompressionLevel;
-            _discordConfiguration.MessageCacheSize = messageCacheSize;
-            _discordConfiguration.Proxy = webProxy;
-            _discordConfiguration.HttpTimeout = httpTimeout ?? TimeSpan.FromSeconds(10);
-            _discordConfiguration.ReconnectIndefinitely = reconnectIndefinitely;
-            _discordConfiguration.Intents = discordIntents;
-            _discordConfiguration.WebSocketClientFactory = webSocketClientFactory ?? WebSocketClient.CreateNew;
-            _discordConfiguration.LoggerFactory = loggerFactory;
+            discordConfiguration.ShardId = shardId;
+            discordConfiguration.ShardCount = shardCount;
+            discordConfiguration.GatewayCompressionLevel = gatewayCompressionLevel;
+            discordConfiguration.MessageCacheSize = messageCacheSize;
+            discordConfiguration.Proxy = webProxy;
+            discordConfiguration.HttpTimeout = httpTimeout ?? TimeSpan.FromSeconds(10);
+            discordConfiguration.ReconnectIndefinitely = reconnectIndefinitely;
+            discordConfiguration.Intents = discordIntents;
+            discordConfiguration.WebSocketClientFactory = webSocketClientFactory ?? WebSocketClient.CreateNew;
+            discordConfiguration.LoggerFactory = loggerFactory;
 
-            _discordClient = new DiscordClient(_discordConfiguration);
+            _discordClient = new DiscordClient(discordConfiguration);
         }
         #endregion
 
         #region CommandsNextSetup
-        /// <summary>
-        /// Method for configuring the base settings in relation to the DSharpPlus <see cref="CommandsNextConfiguration"/>.
-        /// </summary>
-        /// <param name="commandsNextConfiguration"><see cref="CommandsNextConfiguration"/> class for configuring <see cref="CommandsNextExtension"/> settings.</param>
-        public void CommandsNextSetup(CommandsNextConfiguration commandsNextConfiguration)
-        {
-            this._commandsNext = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseCommandsNext(commandsNextConfiguration);
-
-            this.RegisterCommands();
-        }
-
         /// <summary>
         /// Method for configuring <see cref="CommandsNextConfiguration"/>, accessing each configuration individually.
         /// </summary>
@@ -211,12 +164,12 @@ namespace Tars.Core
         /// <param name="services">Sets the service provider for this <see cref="CommandsNextExtension"/> instance. Objects in this provider are used when instantiating command modules. This allows passing data around without resorting to static members. Defaults to <see langword="null"/>.</param>
         /// <param name="ignoreExtraArguments">Sets whether any extra arguments passed to commands should be ignored or not. If this is set to <see langword="false"/>, extra arguments will throw, otherwise they will be ignored. Defaults to <see langword="false"/>.</param>
         /// <param name="useDefaultCommandHandler">Sets whether to automatically enable handling commands. If this is set to <see langword="false"/>, you will need to manually handle each incoming message and pass it to <see cref="CommandsNextExtension"/>. Defaults to <see langword="true"/>.</param>
-        public void CommandsNextSetup(IEnumerable<string> prefixes, PrefixResolverDelegate prefixResolver = null, bool enableMentionPrefix = true,
-                                      bool caseSensitive = false, bool enableDefaultHelp = true, bool directMessageHelp = true,
-                                      IEnumerable<CheckBaseAttribute> defaultHelpChecks = null, bool directMessageCommands = false,
-                                      IServiceCollection services = null, bool ignoreExtraArguments = false, bool useDefaultCommandHandler = true)
+        public void CommandsNextSetup(IEnumerable<string> prefixes, PrefixResolverDelegate prefixResolver = null, bool enableMentionPrefix = true, bool caseSensitive = false,
+                                      bool enableDefaultHelp = true, bool directMessageHelp = true, IEnumerable<CheckBaseAttribute> defaultHelpChecks = null,
+                                      bool directMessageCommands = false, IServiceCollection services = null, bool ignoreExtraArguments = false,
+                                      bool useDefaultCommandHandler = true)
         {
-            this._commandsNext = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseCommandsNext(new CommandsNextConfiguration
+            _commandsNext = (_discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!")).UseCommandsNext(new CommandsNextConfiguration
             {
                 StringPrefixes = prefixes,
                 PrefixResolver = prefixResolver,
@@ -226,7 +179,7 @@ namespace Tars.Core
                 DmHelp = directMessageHelp,
                 DefaultHelpChecks = defaultHelpChecks,
                 EnableDms = directMessageCommands,
-                Services = services?.AddSingleton(this).BuildServiceProvider(true) ?? new ServiceCollection().AddSingleton(this).BuildServiceProvider(true),
+                Services = (services?.AddSingleton(this) ?? new ServiceCollection().AddSingleton(this)).BuildServiceProvider(true),
                 IgnoreExtraArguments = ignoreExtraArguments,
                 UseDefaultCommandHandler = useDefaultCommandHandler
             });
@@ -244,13 +197,6 @@ namespace Tars.Core
 
         #region InteractivitySetup
         /// <summary>
-        /// Method for configuring the base settings in relation to the DSharpPlus <see cref="InteractivityExtension"/>.
-        /// </summary>
-        /// <param name="interactivityConfiguration"></param>
-        public void InteractivitySetup(InteractivityConfiguration interactivityConfiguration)
-            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseInteractivity(interactivityConfiguration);
-
-        /// <summary>
         /// Method for configuring <see cref="InteractivityExtension"/>, accessing each configuration individually.
         /// </summary>
         /// <param name="timeout">Sets the default interactivity action timeout. Defaults to 5 minutes.</param>
@@ -258,10 +204,9 @@ namespace Tars.Core
         /// <param name="paginationEmojis">Emojis to use for pagination. Defaults to <see langword="null"/>.</param>
         /// <param name="paginationBehaviour">How to handle pagination. Defaults to <see cref="PaginationBehaviour.WrapAround"/>.</param>
         /// <param name="paginationDeletion">How to handle pagination deletion. Defaults to <see cref="PaginationDeletion.DeleteEmojis"/>.</param>
-        public void InteractivitySetup(TimeSpan? timeout = null, PollBehaviour pollBehaviour = PollBehaviour.DeleteEmojis,
-                                       PaginationEmojis paginationEmojis = null, PaginationBehaviour paginationBehaviour = PaginationBehaviour.WrapAround,
-                                       PaginationDeletion paginationDeletion = PaginationDeletion.DeleteEmojis)
-            => this._interactivity = (_discordClient ?? throw new NullReferenceException("Call first the DiscordClientSetup!")).UseInteractivity(new InteractivityConfiguration
+        public void InteractivitySetup(TimeSpan? timeout = null, PollBehaviour pollBehaviour = PollBehaviour.DeleteEmojis, PaginationEmojis paginationEmojis = null,
+                                       PaginationBehaviour paginationBehaviour = PaginationBehaviour.WrapAround, PaginationDeletion paginationDeletion = PaginationDeletion.DeleteEmojis)
+            => _interactivity = (_discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!")).UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = timeout ?? TimeSpan.FromMinutes(5),
                 PollBehaviour = pollBehaviour,
@@ -269,6 +214,17 @@ namespace Tars.Core
                 PaginationBehaviour = paginationBehaviour,
                 PaginationDeletion = paginationDeletion
             });
+        #endregion
+
+        #region BaseSetup
+        /// <summary>
+        /// Method for configuring <see cref="TarsBaseConfiguration"/>, accessing each configuration individually.
+        /// </summary>
+        /// <param name="autoReconnect">Set whether the bot will use Tars's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false in <see cref="DiscordConfiguration"/> for Tars's AutoReconnect to take effect.</param>
+        public void BaseSetup(bool autoReconnect = true) => _baseConfiguration = new TarsBaseConfiguration
+        {
+            AutoReconnect = autoReconnect
+        };
         #endregion
 
         #region Base methods
@@ -281,7 +237,6 @@ namespace Tars.Core
                 throw new InvalidOperationException("The Tars is already disposed!");
 
             _discordClient.Dispose();
-            _discordConfiguration = null;
             _commandsNext = null;
             _interactivity = null;
             _discordClient = null;
@@ -300,13 +255,13 @@ namespace Tars.Core
         /// <param name="idleSince">Since when is the client performing the specified activity. Defaults to <see langword="null"/>.</param>
         public async Task StartAsync(DiscordActivity discordActivity = null, UserStatus userStatus = UserStatus.Online, DateTime? idleSince = null)
         {
-            if (this._interactivity == null)
+            if (_interactivity == null)
                 this.InteractivitySetup();
 
-            if (this.BaseConfiguration?.AutoReconnect == true)
+            if ((_baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the DiscordClientSetup!")).AutoReconnect)
                 _discordClient.SocketClosed += async e => await e.Client.ConnectAsync(discordActivity, userStatus, idleSince);
 
-            _discordClient.LogMessage($"The Tars was started successfully! Version: {typeof(TarsBase).Assembly.GetName().Version}");
+            _discordClient.LogMessage($"The TarsBase was started successfully! Version: {this.Version}");
             _discordClient.LogMessage("Connecting to Discord...");
 
             await _discordClient.ConnectAsync(discordActivity, userStatus, idleSince);

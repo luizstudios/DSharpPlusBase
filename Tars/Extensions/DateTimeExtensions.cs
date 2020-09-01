@@ -1,6 +1,6 @@
 ﻿using DSharpPlus;
-using Tars.Core;
 using System;
+using Tars.Core;
 
 namespace Tars.Extensions
 {
@@ -14,6 +14,6 @@ namespace Tars.Extensions
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns>A <see langword="string"/> formatted according to the current date and time format.</returns>
-        public static string FormatWithBaseSettings(this DateTime dateTime) => dateTime.ToString(TarsBase._logTimestampFormat);
+        public static string FormatWithDiscordClientSettings(this DateTime dateTime) => dateTime.ToString(TarsBase._logTimestampFormat);
     }
 }

@@ -1,11 +1,10 @@
-﻿using DSharpPlus.Entities;
-using Tars.Core;
-using Tars.Utilities;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DSharpPlus;
-using System.Collections.Generic;
+using Tars.Core;
+using Tars.Utilities;
 
 namespace Tars.Extensions
 {
@@ -32,15 +31,28 @@ namespace Tars.Extensions
             if (stringMemberOrId.IsNullOrEmptyOrWhiteSpace())
                 throw new ArgumentNullException("The member mention or id can't be null!");
 
-            stringMemberOrId = stringMemberOrId.ToLower();
+            StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
 
             ulong.TryParse(GetStringNumbers(stringMemberOrId), out ulong memberId);
 
             foreach (DiscordGuild guild in discordClient.Guilds.Values)
             {
-                var member = guild.Members.Values.FirstOrDefault(m => m.Nickname?.ToLower() == stringMemberOrId || m.Username.ToLower() == stringMemberOrId || m.Id == memberId);
-                if (member != null)
-                    return member;
+                foreach (DiscordMember member in guild.Members.Values)
+                {
+                    string memberDisplayName = member.DisplayName,
+                           memberNickname = member.Nickname,
+                           memberUsername = member.Username,
+                           memberDiscriminator = member.Discriminator;
+
+                    if (string.Equals($"{memberDisplayName}#{memberDiscriminator}", stringMemberOrId, stringComparison) ||
+                        string.Equals($"{memberNickname}#{memberDiscriminator}", stringMemberOrId, stringComparison) ||
+                        string.Equals($"{memberUsername}#{memberDiscriminator}", stringMemberOrId, stringComparison) ||
+                        string.Equals(memberDisplayName, stringMemberOrId, stringComparison) ||
+                        string.Equals(memberNickname, stringMemberOrId, stringComparison) ||
+                        string.Equals(memberUsername, stringMemberOrId, stringComparison) ||
+                        member.Id == memberId)
+                        return member;
+                }
             }
 
             return null;
@@ -112,8 +124,8 @@ namespace Tars.Extensions
 
             foreach (DiscordGuild guild in discordClient.Guilds.Values)
             {
-                var channel = guild.Channels.Values.FirstOrDefault(c => Regex.Replace(c.Name.ToLower(), @"[^\w]", "").Replace("-", " ").Replace("_", " ") ==
-                                                                        stringChannelOrId.ToLower() || c.Id == channelId);
+                var channel = guild.Channels.Values.FirstOrDefault(c => string.Equals(Regex.Replace(c.Name, @"[^\w]", "").Replace("-", " ").Replace("_", " "),
+                                                                                      stringChannelOrId, StringComparison.CurrentCultureIgnoreCase) || c.Id == channelId);
                 if (channel != null)
                     return channel;
             }
@@ -139,7 +151,7 @@ namespace Tars.Extensions
 
             ulong.TryParse(GetStringNumbers(stringGuildOrId), out ulong guildId);
 
-            return discordClient.Guilds.Values.FirstOrDefault(g => g.Name == stringGuildOrId || g.Id == guildId);
+            return discordClient.Guilds.Values.FirstOrDefault(g => string.Equals(g.Name, stringGuildOrId, StringComparison.CurrentCulture) || g.Id == guildId);
         }
 
         /// <summary>
@@ -184,10 +196,7 @@ namespace Tars.Extensions
                         if (message != null)
                             return message;
                     }
-                    catch
-                    {
-                        continue;
-                    }
+                    catch { }
                 }
             }
 

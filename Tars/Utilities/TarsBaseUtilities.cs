@@ -26,14 +26,14 @@ namespace Tars.Utilities
 
             DiscordClient discordClient = TarsBase._discordClient;
 
-            string oldNameEmoji = emojiNameOrId;
-            emojiNameOrId = emojiNameOrId.ToLower();
+            StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
+
             ulong.TryParse(emojiNameOrId, out ulong emojiId);
 
             foreach (DiscordGuild guild in discordClient.Guilds.Values)
             {
-                var emoji = guild.Emojis.Values.FirstOrDefault(e => e.Name.ToLower() == emojiNameOrId.Replace(":", "") || e.Id == emojiId ||
-                                                                    e.ToString().ToLower() == emojiNameOrId);
+                var emoji = guild.Emojis.Values.FirstOrDefault(e => string.Equals(e.Name, emojiNameOrId.Replace(":", ""), stringComparison) ||
+                                                                    string.Equals(e.ToString(), emojiNameOrId, stringComparison) || e.Id == emojiId);
                 if (emoji != null)
                     return emoji;
             }

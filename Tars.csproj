@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <RootNamespace>Tars</RootNamespace>
+    <RootNamespace></RootNamespace>
     <Version>1.0.0.0</Version>
     <Authors>Luiz Fernando</Authors>
     <Company>Luiz Studios</Company>
