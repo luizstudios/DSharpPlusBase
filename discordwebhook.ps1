@@ -11,7 +11,7 @@ Write-Output "[Webhook]: Sending webhook to Discord..."
 
 Switch ($STATUS) {
   "success" {
-    $EMBED_COLOR=3066993
+    $EMBED_COLOR=52310
     $STATUS_MESSAGE="Passed"
     Break
   }
