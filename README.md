@@ -18,7 +18,7 @@ A simple framework to facilitate the construction of bots for Discord using the 
 
 # .NET Standard 2.0 Compatibilities
 
-    [![.NET Standard 2.0 Compatibilities](https://cdn.discordapp.com/attachments/478612177511645212/750835045610029067/unknown.png)](https://dotnet.microsoft.com/platform/dotnet-standard)
+[![.NET Standard 2.0 Compatibilities](https://cdn.discordapp.com/attachments/478612177511645212/750835045610029067/unknown.png)](https://dotnet.microsoft.com/platform/dotnet-standard)
 
 # Installing
 
