@@ -14,7 +14,7 @@
 </a>
 </p>
 
-A base to facilitate the construction of bots for Discord using the [C#](https://github.com/dotnet/csharplang) language, [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus) library and [.NET Core](https://github.com/dotnet/core).
+A simple framework to facilitate the construction of bots for Discord using the [C#](https://github.com/dotnet/csharplang) language, [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus) library and [.NET Core](https://github.com/dotnet/core).
 
 # Installing
 
