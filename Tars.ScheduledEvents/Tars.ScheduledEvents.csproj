@@ -5,7 +5,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.0.0</Version>
-    <Authors>Luiz Fernando</Authors>
+    <Authors>Luiz Studios</Authors>
     <Company>Luiz Studios</Company>
     <Product>Tars.ScheduledEvents</Product>
     <Description>A base to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.
