@@ -1,26 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.0.0</Version>
     <Authors>Luiz Studios</Authors>
-    <Company>Luiz Studios</Company>
-    <Product>Tars.MongoDB</Product>
+    <Description>A base to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.
+
+Library that gives the possibility to make scheduled events that are called in an interval of time.</Description>
     <Copyright>Luiz Studios</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/luizstudios/Tars</PackageProjectUrl>
     <RepositoryUrl>https://github.com/luizstudios/Tars</RepositoryUrl>
     <RepositoryType>OpenSource</RepositoryType>
     <PackageIcon>TarsPhoto.png</PackageIcon>
-    <PackageTags>DiscordBot, DSharpPlus, Discord bot, Discord, Tars, Tars mongo db</PackageTags>
-    <Description>A base to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.
-
-Library that makes MongoDB compatible with the base.</Description>
+    <PackageTags>DiscordBot, DSharpPlus, Discord bot, Discord, Tars, Tars scheduled events</PackageTags>
+    <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
