@@ -1,20 +1,14 @@
-﻿using Tars.Core;
-using Tars.Extensions;
-using DSharpPlus;
-using MongoDB.Bson;
+﻿
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Tars.Core;
 
 namespace Tars.MongoDB.Extensions
 {
     /// <summary>
     /// Class to extend the standard <see cref="TarsBase"/> methods.
     /// </summary>
-    public static class TarsBotBaseExtensions
+    public static class TarsBaseExtensions
     {
         private static MongoClient _mongoClient;
 

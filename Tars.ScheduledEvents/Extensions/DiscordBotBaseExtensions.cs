@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Tars.Core;
@@ -10,7 +11,7 @@ namespace Tars.ScheduledEvents.Extensions
 {
     public static class DiscordBotBaseExtensions
     {
-        private static List<Event> _scheduledEvents;
+        private static ConcurrentDictionary<Event, byte> _scheduledEvents;
 
         /// <summary>
         /// Method for configuring scheduled events.
@@ -23,14 +24,14 @@ namespace Tars.ScheduledEvents.Extensions
             if (_scheduledEvents != null)
                 throw new InvalidOperationException("The event list has already been instantiated!");
 
-            _scheduledEvents = new List<Event>();
+            _scheduledEvents = new ConcurrentDictionary<Event, byte>();
 
             var iEvent = 0;
 
             foreach (Event scheduledEvent in events)
             {
-                if (!_scheduledEvents.Any(e => e.Name == scheduledEvent.Name))
-                    _scheduledEvents.Add(scheduledEvent);
+                if (!_scheduledEvents.Keys.Any(e => e.Name == scheduledEvent.Name))
+                    _scheduledEvents.TryAdd(scheduledEvent, 0);
 
                 ++iEvent;
             }
@@ -53,14 +54,12 @@ namespace Tars.ScheduledEvents.Extensions
                 throw new NullReferenceException("An event scheduled in the list can't be null!");
 
             if (_scheduledEvents == null)
-                _scheduledEvents = new List<Event>();
+                _scheduledEvents = new ConcurrentDictionary<Event, byte>();
 
             foreach (Event scheduledEvent in scheduledEvents)
             {
-                if (!_scheduledEvents.Contains(scheduledEvent))
-                    _scheduledEvents.Add(scheduledEvent);
-                else
-                    throw new InvalidOperationException("This scheduled event already exists on the list!");
+                if (!_scheduledEvents.Keys.Contains(scheduledEvent))
+                    _scheduledEvents.TryAdd(scheduledEvent, 0);
             }
         }
 
@@ -83,12 +82,12 @@ namespace Tars.ScheduledEvents.Extensions
 
             foreach (Event scheduledEvent in scheduledEvents)
             {
-                var scheduledEventFind = _scheduledEvents.Find(e => e.Name == scheduledEvent.Name);
+                var scheduledEventFind = _scheduledEvents.Keys.FirstOrDefault(e => e.Name == scheduledEvent.Name);
                 if (scheduledEventFind != null)
                 {
                     scheduledEvent.Deactivate();
 
-                    _scheduledEvents.Remove(scheduledEvent);
+                    _scheduledEvents.TryRemove(scheduledEvent, out byte _);
                 }
                 else
                     throw new InvalidOperationException("An event was not found in the list of events scheduled to be removed.");
@@ -98,6 +97,6 @@ namespace Tars.ScheduledEvents.Extensions
         /// <summary>
         /// Get a list of all scheduled events.
         /// </summary>
-        public static IReadOnlyList<Event> GetScheduledEvents(this TarsBase _) => _scheduledEvents;
+        public static IReadOnlyList<Event> GetScheduledEvents(this TarsBase _) => _scheduledEvents.Keys.ToList();
     }
 }

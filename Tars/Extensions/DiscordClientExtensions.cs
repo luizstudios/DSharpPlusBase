@@ -49,8 +49,11 @@ namespace Tars.Extensions
             if (discordClient == null)
                 throw new ArgumentNullException("The DiscordClient can't be null!");
 
+            var tasks = new List<Task<DiscordMessage>>();
             foreach (var channel in channels)
-                await channel.SendMessageAsync(content, tts, embed, mentions);
+                tasks.Add(channel.SendMessageAsync(content, tts, embed, mentions));
+
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
@@ -79,8 +82,11 @@ namespace Tars.Extensions
             if (discordClient == null)
                 throw new ArgumentNullException("The DiscordClient can't be null!");
 
+            var tasks = new List<Task>();
             foreach (var channel in channels)
-                await channel.AddOverwriteAsync(member, allow, deny, reason);
+                tasks.Add(channel.AddOverwriteAsync(member, allow, deny, reason));
+
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
@@ -99,8 +105,11 @@ namespace Tars.Extensions
             if (discordClient == null)
                 throw new ArgumentNullException("The DiscordClient can't be null!");
 
+            var tasks = new List<Task>();
             foreach (var channel in channels)
-                await channel.AddOverwriteAsync(role, allow, deny, reason);
+                tasks.Add(channel.AddOverwriteAsync(role, allow, deny, reason));
+
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>

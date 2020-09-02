@@ -5,7 +5,7 @@ namespace Tars.Core.Settings
     /// <summary>
     /// Class where the Tars settings are defined.
     /// </summary>
-    public sealed class TarsBaseConfiguration
+    public class TarsBaseConfiguration
     {
         /// <summary>
         /// Set whether the bot will use Tars's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false.
