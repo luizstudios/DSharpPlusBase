@@ -13,9 +13,8 @@ namespace Tars.Test
     {
         private TarsBase _bot;
 
-        public TestContext TestContext { get; set; }
+        //public TestContext TestContext { get; set; }
 
-        #region Initialize and Cleanup
         [TestInitialize]
         public async Task TestInitialize()
         {
@@ -35,47 +34,47 @@ namespace Tars.Test
         [TestCleanup]
         public async Task TestCleanup()
         {
-            if (this.TestContext.TestName == "TestExtensions_String_IsNotNull")
-            {
-                await this._bot.DiscordClient.UpdateStatusAsync(new DiscordActivity { Name = "Done!" }, UserStatus.Online);
+            await this._bot.DiscordClient.UpdateStatusAsync(new DiscordActivity { Name = "Done!" }, UserStatus.Online);
 
-                return;
-            }
+            await Task.Delay(TimeSpan.FromSeconds(5));
 
             this._bot.Dispose();
         }
-        #endregion
 
         [TestMethod]
-        public void TestExtensions_Number_IsNotNull()
+        public void TestExtensions_IsNotNull()
         {
-            DiscordMember luizMember = 322745409074102282.ToDiscordMember();
-            DiscordChannel supportChannel = 749718492781215757.ToDiscordChannel();
-            DiscordGuild tarsGuild = 749718492781215754.ToDiscordGuild();
-            DiscordRole libraryRole = 749722451151290519.ToDiscordRole();
-            DiscordEmoji lulEmoji = 749745553025269767.ToDiscordEmoji();
+            DiscordMember luizMemberId = 322745409074102282.ToDiscordMember(),
+                          luizMemberIdOnString = "322745409074102282".ToDiscordMember(),
+                          luizMemberString = "Luiz Fernando".ToDiscordMember();
+            DiscordChannel supportChannelId = 749718492781215757.ToDiscordChannel(),
+                           supportChannelIdOnString = "749718492781215757".ToDiscordChannel(),
+                           supportChannelString = "support".ToDiscordChannel();
+            DiscordGuild luizStudiosGuildId = 749718492781215754.ToDiscordGuild(),
+                         luizStudiosGuildIdOnString = "749718492781215754".ToDiscordGuild(),
+                         luizStudiosGuildString = "Luiz Studios".ToDiscordGuild();
+            DiscordRole libraryRoleId = 749722451151290519.ToDiscordRole(),
+                        libraryRoleIdOnString = "749722451151290519".ToDiscordRole(),
+                        libraryRoleString = "Tars Library".ToDiscordRole();
+            DiscordEmoji lulEmojiId = 749745553025269767.ToDiscordEmoji(),
+                         lulEmojiIdOnString = "749745553025269767".ToDiscordEmoji(),
+                         lulEmojiString = "lul".ToDiscordEmoji();
 
-            Assert.IsNotNull(luizMember);
-            Assert.IsNotNull(supportChannel);
-            Assert.IsNotNull(tarsGuild);
-            Assert.IsNotNull(libraryRole);
-            Assert.IsNotNull(lulEmoji);
-        }
-
-        [TestMethod]
-        public void TestExtensions_String_IsNotNull()
-        {
-            DiscordMember luizMember = "Luiz Fernando".ToDiscordMember();
-            DiscordChannel supportChannel = "support".ToDiscordChannel();
-            DiscordGuild tarsGuild = "Tars".ToDiscordGuild();
-            DiscordRole libraryRole = "Library".ToDiscordRole();
-            DiscordEmoji lulEmoji = "lul".ToDiscordEmoji();
-
-            Assert.IsNotNull(luizMember);
-            Assert.IsNotNull(supportChannel);
-            Assert.IsNotNull(tarsGuild);
-            Assert.IsNotNull(libraryRole);
-            Assert.IsNotNull(lulEmoji);
+            Assert.IsNotNull(luizMemberId);
+            Assert.IsNotNull(luizMemberIdOnString);
+            Assert.IsNotNull(luizMemberString);
+            Assert.IsNotNull(supportChannelId);
+            Assert.IsNotNull(supportChannelIdOnString);
+            Assert.IsNotNull(supportChannelString);
+            Assert.IsNotNull(luizStudiosGuildId);
+            Assert.IsNotNull(luizStudiosGuildIdOnString);
+            Assert.IsNotNull(luizStudiosGuildString);
+            Assert.IsNotNull(libraryRoleId);
+            Assert.IsNotNull(libraryRoleIdOnString);
+            Assert.IsNotNull(libraryRoleString);
+            Assert.IsNotNull(lulEmojiId);
+            Assert.IsNotNull(lulEmojiIdOnString);
+            Assert.IsNotNull(lulEmojiString);
         }
     }
 }
