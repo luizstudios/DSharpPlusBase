@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tars.ScheduledEvents</name>
+    </assembly>
+    <members>
+        <member name="T:Tars.ScheduledEvents.Classes.Event">
+            <summary>
+            Build a scheduled event.
+            </summary>
+        </member>
+        <member name="P:Tars.ScheduledEvents.Classes.Event.Name">
+            <summary>
+            Name of event.
+            </summary>
+        </member>
+        <member name="P:Tars.ScheduledEvents.Classes.Event.Description">
+            <summary>
+            Description of event.
+            </summary>
+        </member>
+        <member name="P:Tars.ScheduledEvents.Classes.Event.Action">
+            <summary>
+            Code that will be executed when the event is called.
+            </summary>
+        </member>
+        <member name="P:Tars.ScheduledEvents.Classes.Event.Interval">
+            <summary>
+            Time interval for the event to be called.
+            </summary>
+        </member>
+        <member name="P:Tars.ScheduledEvents.Classes.Event.IsActived">
+            <summary>
+            Indicates whether the event is active.
+            </summary>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Classes.Event.#ctor(System.String,System.Action,System.TimeSpan,System.String)">
+            <summary>
+            Class constructor to create a new event.
+            </summary>
+            <param name="name">Name of event.</param>
+            <param name="action">Code that will be executed when the event is called.</param>
+            <param name="interval">Time interval for the event to be called.</param>
+            <param name="description"> Description of event.</param>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Classes.Event.Activate">
+            <summary>
+            Activate the event.
+            </summary>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Classes.Event.Deactivate">
+            <summary>
+            Disables the event.
+            </summary>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Classes.Event.ChangeSettings(System.String,System.Nullable{System.TimeSpan},System.String)">
+            <summary>
+            Changes the event settings.
+            </summary>
+            <param name="newName">New event name.</param>
+            <param name="newInterval">New time interval for the event to be activated.</param>
+            <param name="newDescription">New event description.</param>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Extensions.DiscordBotBaseExtensions.ScheduledEventsSetup(Tars.Core.TarsBase,Tars.ScheduledEvents.Classes.Event[])">
+            <summary>
+            Method for configuring scheduled events.
+            </summary>
+            <param name="botBase"></param>
+            <param name="events">Instantiate the scheduled events here.</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Extensions.DiscordBotBaseExtensions.AddScheduledEvents(Tars.Core.TarsBase,Tars.ScheduledEvents.Classes.Event[])">
+            <summary>
+            Static method for adding a scheduled event.
+            </summary>
+            <param name="scheduledEvents">Instantiate the scheduled events here.</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Extensions.DiscordBotBaseExtensions.RemoveScheduledEvents(Tars.Core.TarsBase,Tars.ScheduledEvents.Classes.Event[])">
+            <summary>
+            Static method for removing a scheduled event.
+            </summary>
+            <param name="scheduledEvents">The scheduled events you want to remove.</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:Tars.ScheduledEvents.Extensions.DiscordBotBaseExtensions.GetScheduledEvents(Tars.Core.TarsBase)">
+            <summary>
+            Get a list of all scheduled events.
+            </summary>
+        </member>
+    </members>
+</doc>

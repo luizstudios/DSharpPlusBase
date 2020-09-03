@@ -1,0 +1,675 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tars</name>
+    </assembly>
+    <members>
+        <member name="T:Tars.Attributes.RequireGuildsAttribute">
+            <summary>
+            Defines whether the command is restricted to these servers only.
+            </summary>
+        </member>
+        <member name="M:Tars.Attributes.RequireGuildsAttribute.#ctor(System.UInt64[])">
+            <summary>
+            Defines whether the command is restricted to these servers only.
+            </summary>
+            <param name="guildsId">Servers id.</param>
+        </member>
+        <member name="T:Tars.Core.Settings.TarsBaseConfiguration">
+            <summary>
+            Class where the Tars settings are defined.
+            </summary>
+        </member>
+        <member name="P:Tars.Core.Settings.TarsBaseConfiguration.AutoReconnect">
+            <summary>
+            Set whether the bot will use Tars's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false.
+            The default is true, so the DSharpPlus <see cref="T:DSharpPlus.DiscordConfiguration"/> comes standard with AutoReconnect as false.
+            </summary>
+        </member>
+        <member name="T:Tars.Core.TarsBase">
+            <summary>
+            Class where the bot is instantiated using Tars.
+            </summary>
+        </member>
+        <member name="P:Tars.Core.TarsBase.Base">
+            <summary>
+            Get the current settings from the <see cref="T:Tars.Core.Settings.TarsBaseConfiguration"/>.
+            </summary>
+        </member>
+        <member name="P:Tars.Core.TarsBase.DiscordClient">
+            <summary>
+            Get the DSharpPlus <see cref="T:DSharpPlus.DiscordClient"/>.
+            </summary>
+        </member>
+        <member name="P:Tars.Core.TarsBase.CommandsNext">
+            <summary>
+            Get the DSharpPlus <see cref="T:DSharpPlus.CommandsNext.CommandsNextExtension"/>.
+            </summary>
+        </member>
+        <member name="P:Tars.Core.TarsBase.Interactivity">
+            <summary>
+            Get the DSharpPlus <see cref="T:DSharpPlus.Interactivity.InteractivityExtension"/>.
+            </summary>
+        </member>
+        <member name="P:Tars.Core.TarsBase.Version">
+            <summary>
+            Get <see cref="T:Tars.Core.TarsBase"/> version.
+            </summary>
+        </member>
+        <member name="M:Tars.Core.TarsBase.#ctor(System.Object)">
+            <summary>
+            Constructor of the Tars class.
+            </summary>
+            <param name="botClassOrAssembly">Use the keyword <see langword="this"/> or call the <see cref="M:System.Reflection.Assembly.GetEntryAssembly"/> method.</param>
+        </member>
+        <member name="M:Tars.Core.TarsBase.DiscordClientSetup(System.String,DSharpPlus.TokenType,System.Nullable{Microsoft.Extensions.Logging.LogLevel},System.Boolean,System.Boolean,System.String,System.Int32,System.Boolean,System.Int32,System.Int32,DSharpPlus.GatewayCompressionLevel,System.Int32,System.Net.IWebProxy,System.Nullable{System.TimeSpan},System.Boolean,System.Nullable{DSharpPlus.DiscordIntents},DSharpPlus.Net.WebSocket.WebSocketClientFactoryDelegate,DSharpPlus.Net.Udp.UdpClientFactoryDelegate,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Method for configuring <see cref="T:DSharpPlus.DiscordClient"/>, accessing each configuration individually.
+            </summary>
+            <param name="token">Sets the token used to identify the client.</param>
+            <param name="tokenType">Sets the type of the token used to identify the client. Defaults to <see cref="F:DSharpPlus.TokenType.Bot"/>.</param>
+            <param name="minimumLogLevel">Sets the maximum logging level for messages. If left as <see langword="null"/>, and the <paramref name="logLevelDebugOnDebugging"/> property as <see langword="true"/>, the bot will use <see cref="F:Microsoft.Extensions.Logging.LogLevel.Debug"/> when debugging Visual Studio and will <see cref="F:Microsoft.Extensions.Logging.LogLevel.Information"/> when it starts without debugging.</param>
+            <param name="logLevelDebugOnDebugging">Set if the bot will start using <see cref="F:Microsoft.Extensions.Logging.LogLevel.Debug"/> when debugging Visual Studio, if <see langword="false"/>, the bot will always start at <see cref="!:LogLevel.Info"/></param>
+            <param name="useRelativeRateLimit">Sets whether to rely on Discord for NTP (Network Time Protocol) synchronization with the "X-Ratelimit-Reset-After" header. If the system clock is unsynced, setting this to true will ensure ratelimits are synced with Discord and reduce the risk of hitting one. This should only be set to <see langword="false"/> if the system clock is synced with NTP. Defaults to <see langword="true"/>.</param>
+            <param name="logTimestampFormat">Allows you to overwrite the time format used by the internal debug logger. The default is the format of your PC's date.</param>
+            <param name="largeThreshold">Sets the member count threshold at which guilds are considered large. Defaults to 1000.></param>
+            <param name="autoReconnect">Sets whether to automatically reconnect in case a connection is lost. Defaults to <see langword="false"/>.</param>
+            <param name="shardId">Sets the ID of the shard to connect to. If not sharding, or sharding automatically, this value should be left with the default value of 0.</param>
+            <param name="shardCount">Sets the total number of shards the bot is on. If not sharding, this value should be left with a default value of 1. If sharding automatically, this value will indicate how many shards to boot. If left default for automatic sharding, the client will determine the shard count automatically.</param>
+            <param name="gatewayCompressionLevel">Sets the level of compression for WebSocket traffic. Disabling this option will increase the amount of traffic sent via WebSocket. Setting <see cref="F:DSharpPlus.GatewayCompressionLevel.Payload"/> will enable compression for READY and GUILD_CREATE payloads. Setting <see cref="F:DSharpPlus.GatewayCompressionLevel.Stream"/> will enable compression for the entire WebSocket stream, drastically reducing amount of traffic. Defaults to <see cref="F:DSharpPlus.GatewayCompressionLevel.Stream"/>.</param>
+            <param name="messageCacheSize">Sets the size of the global message cache. Setting this to 0 will disable message caching entirely. Defaults to 1024.</param>
+            <param name="webProxy">Sets the proxy to use for HTTP and WebSocket connections to Discord. Defaults to <see langword="null"/>.</param>
+            <param name="httpTimeout">Sets the timeout for HTTP requests. Set to <see cref="F:System.Threading.Timeout.InfiniteTimeSpan"/> to disable timeouts. Defaults to 10 seconds.</param>
+            <param name="reconnectIndefinitely">Defines that the client should attempt to reconnect indefinitely. This is typically a very bad idea to set to <see langword="true"/>, as it will swallow all connection errors. Defaults to <see langword="false"/>.</param>
+            <param name="discordIntents">Sets the gateway intents for this client. If set, the client will only receive events that they specify with intents. Defaults to <see langword="null"/>.</param>
+            <param name="webSocketClientFactory">Sets the factory method used to create instances of WebSocket clients. Use <see cref="M:DSharpPlus.Net.WebSocket.WebSocketClient.CreateNew(System.Net.IWebProxy)"/> and equivalents on other implementations to switch out client implementations. Defaults to <see cref="M:DSharpPlus.Net.WebSocket.WebSocketClient.CreateNew(System.Net.IWebProxy)"/></param>
+            <param name="udpClientFactory">Sets the factory method used to create instances of UDP clients. Use <see cref="M:DSharpPlus.Net.Udp.DspUdpClient.CreateNew"/> and equivalents on other implementations to switch out client implementations. Defaults to <see cref="M:DSharpPlus.Net.Udp.DspUdpClient.CreateNew"/>.</param>
+            <param name="loggerFactory">Sets the logger implementation to use. To create your own logger, implement the <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> instance. Defaults to built-in implementation.</param>
+        </member>
+        <member name="M:Tars.Core.TarsBase.CommandsNextSetup(System.Collections.Generic.IEnumerable{System.String},DSharpPlus.CommandsNext.PrefixResolverDelegate,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Collections.Generic.IEnumerable{DSharpPlus.CommandsNext.Attributes.CheckBaseAttribute},System.Boolean,Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean,System.Boolean)">
+            <summary>
+            Method for configuring <see cref="T:DSharpPlus.CommandsNext.CommandsNextConfiguration"/>, accessing each configuration individually.
+            </summary>
+            <param name="prefixes">Sets the string prefixes used for commands.</param>
+            <param name="prefixResolver">Sets the custom prefix resolver used for commands. Defaults to none (disabled).</param>
+            <param name="enableMentionPrefix">Sets whether to allow mentioning the bot to be used as command prefix. Defaults to <see langword="true"/>.</param>
+            <param name="caseSensitive">Sets whether strings should be matched in a case-sensitive manner. This switch affects the behaviour of default prefix resolver, command searching, and argument conversion. Defaults to <see langword="false"/>.</param>
+            <param name="enableDefaultHelp">Sets whether to enable default help command. Disabling this will allow you to make your own help command. Modifying default help can be achieved via custom help formatters (see <see cref="!:BaseHelpFormatter"/> and <see cref="M:DSharpPlus.CommandsNext.CommandsNextExtension.SetHelpFormatter``1"/> for more details). It is recommended to use help formatter instead of disabling help. Defaults to <see langword="true"/>.</param>
+            <param name="directMessageHelp">Controls whether the default help will be sent via Direct Message or not. Enabling this will make the bot respond with help via direct messages. Defaults to <see langword="true"/>.</param>
+            <param name="defaultHelpChecks">Sets the default pre-execution checks for the built-in help command. Only applicable if default help is enabled. Defaults to <see langword="null"/>.</param>
+            <param name="directMessageCommands">Sets whether commands sent via direct messages should be processed. Defaults to <see langword="true"/>.</param>
+            <param name="services">Sets the service provider for this <see cref="T:DSharpPlus.CommandsNext.CommandsNextExtension"/> instance. Objects in this provider are used when instantiating command modules. This allows passing data around without resorting to static members. Defaults to <see langword="null"/>.</param>
+            <param name="ignoreExtraArguments">Sets whether any extra arguments passed to commands should be ignored or not. If this is set to <see langword="false"/>, extra arguments will throw, otherwise they will be ignored. Defaults to <see langword="false"/>.</param>
+            <param name="useDefaultCommandHandler">Sets whether to automatically enable handling commands. If this is set to <see langword="false"/>, you will need to manually handle each incoming message and pass it to <see cref="T:DSharpPlus.CommandsNext.CommandsNextExtension"/>. Defaults to <see langword="true"/>.</param>
+        </member>
+        <member name="M:Tars.Core.TarsBase.InteractivitySetup(System.Nullable{System.TimeSpan},DSharpPlus.Interactivity.Enums.PollBehaviour,DSharpPlus.Interactivity.PaginationEmojis,DSharpPlus.Interactivity.Enums.PaginationBehaviour,DSharpPlus.Interactivity.Enums.PaginationDeletion)">
+            <summary>
+            Method for configuring <see cref="T:DSharpPlus.Interactivity.InteractivityExtension"/>, accessing each configuration individually.
+            </summary>
+            <param name="timeout">Sets the default interactivity action timeout. Defaults to 5 minutes.</param>
+            <param name="pollBehaviour">What to do after the poll ends. Defaults to <see cref="F:DSharpPlus.Interactivity.Enums.PollBehaviour.DeleteEmojis"/>.</param>
+            <param name="paginationEmojis">Emojis to use for pagination. Defaults to <see langword="null"/>.</param>
+            <param name="paginationBehaviour">How to handle pagination. Defaults to <see cref="F:DSharpPlus.Interactivity.Enums.PaginationBehaviour.WrapAround"/>.</param>
+            <param name="paginationDeletion">How to handle pagination deletion. Defaults to <see cref="F:DSharpPlus.Interactivity.Enums.PaginationDeletion.DeleteEmojis"/>.</param>
+        </member>
+        <member name="M:Tars.Core.TarsBase.BaseSetup(System.Boolean)">
+            <summary>
+            Method for configuring <see cref="T:Tars.Core.Settings.TarsBaseConfiguration"/>, accessing each configuration individually.
+            </summary>
+            <param name="autoReconnect">Set whether the bot will use Tars's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false in <see cref="T:DSharpPlus.DiscordConfiguration"/> for Tars's AutoReconnect to take effect.</param>
+        </member>
+        <member name="M:Tars.Core.TarsBase.Dispose">
+            <summary>
+            Dispose Tars and DSharpPlus.
+            </summary>
+        </member>
+        <member name="M:Tars.Core.TarsBase.StartAsync(DSharpPlus.Entities.DiscordActivity,DSharpPlus.Entities.UserStatus,System.Nullable{System.DateTime})">
+            <summary>
+            Method to start the base and connect the bot to Discord.
+            </summary>
+            <param name="discordActivity">Represents a game that a user is playing. When the bot connects to the gateway, it will go online with the presence passed in that parameter, if it is null, it will only go online. Defaults to <see langword="null"/>.</param>
+            <param name="userStatus">Represents user status. Defaults to <see cref="F:DSharpPlus.Entities.UserStatus.Online"/>.</param>
+            <param name="idleSince">Since when is the client performing the specified activity. Defaults to <see langword="null"/>.</param>
+        </member>
+        <member name="T:Tars.Extensions.DateTimeExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:System.DateTime"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.DateTimeExtensions.FormatWithDiscordClientSettings(System.DateTime)">
+            <summary>
+            Returns the <see cref="T:System.DateTime"/> formatted according to DSharpPlus, the base takes the format of your PC automatically if you have not defined a different format.  <c>Attention!</c>  This method only works if you instantiated the bot without using <see langword="new"/> <see cref="T:DSharpPlus.DiscordConfiguration"/>.
+            </summary>
+            <param name="dateTime"></param>
+            <returns>A <see langword="string"/> formatted according to the current date and time format.</returns>
+        </member>
+        <member name="T:Tars.Extensions.DiscordClientExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:DSharpPlus.DiscordClient"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.FindEmoji(DSharpPlus.DiscordClient,System.String)">
+            <summary>
+            Search for a emoji on all the servers the bot is on, this method is compatible with standard <see cref="T:DSharpPlus.Entities.DiscordEmoji"/>.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="emojiNameOrId">Emoji name (can be with ":" or without) or id of it, it can also be the name of a <see cref="T:DSharpPlus.Entities.DiscordEmoji"/>, the method will also look for.</param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordEmoji"/> with the found emoji or <see langword="null"/> if the bot found nothing..</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.FindRole(DSharpPlus.DiscordClient,System.String)">
+            <summary>
+            Search for a role on all the servers the bot is on.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="roleNameOrId">Role name or id.</param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordRole"/> with the found role or <see langword="null"/> if the bot found nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.SendSameMessageToMultipleChannelsAsync(DSharpPlus.DiscordClient,System.String,System.Boolean,DSharpPlus.Entities.DiscordEmbed,System.Collections.Generic.IEnumerable{DSharpPlus.Entities.IMention},DSharpPlus.Entities.DiscordChannel[])">
+            <summary>
+            Sends the same message to different channels.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="content">Content of the message to send.</param>
+            <param name="tts">Whether the message is to be read using TTS.</param>
+            <param name="embed">Embed to attach to the message.</param>
+            <param name="mentions">Allowed mentions in the message.</param>
+            <param name="channels">Channels for the message to be sent.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.FindMember(DSharpPlus.DiscordClient,System.String)">
+            <summary>
+            Searches for a member on all servers the bot is on.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="memberNameOrId">Member name or id.</param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordMember"/> with the found member or <see langword="null"/> if the bot found nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.AddOverwriteOnMultipleChannelsAsync(DSharpPlus.DiscordClient,DSharpPlus.Entities.DiscordMember,DSharpPlus.Permissions,DSharpPlus.Permissions,System.String,DSharpPlus.Entities.DiscordChannel[])">
+            <summary>
+            Adds the same permission on different channels.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="member">Member to be added to permission.</param>
+            <param name="allow">Permissions to be released.</param>
+            <param name="deny">Permissions to be denied.</param>
+            <param name="reason">Reason for audit logs.</param>
+            <param name="channels">Discord channels for adding permissions.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.AddOverwriteOnMultipleChannelsAsync(DSharpPlus.DiscordClient,DSharpPlus.Entities.DiscordRole,DSharpPlus.Permissions,DSharpPlus.Permissions,System.String,DSharpPlus.Entities.DiscordChannel[])">
+            <summary>
+            Adds the same permission on different channels.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="role">Role to be added to permission.</param>
+            <param name="allow">Permissions to be released.</param>
+            <param name="deny">Permissions to be denied.</param>
+            <param name="reason">Reason for audit logs.</param>
+            <param name="channels">Discord channels for adding permissions.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.LogMessage(DSharpPlus.DiscordClient,System.String,System.Exception,Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            Sends a log message to the console using the DSharpPlus logger.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="message">Message to be displayed on the console.</param>
+            <param name="exception">Exception if the message is an error.</param>
+            <param name="logLevel">The message level, the default is <see cref="F:Microsoft.Extensions.Logging.LogLevel.Information"/>.</param>
+        </member>
+        <member name="M:Tars.Extensions.DiscordClientExtensions.FindMessage(DSharpPlus.DiscordClient,System.UInt64)">
+            <summary>
+            Searches for a message on all servers the bot is on.
+            </summary>
+            <param name="discordClient"></param>
+            <param name="messageId">Message id.</param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordMessage"/> with the found message or <see langword="null"/> if the bot found nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="T:Tars.Extensions.DiscordEmbedBuilderExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:DSharpPlus.Entities.DiscordEmbedBuilder"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.DiscordEmbedBuilderExtensions.WithColor(DSharpPlus.Entities.DiscordEmbedBuilder)">
+            <summary>
+            Generates a random color for the embed.
+            </summary>
+            <param name="embed"></param>
+            <returns>This embed builder.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordEmbedBuilderExtensions.AddField(DSharpPlus.Entities.DiscordEmbedBuilder)">
+            <summary>
+            Adds a blank field to the embed.
+            </summary>
+            <param name="embed"></param>
+            <returns>This embed builder.</returns>
+        </member>
+        <member name="T:Tars.Extensions.DiscordGuildExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:DSharpPlus.Entities.DiscordGuild"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.DiscordGuildExtensions.FindEmoji(DSharpPlus.Entities.DiscordGuild,System.String)">
+            <summary>
+            Search for the <see cref="T:DSharpPlus.Entities.DiscordEmoji"/> across the Discord server.
+            </summary>
+            <param name="guild"></param>
+            <param name="emojiNameOrId"><see cref="T:DSharpPlus.Entities.DiscordEmoji"/> name or id.</param>
+            <returns>The <see cref="T:DSharpPlus.Entities.DiscordEmoji"/> found, or <see langword="null"/> if the bot can't find it.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.DiscordGuildExtensions.FindRole(DSharpPlus.Entities.DiscordGuild,System.String)">
+            <summary>
+            Search for the <see cref="T:DSharpPlus.Entities.DiscordRole"/> across the Discord server.
+            </summary>
+            <param name="guild"></param>
+            <param name="roleNameOrId"><see cref="T:DSharpPlus.Entities.DiscordRole"/> name or id.</param>
+            <returns>The <see cref="T:DSharpPlus.Entities.DiscordRole"/> found, or <see langword="null"/> if the bot can't find it.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.DiscordGuildExtensions.GetOrganizedRoles(DSharpPlus.Entities.DiscordGuild)">
+            <summary>
+            Get a list of all Discord server roles organized by the Discord hierarchy.
+            </summary>
+            <param name="guild"></param>
+            <returns><see cref="T:System.Collections.Generic.IReadOnlyList`1"/> with the roles.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordGuildExtensions.GetHighestRole(DSharpPlus.Entities.DiscordGuild,System.Func{DSharpPlus.Entities.DiscordRole,System.Boolean})">
+            <summary>
+            Get the highest role of the Discord server following the Discord hierarchy.
+            </summary>
+            <param name="guild"></param>
+            <param name="predicate">A function to test each element for a condition.</param>
+            <returns>Discord server highest <see cref="T:DSharpPlus.Entities.DiscordRole"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordGuildExtensions.GetLowestRoleAfterEveryone(DSharpPlus.Entities.DiscordGuild,System.Func{DSharpPlus.Entities.DiscordRole,System.Boolean})">
+            <summary>
+            Get the lowest role of the Discord server after "@everyone".
+            </summary>
+            <param name="guild"></param>
+            <param name="predicate">A function to test each element for a condition.</param>
+            <returns>Discord server lowest <see cref="T:DSharpPlus.Entities.DiscordRole"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordGuildExtensions.DeleteChannelAsync(DSharpPlus.Entities.DiscordGuild,System.String,System.String)">
+            <summary>
+            Deletes a channel.
+            </summary>
+            <param name="_"></param>
+            <param name="channelNameOrId">Channel name or id.</param>
+            <param name="reason">Reason for audit logs.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordGuildExtensions.DeleteChannelAsync(DSharpPlus.Entities.DiscordGuild,DSharpPlus.Entities.DiscordChannel,System.String)">
+            <summary>
+            Deletes a channel.
+            </summary>
+            <param name="_"></param>
+            <param name="channel">Channel object.</param>
+            <param name="reason">Reason for audit logs.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Tars.Extensions.DiscordMemberExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:DSharpPlus.Entities.DiscordMember"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.DiscordMemberExtensions.ToDiscordUser(DSharpPlus.Entities.DiscordMember)">
+            <summary>
+            Convert <see cref="T:DSharpPlus.Entities.DiscordMember"/> to <see cref="T:DSharpPlus.Entities.DiscordUser"/>.
+            </summary>
+            <param name="discordMember"></param>
+            <returns>The <see cref="T:DSharpPlus.Entities.DiscordUser"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.DiscordMemberExtensions.GetHighestRole(DSharpPlus.Entities.DiscordMember,System.Func{DSharpPlus.Entities.DiscordRole,System.Boolean})">
+            <summary>
+            Get the highest role of this member in relation to the hierarchy of the Discord server.
+            </summary>
+            <param name="discordMember"></param>
+            <param name="predicate">A function to test each element for a condition.</param>
+            <returns>The highest <see cref="T:DSharpPlus.Entities.DiscordRole"/> of the member in relation to the role of the Discord server.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordMemberExtensions.GetLowestRole(DSharpPlus.Entities.DiscordMember,System.Func{DSharpPlus.Entities.DiscordRole,System.Boolean})">
+            <summary>
+            Get the lowest role of this member in relation to the hierarchy of the Discord server.
+            </summary>
+            <param name="discordMember"></param>
+            <param name="predicate">A function to test each element for a condition.</param>
+            <returns>The lowest <see cref="T:DSharpPlus.Entities.DiscordRole"/> of the member in relation to the role of the Discord server.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordMemberExtensions.CanBeBanned(DSharpPlus.Entities.DiscordMember)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the member can be banned from the server. <c>Attention!</c> can be banned by the <c>bot</c>.
+            </summary>
+            <param name="discordMember"></param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordMemberExtensions.IsAdministrator(DSharpPlus.Entities.DiscordMember)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the member is a server administrator.
+            </summary>
+            <param name="discordMember"></param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="T:Tars.Extensions.DiscordRoleExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:DSharpPlus.Entities.DiscordRole"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.DiscordRoleExtensions.GetMembers(DSharpPlus.Entities.DiscordRole)">
+            <summary>
+            Get a list that contains all the <see cref="T:DSharpPlus.Entities.DiscordMember"/> that have that role.
+            </summary>
+            <param name="role"></param>
+            <returns>A <see cref="T:System.Collections.Generic.IReadOnlyList`1"/> with the members.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordRoleExtensions.IsAbove(DSharpPlus.Entities.DiscordRole,DSharpPlus.Entities.DiscordRole)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether this <see cref="T:DSharpPlus.Entities.DiscordRole"/> is above another <see cref="T:DSharpPlus.Entities.DiscordRole"/>.
+            </summary>
+            <param name="roleAbove"></param>
+            <param name="role">The other <see cref="T:DSharpPlus.Entities.DiscordRole"/> to compare.</param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordRoleExtensions.IsBelow(DSharpPlus.Entities.DiscordRole,DSharpPlus.Entities.DiscordRole)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether this <see cref="T:DSharpPlus.Entities.DiscordRole"/> is below another <see cref="T:DSharpPlus.Entities.DiscordRole"/>.
+            </summary>
+            <param name="roleBelow"></param>
+            <param name="role">The other <see cref="T:DSharpPlus.Entities.DiscordRole"/> to compare.</param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordRoleExtensions.GetPercentageOfMembers(DSharpPlus.Entities.DiscordRole)">
+            <summary>
+            Returns a percentage of the members who hold this <see cref="T:DSharpPlus.Entities.DiscordRole"/>.
+            </summary>
+            <param name="role"></param>
+            <returns>A <see cref="T:System.Decimal"/> with the percentage.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="T:Tars.Extensions.DiscordUserExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:DSharpPlus.Entities.DiscordUser"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.DiscordUserExtensions.ToDiscordMember(DSharpPlus.Entities.DiscordUser)">
+            <summary>
+            Convert <see cref="T:DSharpPlus.Entities.DiscordUser"/> to <see cref="T:DSharpPlus.Entities.DiscordMember"/>.
+            </summary>
+            <param name="discordUser"></param>
+            <returns>The <see cref="T:DSharpPlus.Entities.DiscordMember"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.DiscordUserExtensions.GetHighestRole(DSharpPlus.Entities.DiscordUser,System.Func{DSharpPlus.Entities.DiscordRole,System.Boolean})">
+            <summary>
+            Get the highest role of this user in relation to the hierarchy of the Discord server.
+            </summary>
+            <param name="discordUser"></param>
+            <param name="predicate">A function to test each element for a condition.</param>
+            <returns>The highest <see cref="T:DSharpPlus.Entities.DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordUserExtensions.GetLowestRole(DSharpPlus.Entities.DiscordUser,System.Func{DSharpPlus.Entities.DiscordRole,System.Boolean})">
+            <summary>
+            Get the lowest role of this user in relation to the hierarchy of the Discord server.
+            </summary>
+            <param name="discordUser"></param>
+            <param name="predicate"></param>
+            <returns>The lowest <see cref="T:DSharpPlus.Entities.DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordUserExtensions.CanBeBanned(DSharpPlus.Entities.DiscordUser)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the member can be banned from the server. <c>Attention!</c> can be banned by the <c>bot</c>.
+            </summary>
+            <param name="discordUser"></param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.DiscordUserExtensions.IsAdministrator(DSharpPlus.Entities.DiscordUser)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the user is a server administrator.
+            </summary>
+            <param name="discordUser"></param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="T:Tars.Extensions.EnumerableExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:System.Collections.Generic.IEnumerable`1"/> methods and <see cref="!:T[]"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.EnumerableExtensions.ElementIsFirst``1(``0[],``0,System.Int32)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the specified element is the first in the array.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="array"></param>
+            <param name="element">Element to be checked.</param>
+            <param name="startIndex">The zero-based starting index of the search.</param>
+            <returns>A <see langword="bool"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.EnumerableExtensions.ElementIsFirst``1(System.Collections.Generic.IEnumerable{``0},``0,System.Int32)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the specified element is the first in the list.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="element">Element to be checked.</param>
+            <param name="startIndex">The zero-based starting index of the search.</param>
+            <returns>A <see langword="bool"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.EnumerableExtensions.ElementIsLast``1(``0[],``0,System.Int32)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the specified element is the last in the list.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="array"></param>
+            <param name="element">Element to be checked.</param>
+            <param name="startIndex">The zero-based starting index of the search.</param>
+            <returns>A <see langword="bool"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.EnumerableExtensions.ElementIsLast``1(System.Collections.Generic.IEnumerable{``0},``0,System.Int32)">
+            <summary>
+            Returns a <see langword="bool"/> that says whether the specified element is the last in the list.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="element">Element to be checked.</param>
+            <param name="startIndex">The zero-based starting index of the search.</param>
+            <returns>A <see langword="bool"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="T:Tars.Extensions.IntegralNumbersExtensions">
+            <summary>
+            Class to extend the standard <see langword="ulong"/> and <see langword="long"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordMember(System.UInt64)">
+            <summary>
+            Converts an <see langword="ulong"/> to <see cref="T:DSharpPlus.Entities.DiscordMember"/>.
+            </summary>
+            <param name="memberId"></param>
+            <returns>An <see langword="ulong"/> with <see cref="T:DSharpPlus.Entities.DiscordMember"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordRole(System.UInt64)">
+            <summary>
+            Converts an <see langword="ulong"/> to <see cref="T:DSharpPlus.Entities.DiscordRole"/>.
+            </summary>
+            <param name="roleId"></param>
+            <returns>An <see langword="ulong"/> with <see cref="T:DSharpPlus.Entities.DiscordRole"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordEmoji(System.UInt64)">
+            <summary>
+            Converts an <see langword="ulong"/> to <see cref="T:DSharpPlus.Entities.DiscordEmoji"/>.
+            </summary>
+            <param name="emojiId"></param>
+            <returns>An <see langword="ulong"/> with <see cref="T:DSharpPlus.Entities.DiscordEmoji"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordChannel(System.UInt64)">
+            <summary>
+            Converts an <see langword="ulong"/> to <see cref="T:DSharpPlus.Entities.DiscordChannel"/>.
+            </summary>
+            <param name="channelId"></param>
+            <returns>An <see langword="ulong"/> with <see cref="T:DSharpPlus.Entities.DiscordChannel"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordGuild(System.UInt64)">
+            <summary>
+            Converts an <see langword="ulong"/> to <see cref="T:DSharpPlus.Entities.DiscordGuild"/>.
+            </summary>
+            <param name="guildId"></param>
+            <returns>An <see langword="ulong"/> with <see cref="T:DSharpPlus.Entities.DiscordGuild"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordMessage(System.UInt64)">
+            <summary>
+            Converts an <see langword="ulong"/> to <see cref="T:DSharpPlus.Entities.DiscordMessage"/>.
+            </summary>
+            <param name="messageId"></param>
+            <returns>An <see langword="ulong"/> with <see cref="T:DSharpPlus.Entities.DiscordMessage"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordMember(System.Int64)">
+            <summary>
+            Converts an <see langword="long"/> to <see cref="T:DSharpPlus.Entities.DiscordMember"/>.
+            </summary>
+            <param name="memberId"></param>
+            <returns>An <see langword="long"/> with <see cref="T:DSharpPlus.Entities.DiscordMember"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordRole(System.Int64)">
+            <summary>
+            Converts an <see langword="long"/> to <see cref="T:DSharpPlus.Entities.DiscordRole"/>.
+            </summary>
+            <param name="roleId"></param>
+            <returns>An <see langword="long"/> with <see cref="T:DSharpPlus.Entities.DiscordRole"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordEmoji(System.Int64)">
+            <summary>
+            Converts an <see langword="long"/> to <see cref="T:DSharpPlus.Entities.DiscordEmoji"/>.
+            </summary>
+            <param name="emojiId"></param>
+            <returns>An <see langword="long"/> with <see cref="T:DSharpPlus.Entities.DiscordEmoji"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordChannel(System.Int64)">
+            <summary>
+            Converts an <see langword="long"/> to <see cref="T:DSharpPlus.Entities.DiscordChannel"/>.
+            </summary>
+            <param name="channelId"></param>
+            <returns>An <see langword="long"/> with <see cref="T:DSharpPlus.Entities.DiscordChannel"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordGuild(System.Int64)">
+            <summary>
+            Converts an <see langword="long"/> to <see cref="T:DSharpPlus.Entities.DiscordGuild"/>.
+            </summary>
+            <param name="guildId"></param>
+            <returns>An <see langword="long"/> with <see cref="T:DSharpPlus.Entities.DiscordGuild"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.IntegralNumbersExtensions.ToDiscordMessage(System.Int64)">
+            <summary>
+            Converts an <see langword="long"/> to <see cref="T:DSharpPlus.Entities.DiscordMessage"/>.
+            </summary>
+            <param name="messageId"></param>
+            <returns>An <see langword="long"/> with <see cref="T:DSharpPlus.Entities.DiscordMessage"/> or <see langword="null"/> if the bot can't find something.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="T:Tars.Extensions.StringExtensions">
+            <summary>
+            Class to extend the standard <see langword="string"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.ToDiscordMember(System.String)">
+            <summary>
+            Convert a <see langword="string"/> to <see cref="T:DSharpPlus.Entities.DiscordMember"/>. Example: "Member id", "Member nickname"
+            </summary>
+            <param name="stringMemberOrId"></param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordMember"/> or <see langword="null"/> if the bot finds nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.ToDiscordEmoji(System.String)">
+            <summary>
+            Convert a <see langword="string"/> to <see cref="T:DSharpPlus.Entities.DiscordEmoji"/>. Example: "Emoji id", "Emoji name"
+            </summary>
+            <param name="stringEmojiOrId"></param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordEmoji"/> or <see langword="null"/> if the bot finds nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.ToDiscordRole(System.String)">
+            <summary>
+            Convert a <see langword="string"/> to <see cref="T:DSharpPlus.Entities.DiscordRole"/>. Example: "Role id", "Role name"
+            </summary>
+            <param name="stringRoleOrId"></param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordRole"/> or <see langword="null"/> if the bot finds nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.ToDiscordChannel(System.String)">
+            <summary>
+            Convert a <see langword="string"/> to <see cref="T:DSharpPlus.Entities.DiscordChannel"/>. Example: "Channel id", "Channel name (without "_" or "-")"
+            </summary>
+            <param name="stringChannelOrId"></param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordChannel"/> or <see langword="null"/> if the bot finds nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.ToDiscordGuild(System.String)">
+            <summary>
+            Convert a <see langword="string"/> to <see cref="T:DSharpPlus.Entities.DiscordGuild"/>. Example: "Guild id", "Guild name"
+            </summary>
+            <param name="stringGuildOrId"></param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordGuild"/> or <see langword="null"/> if the bot finds nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.StartWithNumber(System.String)">
+            <summary>
+            Checks whether the string starts with numbers.
+            </summary>
+            <param name="stringValue"></param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.IsNullOrEmptyOrWhiteSpace(System.String)">
+            <summary>
+            Checks <code>string.IsNullOrEmpty()</code> and <code>string.IsNullOrWhiteSpace()</code> and returns a <see langword="bool"/>.
+            </summary>
+            <param name="stringValue"></param>
+            <returns>A <see langword="bool"/>.</returns>
+        </member>
+        <member name="M:Tars.Extensions.StringExtensions.ToDiscordMessage(System.String)">
+            <summary>
+            Convert a <see langword="string"/> to <see cref="T:DSharpPlus.Entities.DiscordMessage"/>. <c>Attention!</c> Just use the message id, it is not yet possible to search for a message other than its id. This method is a little slow to search for the message, so wait and let it finish the search.
+            </summary>
+            <param name="stringMessageId"></param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordMessage"/> or <see langword="null"/> if the bot finds nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="T:Tars.Utilities.TarsBaseUtilities">
+            <summary>
+            Tars utility class.
+            </summary>
+        </member>
+        <member name="M:Tars.Utilities.TarsBaseUtilities.FindEmoji(System.String)">
+            <summary>
+            Internal method to search for emojis.
+            </summary>
+            <param name="emojiNameOrId"></param>
+            <returns>A <see cref="T:DSharpPlus.Entities.DiscordEmoji"/> or <see langword="null"/> if the bot finds nothing.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+    </members>
+</doc>

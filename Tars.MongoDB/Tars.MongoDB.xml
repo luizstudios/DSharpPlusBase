@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tars.MongoDB</name>
+    </assembly>
+    <members>
+        <member name="T:Tars.MongoDB.Extensions.TarsBaseExtensions">
+            <summary>
+            Class to extend the standard <see cref="T:Tars.Core.TarsBase"/> methods.
+            </summary>
+        </member>
+        <member name="M:Tars.MongoDB.Extensions.TarsBaseExtensions.MongoClientSetup(Tars.Core.TarsBase,MongoDB.Driver.MongoClient)">
+            <summary>
+            Method for configuring MongoDB.
+            </summary>
+            <param name="botBase"></param>
+            <param name="mongoClient">Mongo class instance.</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Tars.MongoDB.Extensions.TarsBaseExtensions.GetMongoClient(Tars.Core.TarsBase)">
+            <summary>
+            Method to get the current Mongo instance.
+            </summary>
+            <param name="_"></param>
+            <returns>The current instance of <see cref="T:MongoDB.Driver.MongoClient"/>.</returns>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+    </members>
+</doc>

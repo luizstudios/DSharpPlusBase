@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.0.0</Version>
     <Authors>Luiz Studios</Authors>
-    <Description>A base to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.
+    <Description>A simple framework to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.
 
 Library that gives the possibility to make scheduled events that are called in an interval of time.</Description>
     <Copyright>Luiz Studios</Copyright>
@@ -17,6 +17,10 @@ Library that gives the possibility to make scheduled events that are called in a
     <PackageIcon>TarsPhoto.png</PackageIcon>
     <PackageTags>DiscordBot, DSharpPlus, Discord bot, Discord, Tars, Tars scheduled events</PackageTags>
     <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\luizf\Desktop\Tars\Tars.MongoDB\Tars.MongoDB.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

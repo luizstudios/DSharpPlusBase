@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Luiz Studios</Authors>
     <Company>Luiz Studios</Company>
-    <Description>A base to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.</Description>
+    <Description>A simple framework to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.</Description>
     <Copyright>Luiz Studios</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/luizstudios/Tars</PackageProjectUrl>
@@ -16,6 +16,10 @@
     <PackageTags>DiscordBot, DSharpPlus. Discord bot, Discord, Tars</PackageTags>
     <PackageIcon>TarsPhoto.png</PackageIcon>
     <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\luizf\Desktop\Tars\Tars.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
