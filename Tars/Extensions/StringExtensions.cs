@@ -159,7 +159,7 @@ namespace Tars.Extensions
         /// </summary>
         /// <param name="stringValue"></param>
         /// <returns>A <see langword="bool"/>.</returns>
-        public static bool StartWithNumber(this string stringValue) => Regex.IsMatch(stringValue, @"^\d");
+        //public static bool StartWithNumber(this string stringValue) => Regex.IsMatch(stringValue, @"^\d");
 
         /// <summary>
         /// Checks <code>string.IsNullOrEmpty()</code> and <code>string.IsNullOrWhiteSpace()</code> and returns a <see langword="bool"/>.

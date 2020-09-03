@@ -26,12 +26,15 @@
     <Compile Remove="Tars.MongoDB\**" />
     <Compile Remove="Tars.MSTest\**" />
     <Compile Remove="Tars.ScheduledEvents\**" />
+    <Compile Remove="Tars.Tests\**" />
     <EmbeddedResource Remove="Tars.MongoDB\**" />
     <EmbeddedResource Remove="Tars.MSTest\**" />
     <EmbeddedResource Remove="Tars.ScheduledEvents\**" />
+    <EmbeddedResource Remove="Tars.Tests\**" />
     <None Remove="Tars.MongoDB\**" />
     <None Remove="Tars.MSTest\**" />
     <None Remove="Tars.ScheduledEvents\**" />
+    <None Remove="Tars.Tests\**" />
   </ItemGroup>
 
   <ItemGroup>

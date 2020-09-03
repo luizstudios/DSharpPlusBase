@@ -30,7 +30,7 @@ A simple framework to facilitate the construction of bots for Discord using the 
 - If red lines appear in the code, click on it and press ```Ctrl``` + ```.``` and add the missing usings, do it the other times you need.
 - In your bot's main, just write this:
 ```C#
-public static async Task MainAsync(string[] args)
+public static async Task Main(string[] args)
 {
     var botBase = new TarsBase(Assembly.GetEntryAssembly());
     botBase.DiscordClientSetup("Your bot's token");

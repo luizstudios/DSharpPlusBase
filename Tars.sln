@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tars", "Tars.csproj", "{5D4EB01C-9783-4F39-994A-79940AA21E71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tars.MongoDB", "Tars.MongoDB\Tars.MongoDB.csproj", "{5BC07102-347F-40D9-B0E2-33EDE59F99C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tars.MongoDB", "Tars.MongoDB\Tars.MongoDB.csproj", "{5BC07102-347F-40D9-B0E2-33EDE59F99C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tars.ScheduledEvents", "Tars.ScheduledEvents\Tars.ScheduledEvents.csproj", "{558A2024-B0CB-42B5-A6F8-53798CF06F54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tars.ScheduledEvents", "Tars.ScheduledEvents\Tars.ScheduledEvents.csproj", "{558A2024-B0CB-42B5-A6F8-53798CF06F54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tars.MSTest", "Tars.MSTest\Tars.MSTest.csproj", "{ABE00D9F-0BA9-4F85-AD64-114067764195}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tars.MSTest", "Tars.MSTest\Tars.MSTest.csproj", "{ABE00D9F-0BA9-4F85-AD64-114067764195}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tars.Tests", "Tars.Tests\Tars.Tests.csproj", "{503EC776-3C14-44E6-936C-96FBF7D73D69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{ABE00D9F-0BA9-4F85-AD64-114067764195}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE00D9F-0BA9-4F85-AD64-114067764195}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE00D9F-0BA9-4F85-AD64-114067764195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{503EC776-3C14-44E6-936C-96FBF7D73D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{503EC776-3C14-44E6-936C-96FBF7D73D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{503EC776-3C14-44E6-936C-96FBF7D73D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{503EC776-3C14-44E6-936C-96FBF7D73D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

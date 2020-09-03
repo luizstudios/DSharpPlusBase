@@ -1,5 +1,7 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using System;
+using System.Reflection;
 using Tars.Core;
 
 namespace Tars.MongoDB.Extensions
@@ -23,6 +25,8 @@ namespace Tars.MongoDB.Extensions
                 throw new ArgumentNullException("The BotBase can't be null!");
 
             _mongoClient = mongoClient ?? throw new ArgumentNullException("The MongoClient can't be null!");
+
+            ((IServiceCollection)typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase)).AddSingleton(_mongoClient);
         }
 
         /// <summary>

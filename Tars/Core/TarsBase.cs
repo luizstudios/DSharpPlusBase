@@ -64,6 +64,7 @@ namespace Tars.Core
         #endregion
 
         private readonly DateTimeFormatInfo _dateTimeFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
+        private readonly IServiceCollection _services = new ServiceCollection();
         private object _botClassOrAssembly;
         private bool _disposed;
 
@@ -115,7 +116,7 @@ namespace Tars.Core
             var discordConfiguration = new DiscordConfiguration();
 
             if (udpClientFactory != null)
-               discordConfiguration.UdpClientFactory = udpClientFactory;
+                discordConfiguration.UdpClientFactory = udpClientFactory;
 
             discordConfiguration.Token = token;
             discordConfiguration.TokenType = tokenType;
@@ -179,7 +180,7 @@ namespace Tars.Core
                 DmHelp = directMessageHelp,
                 DefaultHelpChecks = defaultHelpChecks,
                 EnableDms = directMessageCommands,
-                Services = (services?.AddSingleton(this) ?? new ServiceCollection().AddSingleton(this)).BuildServiceProvider(true),
+                Services = (services is null ? this._services.AddSingleton(this) : this._services.AddSingleton(this).AddSingleton(services)).BuildServiceProvider(true),
                 IgnoreExtraArguments = ignoreExtraArguments,
                 UseDefaultCommandHandler = useDefaultCommandHandler
             });
