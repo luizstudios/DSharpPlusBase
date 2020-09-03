@@ -1,6 +1,9 @@
 version: 1.1.{build}
 configuration: Release
 
+init:
+  - ps: CheckBuildNumber.ps1
+
 before_build:
   - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
 
@@ -28,8 +31,8 @@ deploy:
   artifact: /.*(\.|\.s)nupkg/
 
 on_success:
-  - ps: Invoke-RestMethod https://raw.githubusercontent.com/luizstudios/Tars/master/discordwebhook.ps1 -o discordwebhook.ps1
-  - ps: ./discordwebhook.ps1 success $env:WEBHOOK_URL
+  - ps: Invoke-RestMethod https://raw.githubusercontent.com/luizstudios/Tars/master/DiscordWebhook.ps1 -o DiscordWebhook.ps1
+  - ps: ./DiscordWebhook.ps1 success $env:WEBHOOK_URL
 on_failure:
-  - ps: Invoke-RestMethod https://raw.githubusercontent.com/luizstudios/Tars/master/discordwebhook.ps1 -o discordwebhook.ps1
-  - ps: ./discordwebhook.ps1 failure $env:WEBHOOK_URL
+  - ps: Invoke-RestMethod https://raw.githubusercontent.com/luizstudios/Tars/master/DiscordWebhook.ps1 -o DiscordWebhook.ps1
+  - ps: ./DiscordWebhook.ps1 failure $env:WEBHOOK_URL
