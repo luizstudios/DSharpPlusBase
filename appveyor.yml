@@ -1,11 +1,9 @@
 version: 1.1.{build}
 configuration: Release
 
-init:
-  - ps: C:\projects\tars\CheckBuildNumber.ps1
-
 before_build:
   - nuget restore -source "https://nuget.emzi0767.com/api/v3/index.json" -source "https://api.nuget.org/v3/index.json"
+  - ps: C:\projects\tars\CheckBuildNumber.ps1
 
 build:
   project: Tars.sln
