@@ -38,7 +38,7 @@ namespace Tars.ScheduledEvents.Extensions
         /// <exception cref="InvalidOperationException"></exception>
         public static void ScheduledEventsSetup(this TarsBase botBase, params Event[] events)
         {
-            if (_scheduledEvents != null)
+            if (!(_scheduledEvents is null))
                 throw new InvalidOperationException("The event list has already been instantiated!");
 
             _scheduledEvents = new ConcurrentDictionary<Event, byte>();
@@ -64,18 +64,18 @@ namespace Tars.ScheduledEvents.Extensions
         /// <exception cref="NullReferenceException"></exception>
         public static void AddScheduledEvents(this TarsBase _, params Event[] scheduledEvents)
         {
-            if (scheduledEvents == null)
+            if (scheduledEvents is null)
                 throw new NullReferenceException("The scheduled events list can't be null!");
 
             if (scheduledEvents.Any(e => e == null))
                 throw new NullReferenceException("An event scheduled in the list can't be null!");
 
-            if (_scheduledEvents == null)
+            if (_scheduledEvents is null)
                 _scheduledEvents = new ConcurrentDictionary<Event, byte>();
 
             foreach (Event scheduledEvent in scheduledEvents)
             {
-                if (!_scheduledEvents.Keys.Contains(scheduledEvent))
+                if (!_scheduledEvents.Keys.Any(e => e.Name == scheduledEvent.Name))
                     _scheduledEvents.TryAdd(scheduledEvent, 0);
             }
         }
@@ -88,19 +88,19 @@ namespace Tars.ScheduledEvents.Extensions
         /// <exception cref="NullReferenceException"></exception>
         public static void RemoveScheduledEvents(this TarsBase _, params Event[] scheduledEvents)
         {
-            if (scheduledEvents == null)
+            if (scheduledEvents is null)
                 throw new NullReferenceException("The scheduled events list can't be null!");
 
             if (scheduledEvents.Any(e => e == null))
                 throw new NullReferenceException("The scheduled event can't be null!");
 
-            if (_scheduledEvents == null)
+            if (_scheduledEvents is null)
                 throw new NullReferenceException("Add an scheduled event before removing!");
 
             foreach (Event scheduledEvent in scheduledEvents)
             {
                 var scheduledEventFind = _scheduledEvents.Keys.FirstOrDefault(e => e.Name == scheduledEvent.Name);
-                if (scheduledEventFind != null)
+                if (!(scheduledEventFind is null))
                 {
                     scheduledEvent.Deactivate();
 
