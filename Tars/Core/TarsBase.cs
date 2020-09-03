@@ -248,7 +248,7 @@ namespace Tars.Core
         #endregion
 
         /// <summary>
-        /// Method to start the base and connect the bot to Discord.
+        /// Method to start the framework and connect the bot to Discord.
         /// </summary>
         /// <param name="discordActivity">Represents a game that a user is playing. When the bot connects to the gateway, it will go online with the presence passed in that parameter, if it is null, it will only go online. Defaults to <see langword="null"/>.</param>
         /// <param name="userStatus">Represents user status. Defaults to <see cref="UserStatus.Online"/>.</param>

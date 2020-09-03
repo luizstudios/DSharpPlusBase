@@ -5,7 +5,7 @@ using Tars.Extensions;
 namespace Tars.ScheduledEvents.Classes
 {
     /// <summary>
-    /// Build a scheduled event.
+    /// Class to create a new event.
     /// </summary>
     public sealed class Event
     {
@@ -34,27 +34,41 @@ namespace Tars.ScheduledEvents.Classes
         /// </summary>
         public bool IsActived { get; private set; }
 
+        /// <summary>
+        /// Indicates if the scheduled event will execute on Debug mode.
+        /// </summary>
+        public bool ExecuteOnDebugMode { get; }
+
         private readonly Timer _timer;
 
         /// <summary>
-        /// Class constructor to create a new event.
+        /// Build a scheduled event.
         /// </summary>
         /// <param name="name">Name of event.</param>
         /// <param name="action">Code that will be executed when the event is called.</param>
         /// <param name="interval">Time interval for the event to be called.</param>
         /// <param name="description"> Description of event.</param>
-        public Event(string name, Action action, TimeSpan interval, string description = null)
+        public Event(string name, Action action, TimeSpan interval, string description = null, bool executeOnDebugMode = true)
         {
             this.Name = name.IsNullOrEmptyOrWhiteSpace() ? throw new ArgumentException("The Name of scheduled event can't be null!") : name;
             this.Action = action ?? throw new ArgumentNullException("The Action can't be null!");
             this.Interval = interval;
             this.Description = description;
+            this.ExecuteOnDebugMode = executeOnDebugMode;
 
             this._timer = new Timer()
             {
                 Interval = this.Interval.TotalMilliseconds
             };
-            this._timer.Elapsed += (s, e) => this.Action.Invoke();
+            this._timer.Elapsed += (s, e) =>
+            {
+#if DEBUG
+                if (this.ExecuteOnDebugMode)
+                    this.Action.Invoke();
+#else
+                this.Action.Invoke();
+#endif
+            };
             this._timer.Start();
 
             this.IsActived = true;

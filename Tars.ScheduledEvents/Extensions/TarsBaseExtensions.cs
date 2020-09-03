@@ -9,9 +9,26 @@ using Tars.ScheduledEvents.Classes;
 
 namespace Tars.ScheduledEvents.Extensions
 {
-    public static class DiscordBotBaseExtensions
+    public static class TarsBaseExtensions
     {
         private static ConcurrentDictionary<Event, byte> _scheduledEvents;
+
+        /// <summary>
+        /// Instantiates the scheduled events class.
+        /// </summary>
+        /// <param name="botBase"></param>
+        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static void ScheduledEventsSetup(this TarsBase botBase)
+        {
+            if (botBase is null)
+                throw new NullReferenceException("The Tars can't be null! Instantiate the framework!");
+
+            if (!(_scheduledEvents is null))
+                throw new InvalidOperationException("The scheduled events has already been instantiated!");
+
+            _scheduledEvents = new ConcurrentDictionary<Event, byte>();
+        }
 
         /// <summary>
         /// Method for configuring scheduled events.
