@@ -19,7 +19,7 @@ Library that gives the possibility to make scheduled events that are called in a
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>C:\Users\luizf\Desktop\Tars\Tars.ScheduledEvents\Tars.ScheduledEvents.xml</DocumentationFile>
   </PropertyGroup>
 
