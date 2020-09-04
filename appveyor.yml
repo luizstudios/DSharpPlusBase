@@ -26,9 +26,6 @@ deploy:
     secure: dCZNG8/ldkL2Sltly2fLr+4SEx13wnc/CNiB3p2+h9MdsEVkUcPeG+hy4r8gMPxR
   artifact: /.*(\.|\.s)nupkg/
 
-after_deploy:
-  - ps: C:\projects\tars\CheckBuildNumber.ps1
-
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/luizstudios/Tars/master/DiscordWebhook.ps1 -o DiscordWebhook.ps1
   - ps: ./DiscordWebhook.ps1 success $env:WEBHOOK_URL
