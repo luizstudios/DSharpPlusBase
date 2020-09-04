@@ -21,7 +21,7 @@ namespace Tars.MongoDB.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static void MongoClientSetup(this TarsBase botBase, MongoClient mongoClient)
         {
-            if (botBase == null)
+            if (botBase is null)
                 throw new ArgumentNullException("The BotBase can't be null!");
 
             _mongoClient = mongoClient ?? throw new ArgumentNullException("The MongoClient can't be null!");

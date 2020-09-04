@@ -67,7 +67,7 @@ namespace Tars.ScheduledEvents.Extensions
             if (scheduledEvents is null)
                 throw new NullReferenceException("The scheduled events list can't be null!");
 
-            if (scheduledEvents.Any(e => e == null))
+            if (scheduledEvents.Any(e => e is null))
                 throw new NullReferenceException("An event scheduled in the list can't be null!");
 
             if (_scheduledEvents is null)
@@ -91,7 +91,7 @@ namespace Tars.ScheduledEvents.Extensions
             if (scheduledEvents is null)
                 throw new NullReferenceException("The scheduled events list can't be null!");
 
-            if (scheduledEvents.Any(e => e == null))
+            if (scheduledEvents.Any(e => e is null))
                 throw new NullReferenceException("The scheduled event can't be null!");
 
             if (_scheduledEvents is null)

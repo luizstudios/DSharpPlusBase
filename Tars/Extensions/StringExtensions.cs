@@ -25,7 +25,7 @@ namespace Tars.Extensions
         public static DiscordMember ToDiscordMember(this string stringMemberOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
             if (stringMemberOrId.IsNullOrEmptyOrWhiteSpace())
@@ -77,7 +77,7 @@ namespace Tars.Extensions
         public static DiscordRole ToDiscordRole(this string stringRoleOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
             if (stringRoleOrId.IsNullOrEmptyOrWhiteSpace())
@@ -105,7 +105,7 @@ namespace Tars.Extensions
         public static DiscordChannel ToDiscordChannel(this string stringChannelOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
             if (stringChannelOrId.IsNullOrEmptyOrWhiteSpace())
@@ -143,7 +143,7 @@ namespace Tars.Extensions
         public static DiscordGuild ToDiscordGuild(this string stringGuildOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
             if (stringGuildOrId.IsNullOrEmptyOrWhiteSpace())
@@ -178,7 +178,7 @@ namespace Tars.Extensions
         public static DiscordMessage ToDiscordMessage(this string stringMessageId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new NullReferenceException("The DiscordClient can't be null!");
 
             if (stringMessageId.IsNullOrEmptyOrWhiteSpace())

@@ -21,7 +21,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordEmoji"/> with the found emoji or <see langword="null"/> if the bot found nothing..</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordEmoji FindEmoji(this DiscordClient discordClient, string emojiNameOrId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : TarsBaseUtilities.FindEmoji(emojiNameOrId);
+            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : TarsBaseUtilities.FindEmoji(emojiNameOrId);
 
         /// <summary>
         /// Search for a role on all the servers the bot is on.
@@ -31,7 +31,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordRole"/> with the found role or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : roleNameOrId.ToDiscordRole();
+            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : roleNameOrId.ToDiscordRole();
 
         /// <summary>
         /// Sends the same message to different channels.
@@ -46,7 +46,7 @@ namespace Tars.Extensions
         public static async Task SendSameMessageToMultipleChannelsAsync(this DiscordClient discordClient, string content = null, bool tts = false, DiscordEmbed embed = null,
                                                                         IEnumerable<IMention> mentions = null, params DiscordChannel[] channels)
         {
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new ArgumentNullException("The DiscordClient can't be null!");
 
             var tasks = new List<Task<DiscordMessage>>();
@@ -64,7 +64,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordMember"/> with the found member or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordMember FindMember(this DiscordClient discordClient, string memberNameOrId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : memberNameOrId.ToDiscordMember();
+            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : memberNameOrId.ToDiscordMember();
 
         /// <summary>
         /// Adds the same permission on different channels.
@@ -79,7 +79,7 @@ namespace Tars.Extensions
         public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordMember member, Permissions allow = Permissions.None,
                                                                      Permissions deny = Permissions.None, string reason = null, params DiscordChannel[] channels)
         {
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new ArgumentNullException("The DiscordClient can't be null!");
 
             var tasks = new List<Task>();
@@ -102,7 +102,7 @@ namespace Tars.Extensions
         public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordRole role, Permissions allow = Permissions.None,
                                                                      Permissions deny = Permissions.None, string reason = null, params DiscordChannel[] channels)
         {
-            if (discordClient == null)
+            if (discordClient is null)
                 throw new ArgumentNullException("The DiscordClient can't be null!");
 
             var tasks = new List<Task>();
@@ -130,6 +130,6 @@ namespace Tars.Extensions
         /// <returns>A <see cref="DiscordMessage"/> with the found message or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordMessage FindMessage(this DiscordClient discordClient, ulong messageId)
-            => discordClient == null ? throw new ArgumentNullException("The DiscordClient can't be null!") : messageId.ToString().ToDiscordMessage();
+            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : messageId.ToString().ToDiscordMessage();
     }
 }

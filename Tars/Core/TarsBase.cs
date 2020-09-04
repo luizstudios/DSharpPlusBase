@@ -65,7 +65,7 @@ namespace Tars.Core
 
         private readonly DateTimeFormatInfo _dateTimeFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
         private readonly IServiceCollection _services = new ServiceCollection();
-        private object _botClassOrAssembly;
+        private object _botObject;
         private bool _disposed;
 
         internal static string _logTimestampFormat;
@@ -76,10 +76,13 @@ namespace Tars.Core
         /// <param name="botClassOrAssembly">Use the keyword <see langword="this"/> or call the <see cref="Assembly.GetEntryAssembly()"/> method.</param>
         public TarsBase(object botClassOrAssembly)
         {
-            if (_discordClient != null)
+            if (botClassOrAssembly is null)
+                throw new NullReferenceException("The bot class or assembly can't be null!");
+
+            if (!(_discordClient is null))
                 throw new InvalidOperationException("A bot instance has already been instantiated!");
 
-            this._botClassOrAssembly = botClassOrAssembly;
+            this._botObject = botClassOrAssembly;
         }
 
         #region DiscordClientSetup
@@ -185,14 +188,9 @@ namespace Tars.Core
                 UseDefaultCommandHandler = useDefaultCommandHandler
             });
 
-            this.RegisterCommands();
-        }
-
-        private void RegisterCommands()
-        {
-            object botClassOrAssembly = this._botClassOrAssembly;
-            Type objectType = botClassOrAssembly.GetType();
-            _commandsNext.RegisterCommands(objectType.IsClass && objectType.Name != "RuntimeAssembly" ? objectType.Assembly : (Assembly)botClassOrAssembly);
+            Type botObjectType = this._botObject.GetType();
+            _commandsNext.RegisterCommands(botObjectType.IsClass && !string.Equals(botObjectType.Name, "runtimeassembly", StringComparison.CurrentCultureIgnoreCase) ?
+                                           botObjectType.Assembly : (Assembly)this._botObject);
         }
         #endregion
 
@@ -241,7 +239,7 @@ namespace Tars.Core
             _commandsNext = null;
             _interactivity = null;
             _discordClient = null;
-            _botClassOrAssembly = null;
+            _botObject = null;
             _logTimestampFormat = string.Empty;
 
             this._disposed = true;
@@ -256,7 +254,7 @@ namespace Tars.Core
         /// <param name="idleSince">Since when is the client performing the specified activity. Defaults to <see langword="null"/>.</param>
         public async Task StartAsync(DiscordActivity discordActivity = null, UserStatus userStatus = UserStatus.Online, DateTime? idleSince = null)
         {
-            if (_interactivity == null)
+            if (_interactivity is null)
                 this.InteractivitySetup();
 
             if ((_baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the DiscordClientSetup!")).AutoReconnect)

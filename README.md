@@ -14,7 +14,7 @@
 </a>
 </p>
 
-A simple framework to facilitate the construction of bots for Discord using the [C#](https://github.com/dotnet/csharplang) language, [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus) library and [.NET Standard](https://github.com/dotnet/standard).
+A simple framework to facilitate the construction of bots for Discord using the [C#](https://github.com/dotnet/csharplang) language, [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus) library and [.NET Standard 2.0](https://github.com/dotnet/standard).
 
 # .NET Standard 2.0 Compatibilities
 

@@ -16,6 +16,7 @@
     <PackageTags>DiscordBot, DSharpPlus. Discord bot, Discord, Tars</PackageTags>
     <PackageIcon>TarsPhoto.png</PackageIcon>
     <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -29,7 +29,7 @@ namespace Tars.Extensions
         public static DiscordRole GetHighestRole(this DiscordMember discordMember, Func<DiscordRole, bool> predicate = null)
         {
             var memberRolesOrded = discordMember.Roles.OrderByDescending(r => r.Position);
-            return discordMember == null ? throw new ArgumentNullException("The DiscordMember can't be null!") : predicate == null ? memberRolesOrded.FirstOrDefault() :
+            return discordMember is null ? throw new ArgumentNullException("The DiscordMember can't be null!") : predicate is null ? memberRolesOrded.FirstOrDefault() :
                                                                                                                                      memberRolesOrded.FirstOrDefault(predicate);
         }
 
@@ -42,7 +42,7 @@ namespace Tars.Extensions
         public static DiscordRole GetLowestRole(this DiscordMember discordMember, Func<DiscordRole, bool> predicate = null)
         {
             var memberRolesOrded = discordMember.Roles.OrderByDescending(r => r.Position);
-            return discordMember == null ? throw new ArgumentNullException("The DiscordMember can't be null!") : predicate == null ? memberRolesOrded.LastOrDefault() :
+            return discordMember is null ? throw new ArgumentNullException("The DiscordMember can't be null!") : predicate is null ? memberRolesOrded.LastOrDefault() :
                                                                                                                                      memberRolesOrded.LastOrDefault(predicate);
         }
 

@@ -18,7 +18,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="IReadOnlyList{DiscordRole}"/> with the members.</returns>
         public static IReadOnlyList<DiscordMember> GetMembers(this DiscordRole role)
         {
-            if (role == null)
+            if (role is null)
                 throw new ArgumentNullException("The role can't be null!");
 
             var guildRole = TarsBase._discordClient.Guilds.Values.FirstOrDefault(g => g.Roles.Values.Contains(role));
@@ -32,7 +32,7 @@ namespace Tars.Extensions
         /// <param name="role">The other <see cref="DiscordRole"/> to compare.</param>
         /// <returns>A <see langword="bool"/>.</returns>
         public static bool IsAbove(this DiscordRole roleAbove, DiscordRole role)
-            => roleAbove == null ? throw new ArgumentNullException("The above role can't be null!") : role == null ? throw new ArgumentNullException("The role can't be null!") :
+            => roleAbove is null ? throw new ArgumentNullException("The above role can't be null!") : role is null ? throw new ArgumentNullException("The role can't be null!") :
                                                                                                                      roleAbove.Position > role.Position;
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Tars.Extensions
         /// <param name="role">The other <see cref="DiscordRole"/> to compare.</param>
         /// <returns>A <see langword="bool"/>.</returns>
         public static bool IsBelow(this DiscordRole roleBelow, DiscordRole role)
-            => roleBelow == null ? throw new ArgumentNullException("The below role can't be null!") : role == null ? throw new ArgumentNullException("The role can't be null!") :
+            => roleBelow is null ? throw new ArgumentNullException("The below role can't be null!") : role is null ? throw new ArgumentNullException("The role can't be null!") :
                                                                                                                      roleBelow.Position < role.Position;
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Tars.Extensions
         /// <returns>A <see cref="decimal"/> with the percentage.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static decimal GetPercentageOfMembers(this DiscordRole role)
-            => role == null ? throw new ArgumentNullException("The role can't be null!") : Math.Round((decimal)GetMembers(role).Count * 100 /
+            => role is null ? throw new ArgumentNullException("The role can't be null!") : Math.Round((decimal)GetMembers(role).Count * 100 /
                                                                                                       (int)TarsBase._discordClient.Guilds.Values.FirstOrDefault(g =>
                                                                                                       g.Roles.Values.Contains(role))?.MemberCount, 5);
     }

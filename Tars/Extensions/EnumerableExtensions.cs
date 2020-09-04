@@ -20,10 +20,10 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static bool ElementIsFirst<T>(this T[] array, T element, int startIndex = 0)
         {
-            if (array == null)
+            if (array is null)
                 throw new ArgumentNullException("The array can't be null!");
 
-            if (element == null)
+            if (element is null)
                 throw new ArgumentNullException("The element can't be null!");
 
             var arrayToList = array.ToList();
@@ -41,10 +41,10 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static bool ElementIsFirst<T>(this IEnumerable<T> enumerable, T element, int startIndex = 0)
         {
-            if (enumerable == null)
+            if (enumerable is null)
                 throw new ArgumentNullException("The array can't be null!");
 
-            if (element == null)
+            if (element is null)
                 throw new ArgumentNullException("The element can't be null!");
 
             var arrayToList = enumerable.ToList();
@@ -62,10 +62,10 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static bool ElementIsLast<T>(this T[] array, T element, int startIndex = 0)
         {
-            if (array == null)
+            if (array is null)
                 throw new ArgumentNullException("The array can't be null!");
 
-            if (element == null)
+            if (element is null)
                 throw new ArgumentNullException("The element can't be null!");
 
             var arrayToList = array.ToList();
@@ -84,7 +84,7 @@ namespace Tars.Extensions
         public static bool ElementIsLast<T>(this IEnumerable<T> enumerable, T element, int startIndex = 0)
         {
             var list = enumerable.ToList();
-            return list == null ? throw new ArgumentNullException("The list can't be null!") : element == null ?
+            return list is null ? throw new ArgumentNullException("The list can't be null!") : element is null ?
                                   throw new ArgumentNullException("The element can't be null!") : list.FindIndex(startIndex, e => e.Equals(element)) + 1 == list.Count;
         }
     }

@@ -19,7 +19,7 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordMember ToDiscordMember(this DiscordUser discordUser)
         {
-            if (discordUser == null)
+            if (discordUser is null)
                 throw new ArgumentNullException("The DiscordUser can't be null!");
 
             try
@@ -40,11 +40,11 @@ namespace Tars.Extensions
         /// <returns>The highest <see cref="DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
         public static DiscordRole GetHighestRole(this DiscordUser discordUser, Func<DiscordRole, bool> predicate = null)
         {
-            if (discordUser == null)
+            if (discordUser is null)
                 throw new ArgumentNullException("The DiscordUser can't be null!");
 
             var memberRolesOrdered = discordUser.ToDiscordMember().Roles.OrderByDescending(r => r.Position);
-            return predicate == null ? memberRolesOrdered.FirstOrDefault() : memberRolesOrdered.FirstOrDefault(predicate);
+            return predicate is null ? memberRolesOrdered.FirstOrDefault() : memberRolesOrdered.FirstOrDefault(predicate);
         }
 
         /// <summary>
@@ -55,11 +55,11 @@ namespace Tars.Extensions
         /// <returns>The lowest <see cref="DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
         public static DiscordRole GetLowestRole(this DiscordUser discordUser, Func<DiscordRole, bool> predicate = null)
         {
-            if (discordUser == null)
+            if (discordUser is null)
                 throw new ArgumentNullException("The DiscordUser can't be null!");
 
             var memberRolesOrded = discordUser.ToDiscordMember().Roles.OrderByDescending(r => r.Position);
-            return predicate == null ? memberRolesOrded.LastOrDefault() : memberRolesOrded.LastOrDefault(predicate);
+            return predicate is null ? memberRolesOrded.LastOrDefault() : memberRolesOrded.LastOrDefault(predicate);
         }
 
         /// <summary>

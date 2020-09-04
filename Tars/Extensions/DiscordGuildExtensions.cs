@@ -20,7 +20,7 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordEmoji FindEmoji(this DiscordGuild guild, string emojiNameOrId)
         {
-            if (guild == null)
+            if (guild is null)
                 throw new ArgumentNullException("The guild can't be null!");
 
             if (string.IsNullOrWhiteSpace(emojiNameOrId))
@@ -42,7 +42,7 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordRole FindRole(this DiscordGuild guild, string roleNameOrId)
         {
-            if (guild == null)
+            if (guild is null)
                 throw new ArgumentNullException("The guild can't be null!");
 
             if (string.IsNullOrWhiteSpace(roleNameOrId))
@@ -59,7 +59,7 @@ namespace Tars.Extensions
         /// <param name="guild"></param>
         /// <returns><see cref="IReadOnlyList{DiscordRole}"/> with the roles.</returns>
         public static IReadOnlyList<DiscordRole> GetOrganizedRoles(this DiscordGuild guild)
-            => guild == null ? throw new ArgumentNullException("The guild can't be null!") : guild.Roles.Values.OrderByDescending(r => r.Position).ToList();
+            => guild is null ? throw new ArgumentNullException("The guild can't be null!") : guild.Roles.Values.OrderByDescending(r => r.Position).ToList();
 
         /// <summary>
         /// Get the highest role of the Discord server following the Discord hierarchy.
@@ -70,7 +70,7 @@ namespace Tars.Extensions
         public static DiscordRole GetHighestRole(this DiscordGuild guild, Func<DiscordRole, bool> predicate = null)
         {
             var organizedRoles = guild.GetOrganizedRoles();
-            return guild == null ? throw new ArgumentNullException("The guild can't be null!") : predicate == null ? organizedRoles.FirstOrDefault() :
+            return guild is null ? throw new ArgumentNullException("The guild can't be null!") : predicate is null ? organizedRoles.FirstOrDefault() :
                                                                                                                      organizedRoles.FirstOrDefault(predicate);
         }
 
@@ -86,8 +86,8 @@ namespace Tars.Extensions
 
             StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
 
-            return guild == null ? throw new ArgumentNullException("The guild can't be null!") :
-                                   predicate == null ? organizedRoles.LastOrDefault(r => !string.Equals(r.Name, "@everyone", stringComparison)) :
+            return guild is null ? throw new ArgumentNullException("The guild can't be null!") :
+                                   predicate is null ? organizedRoles.LastOrDefault(r => !string.Equals(r.Name, "@everyone", stringComparison)) :
                                                        organizedRoles.Where(r => !string.Equals(r.Name, "@everyone", stringComparison)).LastOrDefault(predicate);
         }
 
