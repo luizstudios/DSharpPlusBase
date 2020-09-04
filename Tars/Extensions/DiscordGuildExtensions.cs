@@ -23,7 +23,7 @@ namespace Tars.Extensions
             if (guild is null)
                 throw new ArgumentNullException("The guild can't be null!");
 
-            if (string.IsNullOrWhiteSpace(emojiNameOrId))
+            if (emojiNameOrId.IsNullOrEmptyOrWhiteSpace())
                 throw new ArgumentNullException("The emoji name or Id can't be null!");
 
             emojiNameOrId = emojiNameOrId.ToLower();
@@ -45,7 +45,7 @@ namespace Tars.Extensions
             if (guild is null)
                 throw new ArgumentNullException("The guild can't be null!");
 
-            if (string.IsNullOrWhiteSpace(roleNameOrId))
+            if (roleNameOrId.IsNullOrEmptyOrWhiteSpace())
                 throw new ArgumentNullException("The emoji name or Id can't be null!");
 
             ulong.TryParse(roleNameOrId, out ulong resultId);
@@ -98,7 +98,8 @@ namespace Tars.Extensions
         /// <param name="channelNameOrId">Channel name or id.</param>
         /// <param name="reason">Reason for audit logs.</param>
         /// <returns></returns>
-        public static async Task DeleteChannelAsync(this DiscordGuild _, string channelNameOrId, string reason = null) => await channelNameOrId.ToDiscordChannel().DeleteAsync(reason);
+        public static async Task DeleteChannelAsync(this DiscordGuild _, string channelNameOrId, string reason = null)
+            => await channelNameOrId.ToDiscordChannel().DeleteAsync(reason);
 
         /// <summary>
         /// Deletes a channel.

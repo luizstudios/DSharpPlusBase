@@ -4,6 +4,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Tars.Core;
+using Tars.Extensions;
 
 namespace Tars.Utilities
 {
@@ -21,7 +22,7 @@ namespace Tars.Utilities
         /// <exception cref="NullReferenceException"></exception>
         internal static DiscordEmoji FindEmoji(string emojiNameOrId)
         {
-            if (string.IsNullOrWhiteSpace(emojiNameOrId))
+            if (emojiNameOrId.IsNullOrEmptyOrWhiteSpace())
                 throw new ArgumentNullException("The emoji name or id can't be null!");
 
             DiscordClient discordClient = TarsBase._discordClient;
@@ -44,7 +45,7 @@ namespace Tars.Utilities
             }
             catch { }
 
-            return !string.IsNullOrWhiteSpace(emojiNameOrId) && CharUnicodeInfo.GetUnicodeCategory(emojiNameOrId, 0) == UnicodeCategory.OtherSymbol ?
+            return !emojiNameOrId.IsNullOrEmptyOrWhiteSpace() && CharUnicodeInfo.GetUnicodeCategory(emojiNameOrId, 0) == UnicodeCategory.OtherSymbol ?
                    DiscordEmoji.FromUnicode(discordClient, emojiNameOrId) : null;
         }
     }

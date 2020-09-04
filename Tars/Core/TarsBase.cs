@@ -130,9 +130,9 @@ namespace Tars.Core
             discordConfiguration.MinimumLogLevel = LogLevel.Information;
 #endif
             discordConfiguration.UseRelativeRatelimit = useRelativeRateLimit;
-            discordConfiguration.LogTimestampFormat = _logTimestampFormat = string.IsNullOrWhiteSpace(logTimestampFormat) ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
-                                                                                                                            $"{this._dateTimeFormatInfo.ShortTimePattern}" :
-                                                                                                                            logTimestampFormat;
+            discordConfiguration.LogTimestampFormat = _logTimestampFormat = logTimestampFormat.IsNullOrEmptyOrWhiteSpace() ? $"{this._dateTimeFormatInfo.ShortDatePattern} " +
+                                                                                                                             $"{this._dateTimeFormatInfo.ShortTimePattern}" :
+                                                                                                                             logTimestampFormat;
             discordConfiguration.LargeThreshold = largeThreshold;
             discordConfiguration.AutoReconnect = autoReconnect;
             if (!autoReconnect)
