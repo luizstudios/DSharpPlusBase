@@ -129,7 +129,7 @@ namespace Tars.Extensions
         /// <param name="messageId">Message id.</param>
         /// <returns>A <see cref="DiscordMessage"/> with the found message or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static DiscordMessage FindMessage(this DiscordClient discordClient, ulong messageId)
-            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : messageId.ToString().ToDiscordMessage();
+        public static DiscordMessage FindMessage(this DiscordClient discordClient, string messageId)
+            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : messageId.ToDiscordMessage();
     }
 }
