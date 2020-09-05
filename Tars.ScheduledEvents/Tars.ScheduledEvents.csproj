@@ -6,7 +6,7 @@
     <Authors>Luiz Studios</Authors>
     <Description>A simple framework to facilitate the construction of bots for Discord using C#, make with DSharpPlus library.
 
-Library that gives the possibility to make scheduled events that are called in an interval of time.</Description>
+This specific library brings the compatibility of Tars with the scheduled events that are executed every time interval.</Description>
     <Copyright>Luiz Studios</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/luizstudios/Tars</PackageProjectUrl>

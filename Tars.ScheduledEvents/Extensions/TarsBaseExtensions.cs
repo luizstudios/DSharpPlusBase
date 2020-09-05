@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Tars.Core;
 using Tars.Extensions;
 using Tars.ScheduledEvents.Classes;
@@ -12,6 +14,10 @@ namespace Tars.ScheduledEvents.Extensions
     public static class TarsBaseExtensions
     {
         private static ConcurrentDictionary<Event, byte> _scheduledEvents;
+
+        private static void AddScheduledEventAsService(TarsBase botBase)
+            => ((IServiceCollection)typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase))
+                .AddSingleton(GetScheduledEvents(botBase));
 
         /// <summary>
         /// Instantiates the scheduled events class.
@@ -28,6 +34,8 @@ namespace Tars.ScheduledEvents.Extensions
                 throw new InvalidOperationException("The scheduled events has already been instantiated!");
 
             _scheduledEvents = new ConcurrentDictionary<Event, byte>();
+
+            AddScheduledEventAsService(botBase);
         }
 
         /// <summary>
@@ -53,7 +61,9 @@ namespace Tars.ScheduledEvents.Extensions
                 ++iEvent;
             }
 
-            botBase.DiscordClient.LogMessage($"{(iEvent > 1 ? $"A total of {iEvent} scheduled events were recorded." : $"A total of {iEvent} scheduled event were recorded.")}", logLevel: LogLevel.Debug);
+            AddScheduledEventAsService(botBase);
+
+            botBase.Discord.LogMessage($"{(iEvent > 1 ? $"A total of {iEvent} scheduled events were recorded." : $"A total of {iEvent} scheduled event were recorded.")}", logLevel: LogLevel.Debug);
         }
 
         /// <summary>

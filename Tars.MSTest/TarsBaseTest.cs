@@ -13,18 +13,16 @@ namespace Tars.Test
     {
         private TarsBase _bot;
 
-        //public TestContext TestContext { get; set; }
-
         [TestInitialize]
         public async Task TestInitialize()
         {
             this._bot = new TarsBase(this);
 
             // This was done to escape Discord's warning that the bot's token is "unprotected".
-            this._bot.DiscordClientSetup(Encoding.UTF8.GetString(new byte[] { 78, 122, 81, 53, 78, 122, 69, 51, 78, 106, 107, 48, 77, 122, 81, 53, 77, 84, 103, 119, 79, 84,
+            this._bot.DiscordSetup(Encoding.UTF8.GetString(new byte[] { 78, 122, 81, 53, 78, 122, 69, 51, 78, 106, 107, 48, 77, 122, 81, 53, 77, 84, 103, 119, 79, 84,
                                                                               85, 52, 46, 88, 48, 119, 68, 65, 119, 46, 80, 77, 110, 55, 51, 99, 71, 122, 118, 101, 83, 54,
                                                                               56, 122, 113, 66, 74, 79, 117, 90, 98, 49, 105, 66, 48, 80, 107 }));
-            this._bot.CommandsNextSetup(new string[] { "tars" });
+            this._bot.CommandsSetup(new string[] { "tars" });
 
             _ = Task.Run(async () => await this._bot.StartAsync(new DiscordActivity { Name = "Running all tests..." }, UserStatus.DoNotDisturb));
 
@@ -34,7 +32,7 @@ namespace Tars.Test
         [TestCleanup]
         public async Task TestCleanup()
         {
-            await this._bot.DiscordClient.UpdateStatusAsync(new DiscordActivity { Name = "Done!" }, UserStatus.Online);
+            await this._bot.Discord.UpdateStatusAsync(new DiscordActivity { Name = "Done!" }, UserStatus.Online);
 
             await Task.Delay(TimeSpan.FromSeconds(5));
 

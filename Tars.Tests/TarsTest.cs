@@ -7,8 +7,8 @@ namespace Tars.Tests
         public TarsTest()
         {
             var botBase = new TarsBase(this);
-            botBase.DiscordClientSetup("nothing here, go out");
-            botBase.CommandsNextSetup(new string[] { "tars" });
+            botBase.DiscordSetup(":p");
+            botBase.CommandsSetup(new string[] { "tars" });
             botBase.StartAsync().GetAwaiter().GetResult();
         }
     }

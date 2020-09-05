@@ -29,19 +29,19 @@ namespace Tars.Core
         /// <summary>
         /// Get the current settings from the <see cref="TarsBaseConfiguration"/>.
         /// </summary>
-        public TarsBaseConfiguration Base => _baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the StartAsync!");
+        public TarsBaseConfiguration Tars => _baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the StartAsync!");
         internal static TarsBaseConfiguration _baseConfiguration;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="DSharpPlus.DiscordClient"/>.
         /// </summary>
-        public DiscordClient DiscordClient => _discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!");
+        public DiscordClient Discord => _discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!");
         internal static DiscordClient _discordClient;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="CommandsNextExtension"/>.
         /// </summary>
-        public CommandsNextExtension CommandsNext => _commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
+        public CommandsNextExtension Commands => _commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
         internal static CommandsNextExtension _commandsNext;
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Tars.Core
         /// <summary>
         /// Get <see cref="TarsBase"/> version.
         /// </summary>
-        public string Version
+        public string TarsVersion
         {
             get
             {
@@ -87,7 +87,7 @@ namespace Tars.Core
 
         #region DiscordClientSetup
         /// <summary>
-        /// Method for configuring <see cref="DSharpPlus.DiscordClient"/>, accessing each configuration individually.
+        /// Method for configuring <see cref="DiscordClient"/>, accessing each configuration individually.
         /// </summary>
         /// <param name="token">Sets the token used to identify the client.</param>
         /// <param name="tokenType">Sets the type of the token used to identify the client. Defaults to <see cref="TokenType.Bot"/>.</param>
@@ -108,12 +108,12 @@ namespace Tars.Core
         /// <param name="webSocketClientFactory">Sets the factory method used to create instances of WebSocket clients. Use <see cref="WebSocketClient.CreateNew(IWebProxy)"/> and equivalents on other implementations to switch out client implementations. Defaults to <see cref="WebSocketClient.CreateNew(IWebProxy)"/></param>
         /// <param name="udpClientFactory">Sets the factory method used to create instances of UDP clients. Use <see cref="DspUdpClient.CreateNew"/> and equivalents on other implementations to switch out client implementations. Defaults to <see cref="DspUdpClient.CreateNew"/>.</param>
         /// <param name="loggerFactory">Sets the logger implementation to use. To create your own logger, implement the <see cref="ILoggerFactory"/> instance. Defaults to built-in implementation.</param>
-        public void DiscordClientSetup(string token, TokenType tokenType = TokenType.Bot, LogLevel? minimumLogLevel = null, bool logLevelDebugOnDebugging = true,
-                                       bool useRelativeRateLimit = true, string logTimestampFormat = null, int largeThreshold = 1000, bool autoReconnect = false,
-                                       int shardId = 0, int shardCount = 1, GatewayCompressionLevel gatewayCompressionLevel = GatewayCompressionLevel.Stream,
-                                       int messageCacheSize = 1024, IWebProxy webProxy = null, TimeSpan? httpTimeout = null, bool reconnectIndefinitely = false,
-                                       DiscordIntents? discordIntents = null, WebSocketClientFactoryDelegate webSocketClientFactory = null,
-                                       UdpClientFactoryDelegate udpClientFactory = null, ILoggerFactory loggerFactory = null)
+        public void DiscordSetup(string token, TokenType tokenType = TokenType.Bot, LogLevel? minimumLogLevel = null, bool logLevelDebugOnDebugging = true,
+                                 bool useRelativeRateLimit = true, string logTimestampFormat = null, int largeThreshold = 1000, bool autoReconnect = false,
+                                 int shardId = 0, int shardCount = 1, GatewayCompressionLevel gatewayCompressionLevel = GatewayCompressionLevel.Stream,
+                                 int messageCacheSize = 1024, IWebProxy webProxy = null, TimeSpan? httpTimeout = null, bool reconnectIndefinitely = false,
+                                 DiscordIntents? discordIntents = null, WebSocketClientFactoryDelegate webSocketClientFactory = null,
+                                 UdpClientFactoryDelegate udpClientFactory = null, ILoggerFactory loggerFactory = null)
 
         {
             var discordConfiguration = new DiscordConfiguration();
@@ -168,10 +168,10 @@ namespace Tars.Core
         /// <param name="services">Sets the service provider for this <see cref="CommandsNextExtension"/> instance. Objects in this provider are used when instantiating command modules. This allows passing data around without resorting to static members. Defaults to <see langword="null"/>.</param>
         /// <param name="ignoreExtraArguments">Sets whether any extra arguments passed to commands should be ignored or not. If this is set to <see langword="false"/>, extra arguments will throw, otherwise they will be ignored. Defaults to <see langword="false"/>.</param>
         /// <param name="useDefaultCommandHandler">Sets whether to automatically enable handling commands. If this is set to <see langword="false"/>, you will need to manually handle each incoming message and pass it to <see cref="CommandsNextExtension"/>. Defaults to <see langword="true"/>.</param>
-        public void CommandsNextSetup(IEnumerable<string> prefixes, PrefixResolverDelegate prefixResolver = null, bool enableMentionPrefix = true, bool caseSensitive = false,
-                                      bool enableDefaultHelp = true, bool directMessageHelp = true, IEnumerable<CheckBaseAttribute> defaultHelpChecks = null,
-                                      bool directMessageCommands = false, IServiceCollection services = null, bool ignoreExtraArguments = false,
-                                      bool useDefaultCommandHandler = true)
+        public void CommandsSetup(IEnumerable<string> prefixes, PrefixResolverDelegate prefixResolver = null, bool enableMentionPrefix = true, bool caseSensitive = false,
+                                  bool enableDefaultHelp = true, bool directMessageHelp = true, IEnumerable<CheckBaseAttribute> defaultHelpChecks = null,
+                                  bool directMessageCommands = false, IServiceCollection services = null, bool ignoreExtraArguments = false,
+                                  bool useDefaultCommandHandler = true)
         {
             _commandsNext = (_discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!")).UseCommandsNext(new CommandsNextConfiguration
             {
@@ -220,7 +220,7 @@ namespace Tars.Core
         /// Method for configuring <see cref="TarsBaseConfiguration"/>, accessing each configuration individually.
         /// </summary>
         /// <param name="autoReconnect">Set whether the bot will use Tars's AutoReconnect. Attention! DSharpPlus AutoReconnect must be set to false in <see cref="DiscordConfiguration"/> for Tars's AutoReconnect to take effect.</param>
-        public void BaseSetup(bool autoReconnect = true) => _baseConfiguration = new TarsBaseConfiguration
+        public void TarsSetup(bool autoReconnect = true) => _baseConfiguration = new TarsBaseConfiguration
         {
             AutoReconnect = autoReconnect
         };
@@ -228,7 +228,7 @@ namespace Tars.Core
 
         #region Base methods
         /// <summary>
-        /// Dispose Tars and DSharpPlus.
+        /// Dispose <see cref="TarsBase"/> and DSharpPlus.
         /// </summary>
         public void Dispose()
         {
@@ -260,7 +260,7 @@ namespace Tars.Core
             if ((_baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the DiscordClientSetup!")).AutoReconnect)
                 _discordClient.SocketClosed += async e => await e.Client.ConnectAsync(discordActivity, userStatus, idleSince);
 
-            _discordClient.LogMessage($"The TarsBase was started successfully! Version: {this.Version}");
+            _discordClient.LogMessage($"The TarsBase was started successfully! Version: {this.TarsVersion}");
             _discordClient.LogMessage("Connecting to Discord...");
 
             await _discordClient.ConnectAsync(discordActivity, userStatus, idleSince);

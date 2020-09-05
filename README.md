@@ -33,16 +33,15 @@ A simple framework to facilitate the construction of bots for Discord using the 
 public static async Task Main(string[] args)
 {
     var botBase = new TarsBase(Assembly.GetEntryAssembly());
-    botBase.DiscordClientSetup("Your bot's token");
-    botBase.CommandsNextSetup(new string[] { "A prefix of your choice" });
+    botBase.DiscordSetup("Your bot's token");
+    botBase.CommandsSetup(new string[] { "A prefix of your choice" });
 
     await botBase.StartAsync();
 }
 ```
 - If you start the bot by another class and methods that are not static, you can put the bot class as a service, to access it via commands, this is how it is added:
 ```C#
-botBase.CommandsNextSetup(new string[] { "A prefix of your choice" },
-		          services: new ServiceCollection().AddSingleton(this));
+botBase.CommandsSetup(new string[] { "A prefix of your choice" }, services: new ServiceCollection().AddSingleton(this));
 ```
 - And ready! If everything goes as expected, your bot will go online :)
 
