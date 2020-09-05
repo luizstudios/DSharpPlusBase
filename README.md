@@ -25,7 +25,8 @@ A simple framework to facilitate the construction of bots for Discord using the 
 - Install the library through [NuGet](https://www.nuget.org/packages?packagetype=&sortby=relevance&q=Tars&prerel=false), if you only wanted the basics to start the bot, download only the "Tars" package.
 
 # Getting Started
-- Create a project in Visual Studio, preferably in .NET Core, and any version of your choice.
+
+- Create a project in Visual Studio, preferably in .NET Core, version 2.0 or later, as shown in the photo above that shows how the .NET Standard 2.0 compatibilities.
 - Change the *Main* method from __void__ to __async Task__.
 - If red lines appear in the code, click on it and press ```Ctrl``` + ```.``` and add the missing usings, do it the other times you need.
 - In your bot's main, just write this:
@@ -48,11 +49,12 @@ botBase.CommandsSetup(new string[] { "A prefix of your choice" }, services: new 
 - This tutorial is just the basics to create a bot, to see more Tars functions, [click here](https://github.com/luizstudios/Tars/wiki).
 
 # Doubts? Questions?
+
 - Open an issue or enter our Discord:
 
     [![Tars Chat](https://discord.com/api/guilds/749718492781215754/embed.png?style=banner1)](https://discord.gg/Z9BcKua)
 
 # Credits
+
 - [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus)
 - Interstellar film for the Tars robot logo. :ok_hand:
-
