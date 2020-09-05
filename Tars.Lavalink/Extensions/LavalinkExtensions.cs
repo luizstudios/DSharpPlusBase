@@ -15,7 +15,7 @@ namespace Tars.Lavalink.Extensions
         /// <param name="lavalink"></param>
         /// <returns>The first <see cref="LavalinkNodeConnection"/>.</returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static LavalinkNodeConnection GetFirstNodeConnectedToLavalink(this LavalinkExtension lavalink) => lavalink.ConnectedNodes.Values.FirstOrDefault() ??
+        public static LavalinkNodeConnection GetFirstNodeConnectedToLavalink(this LavalinkExtension lavalink) => lavalink?.ConnectedNodes?.Values?.FirstOrDefault() ??
                                                                                                                  throw new NullReferenceException("Connect the bot to Lavalink!");
     }
 }

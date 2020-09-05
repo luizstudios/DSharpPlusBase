@@ -33,7 +33,7 @@ namespace Tars.Core
         internal static TarsBaseConfiguration _baseConfiguration;
 
         /// <summary>
-        /// Get the DSharpPlus <see cref="DSharpPlus.DiscordClient"/>.
+        /// Get the DSharpPlus <see cref="DiscordClient"/>.
         /// </summary>
         public DiscordClient Discord => _discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!");
         internal static DiscordClient _discordClient;

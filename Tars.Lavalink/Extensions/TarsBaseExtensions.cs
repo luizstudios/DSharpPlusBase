@@ -27,9 +27,7 @@ namespace Tars.Lavalink.Extensions
         /// <summary>
         /// Method to configure <see cref="LavalinkExtension"/> and connect to it using the default values of DSharpPlus.
         /// <para>Default values:</para>
-        /// <para>- Hostname: 127.0.0.1</para>
-        /// <para>- Port: 2333</para>
-        /// <para>- Password: youshallnotpass</para>
+        /// <para>- Hostname: 127.0.0.1 | Port: 2333 | Password: youshallnotpass</para>
         /// </summary>
         /// <param name="botBase"></param>
         /// <param name="secured">Sets the secured status associated with the Lavalink.</param>
