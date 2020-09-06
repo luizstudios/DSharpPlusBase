@@ -131,5 +131,12 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordMessage FindMessage(this DiscordClient discordClient, string messageId)
             => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : messageId.ToDiscordMessage();
+
+        /// <summary>
+        /// Get the bot as a <see cref="DiscordMember"/>.
+        /// </summary>
+        /// <param name="discordClient"></param>
+        /// <returns>The bot in <see cref="DiscordMember"/> format.</returns>
+        public static DiscordMember GetBotMember(this DiscordClient discordClient) => discordClient.CurrentUser.ToDiscordMember();
     }
 }

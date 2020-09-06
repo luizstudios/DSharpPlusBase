@@ -1,12 +1,11 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Tars.Core;
-
-namespace Tars.Tests
+﻿namespace Tars.Tests
 {
     public static class Program
     {
+        /// <summary>
+        /// Main of Tars.Test.
+        /// </summary>
+        /// <param name="_"></param>
         private static void Main(string[] _) => new TarsTest();
     }
 }

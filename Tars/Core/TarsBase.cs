@@ -85,7 +85,7 @@ namespace Tars.Core
             this._botObject = botClassOrAssembly;
         }
 
-        #region DiscordClientSetup
+        #region DiscordSetup
         /// <summary>
         /// Method for configuring <see cref="DiscordClient"/>, accessing each configuration individually.
         /// </summary>
@@ -153,7 +153,7 @@ namespace Tars.Core
         }
         #endregion
 
-        #region CommandsNextSetup
+        #region CommandsSetup
         /// <summary>
         /// Method for configuring <see cref="CommandsNextConfiguration"/>, accessing each configuration individually.
         /// </summary>
@@ -173,6 +173,12 @@ namespace Tars.Core
                                   bool directMessageCommands = false, IServiceCollection services = null, bool ignoreExtraArguments = false,
                                   bool useDefaultCommandHandler = true)
         {
+            if (!(services is null))
+            {
+                foreach (ServiceDescriptor service in services)
+                    this._services.AddSingleton(service.ServiceType, service.ImplementationInstance);
+            }
+
             _commandsNext = (_discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!")).UseCommandsNext(new CommandsNextConfiguration
             {
                 StringPrefixes = prefixes,
@@ -183,7 +189,7 @@ namespace Tars.Core
                 DmHelp = directMessageHelp,
                 DefaultHelpChecks = defaultHelpChecks,
                 EnableDms = directMessageCommands,
-                Services = (services is null ? this._services.AddSingleton(this) : this._services.AddSingleton(this).AddSingleton(services)).BuildServiceProvider(true),
+                Services = this._services.AddSingleton(this).BuildServiceProvider(true),
                 IgnoreExtraArguments = ignoreExtraArguments,
                 UseDefaultCommandHandler = useDefaultCommandHandler
             });
