@@ -19,9 +19,9 @@ namespace Tars.Test
             this._bot = new TarsBase(this);
 
             // This was done to escape Discord's warning that the bot's token is "unprotected".
-            this._bot.DiscordSetup(Encoding.UTF8.GetString(new byte[] { 78, 122, 81, 53, 78, 122, 69, 51, 78, 106, 107, 48, 77, 122, 81, 53, 77, 84, 103, 119, 79, 84,
-                                                                              85, 52, 46, 88, 48, 119, 68, 65, 119, 46, 80, 77, 110, 55, 51, 99, 71, 122, 118, 101, 83, 54,
-                                                                              56, 122, 113, 66, 74, 79, 117, 90, 98, 49, 105, 66, 48, 80, 107 }));
+            this._bot.DiscordSetup(Encoding.UTF8.GetString(new byte[] { 78, 122, 81, 53, 78, 122, 69, 51, 78, 106, 107, 48, 77, 122, 81, 53, 77, 84, 103, 119, 79, 84, 85, 52,
+                                                                        46, 88, 48, 119, 68, 65, 119, 46, 80, 77, 110, 55, 51, 99, 71, 122, 118, 101, 83, 54, 56, 122, 113, 66,
+                                                                        74, 79, 117, 90, 98, 49, 105, 66, 48, 80, 107 }));
             this._bot.CommandsSetup(new string[] { "tars" });
 
             _ = Task.Run(async () => await this._bot.StartAsync(new DiscordActivity { Name = "Running all tests..." }, UserStatus.DoNotDisturb));
@@ -51,9 +51,9 @@ namespace Tars.Test
             DiscordGuild luizStudiosGuildId = 749718492781215754.ToDiscordGuild(),
                          luizStudiosGuildIdOnString = "749718492781215754".ToDiscordGuild(),
                          luizStudiosGuildString = "Luiz Studios".ToDiscordGuild();
-            DiscordRole libraryRoleId = 749722451151290519.ToDiscordRole(),
-                        libraryRoleIdOnString = "749722451151290519".ToDiscordRole(),
-                        libraryRoleString = "Tars Library".ToDiscordRole();
+            DiscordRole libraryRoleId = 752332921980977172.ToDiscordRole(),
+                        libraryRoleIdOnString = "752332921980977172".ToDiscordRole(),
+                        libraryRoleString = "Tars - Library".ToDiscordRole();
             DiscordEmoji lulEmojiId = 749745553025269767.ToDiscordEmoji(),
                          lulEmojiIdOnString = "749745553025269767".ToDiscordEmoji(),
                          lulEmojiString = "lul".ToDiscordEmoji();
