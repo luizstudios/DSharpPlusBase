@@ -51,8 +51,8 @@ namespace Tars.ScheduledEvents.Classes
         /// <param name="executeOnDebugMode">Indicates if this event will run on debug mode.</param>
         public Event(string name, Action action, TimeSpan interval, string description = null, bool executeOnDebugMode = true)
         {
-            this.Name = name.IsNullOrEmptyOrWhiteSpace() ? throw new ArgumentException("The Name of scheduled event can't be null!") : name;
-            this.Action = action ?? throw new ArgumentNullException("The Action can't be null!");
+            this.Name = name.IsNullOrEmptyOrWhiteSpace() ? throw new ArgumentException("The Name of scheduled event can be null!") : name;
+            this.Action = action ?? throw new ArgumentNullException("The Action can be null!");
             this.Interval = interval;
             this.Description = description;
             this.ExecuteOnDebugMode = executeOnDebugMode;

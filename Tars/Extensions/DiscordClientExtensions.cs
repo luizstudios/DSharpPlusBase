@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tars.Exceptions;
 using Tars.Utilities;
 
 namespace Tars.Extensions
@@ -16,22 +17,22 @@ namespace Tars.Extensions
         /// <summary>
         /// Search for a emoji on all the servers the bot is on, this method is compatible with standard <see cref="DiscordEmoji"/>.
         /// </summary>
-        /// <param name="discordClient"></param>
+        /// <param name="_"></param>
         /// <param name="emojiNameOrId">Emoji name (can be with ":" or without) or id of it, it can also be the name of a <see cref="DiscordEmoji"/>, the method will also look for.</param>
         /// <returns>A <see cref="DiscordEmoji"/> with the found emoji or <see langword="null"/> if the bot found nothing..</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static DiscordEmoji FindEmoji(this DiscordClient discordClient, string emojiNameOrId)
-            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : TarsBaseUtilities.FindEmoji(emojiNameOrId);
+        /// <exception cref="NullReferenceException"></exception>
+        public static DiscordEmoji FindEmoji(this DiscordClient _, string emojiNameOrId) => TarsBaseUtilities.FindEmoji(emojiNameOrId);
 
         /// <summary>
         /// Search for a role on all the servers the bot is on.
         /// </summary>
-        /// <param name="discordClient"></param>
+        /// <param name="_"></param>
         /// <param name="roleNameOrId">Role name or id.</param>
         /// <returns>A <see cref="DiscordRole"/> with the found role or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static DiscordRole FindRole(this DiscordClient discordClient, string roleNameOrId)
-            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : roleNameOrId.ToDiscordRole();
+        /// <exception cref="NullReferenceException"></exception>
+        public static DiscordRole FindRole(this DiscordClient _, string roleNameOrId) => roleNameOrId.ToDiscordRole();
 
         /// <summary>
         /// Sends the same message to different channels.
@@ -42,12 +43,14 @@ namespace Tars.Extensions
         /// <param name="embed">Embed to attach to the message.</param>
         /// <param name="mentions">Allowed mentions in the message.</param>
         /// <param name="channels">Channels for the message to be sent.</param>
+        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="ElementIsNullException"></exception>
         /// <returns></returns>
         public static async Task SendSameMessageToMultipleChannelsAsync(this DiscordClient discordClient, string content = null, bool tts = false, DiscordEmbed embed = null,
                                                                         IEnumerable<IMention> mentions = null, params DiscordChannel[] channels)
         {
-            if (discordClient is null)
-                throw new ArgumentNullException("The DiscordClient can't be null!");
+            discordClient.IsNotNull();
+            channels.IsNotNull();
 
             var tasks = new List<Task<DiscordMessage>>();
             foreach (var channel in channels)
@@ -59,12 +62,12 @@ namespace Tars.Extensions
         /// <summary>
         /// Searches for a member on all servers the bot is on.
         /// </summary>
-        /// <param name="discordClient"></param>
+        /// <param name="_"></param>
         /// <param name="memberNameOrId">Member name or id.</param>
         /// <returns>A <see cref="DiscordMember"/> with the found member or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static DiscordMember FindMember(this DiscordClient discordClient, string memberNameOrId)
-            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : memberNameOrId.ToDiscordMember();
+        /// <exception cref="NullReferenceException"></exception>
+        public static DiscordMember FindMember(this DiscordClient _, string memberNameOrId) => memberNameOrId.ToDiscordMember();
 
         /// <summary>
         /// Adds the same permission on different channels.
@@ -75,12 +78,14 @@ namespace Tars.Extensions
         /// <param name="deny">Permissions to be denied.</param>
         /// <param name="reason">Reason for audit logs.</param>
         /// <param name="channels">Discord channels for adding permissions.</param>
+        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="ElementIsNullException"></exception>
         /// <returns></returns>
         public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordMember member, Permissions allow = Permissions.None,
                                                                      Permissions deny = Permissions.None, string reason = null, params DiscordChannel[] channels)
         {
-            if (discordClient is null)
-                throw new ArgumentNullException("The DiscordClient can't be null!");
+            discordClient.IsNotNull();
+            channels.IsNotNull();
 
             var tasks = new List<Task>();
             foreach (var channel in channels)
@@ -98,12 +103,15 @@ namespace Tars.Extensions
         /// <param name="deny">Permissions to be denied.</param>
         /// <param name="reason">Reason for audit logs.</param>
         /// <param name="channels">Discord channels for adding permissions.</param>
+        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="ElementIsNullException"></exception>
         /// <returns></returns>
         public static async Task AddOverwriteOnMultipleChannelsAsync(this DiscordClient discordClient, DiscordRole role, Permissions allow = Permissions.None,
                                                                      Permissions deny = Permissions.None, string reason = null, params DiscordChannel[] channels)
         {
-            if (discordClient is null)
-                throw new ArgumentNullException("The DiscordClient can't be null!");
+            discordClient.IsNotNull();
+            role.IsNotNull();
+            channels.IsNotNull();
 
             var tasks = new List<Task>();
             foreach (var channel in channels)
@@ -119,24 +127,36 @@ namespace Tars.Extensions
         /// <param name="message">Message to be displayed on the console.</param>
         /// <param name="exception">Exception if the message is an error.</param>
         /// <param name="logLevel">The message level, the default is <see cref="LogLevel.Information"/>.</param>
-        public static void LogMessage(this DiscordClient discordClient, string message, Exception exception = null, LogLevel logLevel = LogLevel.Information)
-            => discordClient.Logger.Log(logLevel, exception, message);
+        /// <exception cref="NullReferenceException"></exception>
+        public static void LogMessage(this DiscordClient discordClient, string message, Exception exception = null, LogLevel logLevel = LogLevel.Information, EventId? eventId = null)
+        {
+            discordClient.IsNotNull();
+            message.IsNotNull();
+
+            discordClient.Logger.Log(logLevel, eventId ?? default, exception, message);
+        }
 
         /// <summary>
         /// Searches for a message on all servers the bot is on.
         /// </summary>
-        /// <param name="discordClient"></param>
+        /// <param name="_"></param>
         /// <param name="messageId">Message id.</param>
         /// <returns>A <see cref="DiscordMessage"/> with the found message or <see langword="null"/> if the bot found nothing.</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static DiscordMessage FindMessage(this DiscordClient discordClient, string messageId)
-            => discordClient is null ? throw new ArgumentNullException("The DiscordClient can't be null!") : messageId.ToDiscordMessage();
+        /// <exception cref="NullReferenceException"></exception>
+        public static DiscordMessage FindMessage(this DiscordClient _, string messageId) => messageId.ToDiscordMessage();
 
         /// <summary>
         /// Get the bot as a <see cref="DiscordMember"/>.
         /// </summary>
         /// <param name="discordClient"></param>
         /// <returns>The bot in <see cref="DiscordMember"/> format.</returns>
-        public static DiscordMember GetBotMember(this DiscordClient discordClient) => discordClient.CurrentUser.ToDiscordMember();
+        /// <exception cref="NullReferenceException"></exception>
+        public static DiscordMember GetBotMember(this DiscordClient discordClient)
+        {
+            discordClient.IsNotNull();
+
+            return discordClient.CurrentUser.ToDiscordMember();
+        }
     }
 }

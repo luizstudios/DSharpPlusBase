@@ -117,7 +117,7 @@ namespace Tars.Lavalink.Extensions
 
         private static void RegisterExitEvent() => AppDomain.CurrentDomain.ProcessExit += Exit;
 
-        // This method is a litte slow :p
+        // This method is a little slow :p
         private static void Exit(object sender, EventArgs e)
         {
             var tasks = new List<Task>();

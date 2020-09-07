@@ -1,4 +1,4 @@
-﻿namespace Tars.Tests
+﻿namespace Tars.Tests.Core
 {
     public static class Program
     {

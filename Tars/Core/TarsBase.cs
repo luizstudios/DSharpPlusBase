@@ -15,8 +15,10 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Tars.Classes;
 using Tars.Core.Settings;
 using Tars.Extensions;
+using Tars.Utilities;
 
 namespace Tars.Core
 {
@@ -29,25 +31,25 @@ namespace Tars.Core
         /// <summary>
         /// Get the current settings from the <see cref="TarsBaseConfiguration"/>.
         /// </summary>
-        public TarsBaseConfiguration Tars => _baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the StartAsync!");
+        public TarsBaseConfiguration Tars => _baseConfiguration ?? throw new NullReferenceException($"The {nameof(TarsBaseConfiguration)} can be null! Call the StartAsync!");
         internal static TarsBaseConfiguration _baseConfiguration;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="DiscordClient"/>.
         /// </summary>
-        public DiscordClient Discord => _discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!");
+        public DiscordClient Discord => _discordClient ?? throw new NullReferenceException(this.MessageErrorDiscordClientIsNull);
         internal static DiscordClient _discordClient;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="CommandsNextExtension"/>.
         /// </summary>
-        public CommandsNextExtension Commands => _commandsNext ?? throw new NullReferenceException("The CommandsNext can't be null! Call the CommandsNextSetup!");
+        public CommandsNextExtension Commands => _commandsNext ?? throw new NullReferenceException($"The {nameof(CommandsNextExtension)} can be null! Call the CommandsSetup!");
         internal static CommandsNextExtension _commandsNext;
 
         /// <summary>
         /// Get the DSharpPlus <see cref="InteractivityExtension"/>.
         /// </summary>
-        public InteractivityExtension Interactivity => _interactivity ?? throw new NullReferenceException("The Interactivity can't be null! Call the InteractivitySetup!");
+        public InteractivityExtension Interactivity => _interactivity ?? throw new NullReferenceException($"The {nameof(InteractivityExtension)} can be null! Call the InteractivitySetup!");
         internal static InteractivityExtension _interactivity;
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace Tars.Core
         private readonly IServiceCollection _services = new ServiceCollection();
         private object _botObject;
         private bool _disposed;
+        private readonly string MessageErrorDiscordClientIsNull = $"The {nameof(DiscordClient)} can be null! Call the DiscordSetup!";
 
         internal static string _logTimestampFormat;
 
@@ -77,10 +80,10 @@ namespace Tars.Core
         public TarsBase(object botClassOrAssembly)
         {
             if (botClassOrAssembly is null)
-                throw new NullReferenceException("The bot class or assembly can't be null!");
+                throw new NullReferenceException("The bot class or assembly can be null!");
 
             if (!(_discordClient is null))
-                throw new InvalidOperationException("A bot instance has already been instantiated!");
+                throw new NullReferenceException($"A {nameof(TarsBase)} instance has already been instantiated!");
 
             this._botObject = botClassOrAssembly;
         }
@@ -179,7 +182,9 @@ namespace Tars.Core
                     this._services.AddSingleton(service.ServiceType, service.ImplementationInstance);
             }
 
-            _commandsNext = (_discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!")).UseCommandsNext(new CommandsNextConfiguration
+            _discordClient.IsNotNull(this.MessageErrorDiscordClientIsNull);
+
+            _commandsNext = _discordClient.UseCommandsNext(new CommandsNextConfiguration
             {
                 StringPrefixes = prefixes,
                 PrefixResolver = prefixResolver,
@@ -211,7 +216,10 @@ namespace Tars.Core
         /// <param name="paginationDeletion">How to handle pagination deletion. Defaults to <see cref="PaginationDeletion.DeleteEmojis"/>.</param>
         public void InteractivitySetup(TimeSpan? timeout = null, PollBehaviour pollBehaviour = PollBehaviour.DeleteEmojis, PaginationEmojis paginationEmojis = null,
                                        PaginationBehaviour paginationBehaviour = PaginationBehaviour.WrapAround, PaginationDeletion paginationDeletion = PaginationDeletion.DeleteEmojis)
-            => _interactivity = (_discordClient ?? throw new NullReferenceException("The DiscordClient can't be null! Call the DiscordClientSetup!")).UseInteractivity(new InteractivityConfiguration
+        {
+            _discordClient.IsNotNull(this.MessageErrorDiscordClientIsNull);
+
+            _interactivity = _discordClient.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = timeout ?? TimeSpan.FromMinutes(5),
                 PollBehaviour = pollBehaviour,
@@ -219,6 +227,7 @@ namespace Tars.Core
                 PaginationBehaviour = paginationBehaviour,
                 PaginationDeletion = paginationDeletion
             });
+        }
         #endregion
 
         #region BaseSetup
@@ -263,15 +272,15 @@ namespace Tars.Core
             if (_interactivity is null)
                 this.InteractivitySetup();
 
-            if ((_baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can't be null! Call the DiscordClientSetup!")).AutoReconnect)
+            if ((_baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can be null! Call the DiscordSetup!")).AutoReconnect)
                 _discordClient.SocketClosed += async e => await e.Client.ConnectAsync(discordActivity, userStatus, idleSince);
 
-            _discordClient.LogMessage($"The TarsBase was started successfully! Version: {this.TarsVersion}");
-            _discordClient.LogMessage("Connecting to Discord...");
+            _discordClient.LogMessage($"The TarsBase was started successfully! Version: {this.TarsVersion}", eventId: LoggerEvents.Startup);
+            _discordClient.LogMessage("Connecting to Discord...", eventId: LoggerEventsExtensions.Trying);
 
             await _discordClient.ConnectAsync(discordActivity, userStatus, idleSince);
 
-            _discordClient.LogMessage("Connection successful!");
+            _discordClient.LogMessage("Connection successful!", eventId: LoggerEventsExtensions.Success);
 
             await Task.Delay(-1);
         }

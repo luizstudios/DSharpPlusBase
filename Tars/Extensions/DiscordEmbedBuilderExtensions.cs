@@ -1,5 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using System;
+using Tars.Utilities;
 
 namespace Tars.Extensions
 {
@@ -13,8 +14,11 @@ namespace Tars.Extensions
         /// </summary>
         /// <param name="embed"></param>
         /// <returns>This embed builder.</returns>
+        /// <exception cref="NullReferenceException"></exception>
         public static DiscordEmbedBuilder WithColor(this DiscordEmbedBuilder embed)
         {
+            embed.IsNotNull();
+
             var rgbColor = new Random();
             return embed.WithColor(new DiscordColor((byte)rgbColor.Next(0, 255), (byte)rgbColor.Next(0, 255), (byte)rgbColor.Next(0, 255)));
         }
@@ -24,6 +28,12 @@ namespace Tars.Extensions
         /// </summary>
         /// <param name="embed"></param>
         /// <returns>This embed builder.</returns>
-        public static DiscordEmbedBuilder AddField(this DiscordEmbedBuilder embed) => embed.AddField("\u200b", "\u200b");
+        /// <exception cref="NullReferenceException"></exception>
+        public static DiscordEmbedBuilder AddField(this DiscordEmbedBuilder embed)
+        {
+            embed.IsNotNull();
+
+            return embed.AddField("\u200b", "\u200b");
+        }
     }
 }

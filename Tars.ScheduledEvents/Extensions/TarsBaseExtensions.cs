@@ -28,7 +28,7 @@ namespace Tars.ScheduledEvents.Extensions
         public static void ScheduledEventsSetup(this TarsBase botBase)
         {
             if (botBase is null)
-                throw new NullReferenceException("The Tars can't be null! Instantiate the framework!");
+                throw new NullReferenceException("The Tars can be null! Instantiate the framework!");
 
             if (!(_scheduledEvents is null))
                 throw new InvalidOperationException("The scheduled events has already been instantiated!");
@@ -75,10 +75,10 @@ namespace Tars.ScheduledEvents.Extensions
         public static void AddScheduledEvents(this TarsBase _, params Event[] scheduledEvents)
         {
             if (scheduledEvents is null)
-                throw new NullReferenceException("The scheduled events list can't be null!");
+                throw new NullReferenceException("The scheduled events list can be null!");
 
             if (scheduledEvents.Any(e => e is null))
-                throw new NullReferenceException("An event scheduled in the list can't be null!");
+                throw new NullReferenceException("An event scheduled in the list can be null!");
 
             if (_scheduledEvents is null)
                 _scheduledEvents = new ConcurrentDictionary<Event, byte>();
@@ -99,10 +99,10 @@ namespace Tars.ScheduledEvents.Extensions
         public static void RemoveScheduledEvents(this TarsBase _, params Event[] scheduledEvents)
         {
             if (scheduledEvents is null)
-                throw new NullReferenceException("The scheduled events list can't be null!");
+                throw new NullReferenceException("The scheduled events list can be null!");
 
             if (scheduledEvents.Any(e => e is null))
-                throw new NullReferenceException("The scheduled event can't be null!");
+                throw new NullReferenceException("The scheduled event can be null!");
 
             if (_scheduledEvents is null)
                 throw new NullReferenceException("Add an scheduled event before removing!");

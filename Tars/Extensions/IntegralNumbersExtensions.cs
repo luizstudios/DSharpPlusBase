@@ -1,6 +1,7 @@
-﻿using Tars.Core;
-using DSharpPlus.Entities;
+﻿using DSharpPlus.Entities;
 using System;
+using Tars.Core;
+using Tars.Utilities;
 
 namespace Tars.Extensions
 {
@@ -9,7 +10,7 @@ namespace Tars.Extensions
     /// </summary>
     public static class IntegralNumbersExtensions
     {
-        #region Ulong
+        #region Ulong methods
         /// <summary>
         /// Converts an <see langword="ulong"/> to <see cref="DiscordMember"/>.
         /// </summary>
@@ -17,7 +18,11 @@ namespace Tars.Extensions
         /// <returns>An <see langword="ulong"/> with <see cref="DiscordMember"/> or <see langword="null"/> if the bot can't find something.</returns>
         /// <exception cref="ArgumentException"></exception>
         public static DiscordMember ToDiscordMember(this ulong memberId)
-            => memberId == 0 ? throw new ArgumentException("The member id can't be 0!") : memberId.ToString().ToDiscordMember();
+        {
+            memberId.Is0();
+
+            return memberId.ToString().ToDiscordMember();
+        }
 
         /// <summary>
         /// Converts an <see langword="ulong"/> to <see cref="DiscordRole"/>.
@@ -26,7 +31,11 @@ namespace Tars.Extensions
         /// <returns>An <see langword="ulong"/> with <see cref="DiscordRole"/> or <see langword="null"/> if the bot can't find something.</returns>
         /// <exception cref="ArgumentException"></exception>
         public static DiscordRole ToDiscordRole(this ulong roleId)
-            => roleId == 0 ? throw new ArgumentException("The role id can't be 0!") : roleId.ToString().ToDiscordRole();
+        {
+            roleId.Is0();
+
+            return roleId.ToString().ToDiscordRole();
+        }
 
         /// <summary>
         /// Converts an <see langword="ulong"/> to <see cref="DiscordEmoji"/>.
@@ -35,7 +44,11 @@ namespace Tars.Extensions
         /// <returns>An <see langword="ulong"/> with <see cref="DiscordEmoji"/> or <see langword="null"/> if the bot can't find something.</returns>
         /// <exception cref="ArgumentException"></exception>
         public static DiscordEmoji ToDiscordEmoji(this ulong emojiId)
-            => emojiId == 0 ? throw new ArgumentException("The emoji id can't be 0!") : emojiId.ToString().ToDiscordEmoji();
+        {
+            emojiId.Is0();
+
+            return emojiId.ToString().ToDiscordEmoji();
+        }
 
         /// <summary>
         /// Converts an <see langword="ulong"/> to <see cref="DiscordChannel"/>.
@@ -45,8 +58,7 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentException"></exception>
         public static DiscordChannel ToDiscordChannel(this ulong channelId)
         {
-            if (channelId == 0)
-                throw new ArgumentException("The channel id can't be 0!");
+            channelId.Is0();
 
             try
             {
@@ -66,8 +78,7 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentException"></exception>
         public static DiscordGuild ToDiscordGuild(this ulong guildId)
         {
-            if (guildId == 0)
-                throw new ArgumentException("The guild id can't be 0!");
+            guildId.Is0();
 
             try
             {
@@ -86,10 +97,14 @@ namespace Tars.Extensions
         /// <returns>An <see langword="ulong"/> with <see cref="DiscordMessage"/> or <see langword="null"/> if the bot can't find something.</returns>
         /// <exception cref="ArgumentException"></exception>
         public static DiscordMessage ToDiscordMessage(this ulong messageId)
-            => messageId == 0 ? throw new ArgumentException("The message id can't be 0!") : messageId.ToString().ToDiscordMessage();
+        {
+            messageId.Is0();
+
+            return messageId.ToString().ToDiscordMessage();
+        }
         #endregion
 
-        #region Long
+        #region Long methods
         /// <summary>
         /// Converts an <see langword="long"/> to <see cref="DiscordMember"/>.
         /// </summary>

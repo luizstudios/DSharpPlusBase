@@ -13,8 +13,7 @@ namespace Tars.Extensions
     /// </summary>
     public static class StringExtensions
     {
-        private static string GetStringNumbers(string stringValue) => Regex.Replace(stringValue, @"[^\d]", string.Empty);
-
+        #region Public methods
         /// <summary>
         /// Convert a <see langword="string"/> to <see cref="DiscordMember"/>. Example: "Member id", "Member nickname"
         /// </summary>
@@ -25,11 +24,8 @@ namespace Tars.Extensions
         public static DiscordMember ToDiscordMember(this string stringMemberOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient is null)
-                throw new NullReferenceException("The DiscordClient can't be null!");
-
-            if (stringMemberOrId.IsNullOrEmptyOrWhiteSpace())
-                throw new ArgumentNullException("The member mention or id can't be null!");
+            discordClient.IsNotNull();
+            stringMemberOrId.IsNotNull();
 
             StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
 
@@ -77,11 +73,8 @@ namespace Tars.Extensions
         public static DiscordRole ToDiscordRole(this string stringRoleOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient is null)
-                throw new NullReferenceException("The DiscordClient can't be null!");
-
-            if (stringRoleOrId.IsNullOrEmptyOrWhiteSpace())
-                throw new ArgumentNullException("The member mention or id can't be null!");
+            discordClient.IsNotNull();
+            stringRoleOrId.IsNotNull();
 
             ulong.TryParse(GetStringNumbers(stringRoleOrId), out ulong resultRoleId);
 
@@ -105,11 +98,8 @@ namespace Tars.Extensions
         public static DiscordChannel ToDiscordChannel(this string stringChannelOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient is null)
-                throw new NullReferenceException("The DiscordClient can't be null!");
-
-            if (stringChannelOrId.IsNullOrEmptyOrWhiteSpace())
-                throw new ArgumentNullException("The member mention or id can't be null!");
+            discordClient.IsNotNull();
+            stringChannelOrId.IsNotNull();
 
             ulong.TryParse(GetStringNumbers(stringChannelOrId), out ulong channelId);
 
@@ -143,11 +133,8 @@ namespace Tars.Extensions
         public static DiscordGuild ToDiscordGuild(this string stringGuildOrId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient is null)
-                throw new NullReferenceException("The DiscordClient can't be null!");
-
-            if (stringGuildOrId.IsNullOrEmptyOrWhiteSpace())
-                throw new ArgumentNullException("The guild name or id can't be null!");
+            discordClient.IsNotNull();
+            stringGuildOrId.IsNotNull();
 
             ulong.TryParse(GetStringNumbers(stringGuildOrId), out ulong guildId);
 
@@ -178,11 +165,8 @@ namespace Tars.Extensions
         public static DiscordMessage ToDiscordMessage(this string stringMessageId)
         {
             DiscordClient discordClient = TarsBase._discordClient;
-            if (discordClient is null)
-                throw new NullReferenceException("The DiscordClient can't be null!");
-
-            if (stringMessageId.IsNullOrEmptyOrWhiteSpace())
-                throw new ArgumentNullException("The message id can't be null!");
+            discordClient.IsNotNull();
+            stringMessageId.IsNotNull();
 
             var messageId = ulong.Parse(stringMessageId);
 
@@ -202,5 +186,22 @@ namespace Tars.Extensions
 
             return null;
         }
+
+        /// <summary>
+        /// Check if the string is empty or contains a white space.
+        /// </summary>
+        /// <param name="stringValue"></param>
+        /// <returns>A <see langword="bool"/>.</returns>
+        public static bool IsEmptyOrWhiteSpace(this string stringValue) => stringValue?.Length == 0 || stringValue == " ";
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Gets only numbers on <see langword="string"/>.
+        /// </summary>
+        /// <param name="stringValue"><see langword="string"/> to return only numbers.</param>
+        /// <returns>The numbers in the form of a <see langword="string"/>.</returns>
+        private static string GetStringNumbers(string stringValue) => Regex.Replace(stringValue, @"[^\d]", string.Empty);
+        #endregion
     }
 }

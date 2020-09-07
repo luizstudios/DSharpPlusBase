@@ -3,6 +3,7 @@ using DSharpPlus.Entities;
 using System;
 using System.Linq;
 using Tars.Core;
+using Tars.Utilities;
 
 namespace Tars.Extensions
 {
@@ -19,8 +20,7 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static DiscordMember ToDiscordMember(this DiscordUser discordUser)
         {
-            if (discordUser is null)
-                throw new ArgumentNullException("The DiscordUser can't be null!");
+            discordUser.IsNotNull();
 
             try
             {
@@ -40,8 +40,7 @@ namespace Tars.Extensions
         /// <returns>The highest <see cref="DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
         public static DiscordRole GetHighestRole(this DiscordUser discordUser, Func<DiscordRole, bool> predicate = null)
         {
-            if (discordUser is null)
-                throw new ArgumentNullException("The DiscordUser can't be null!");
+            discordUser.IsNotNull();
 
             var memberRolesOrdered = discordUser.ToDiscordMember().Roles.OrderByDescending(r => r.Position);
             return predicate is null ? memberRolesOrdered.FirstOrDefault() : memberRolesOrdered.FirstOrDefault(predicate);
@@ -55,8 +54,7 @@ namespace Tars.Extensions
         /// <returns>The lowest <see cref="DiscordRole"/> of the user in relation to the role of the Discord server.</returns>
         public static DiscordRole GetLowestRole(this DiscordUser discordUser, Func<DiscordRole, bool> predicate = null)
         {
-            if (discordUser is null)
-                throw new ArgumentNullException("The DiscordUser can't be null!");
+            discordUser.IsNotNull();
 
             var memberRolesOrded = discordUser.ToDiscordMember().Roles.OrderByDescending(r => r.Position);
             return predicate is null ? memberRolesOrded.LastOrDefault() : memberRolesOrded.LastOrDefault(predicate);
@@ -69,6 +67,8 @@ namespace Tars.Extensions
         /// <returns>A <see langword="bool"/>.</returns>
         public static bool CanBeBanned(this DiscordUser discordUser)
         {
+            discordUser.IsNotNull();
+
             var discordMember = discordUser.ToDiscordMember();
             return !discordMember.IsOwner && !discordMember.IsAdministrator() && discordMember.GetHighestRole().IsBelow(TarsBase._discordClient.CurrentUser.GetHighestRole());
         }
@@ -78,6 +78,11 @@ namespace Tars.Extensions
         /// </summary>
         /// <param name="discordUser"></param>
         /// <returns>A <see langword="bool"/>.</returns>
-        public static bool IsAdministrator(this DiscordUser discordUser) => discordUser.ToDiscordMember().Roles.Any(r => r.Permissions.HasPermission(Permissions.Administrator));
+        public static bool IsAdministrator(this DiscordUser discordUser)
+        {
+            discordUser.IsNotNull();
+
+            return discordUser.ToDiscordMember().Roles.Any(r => r.Permissions.HasPermission(Permissions.Administrator));
+        }
     }
 }

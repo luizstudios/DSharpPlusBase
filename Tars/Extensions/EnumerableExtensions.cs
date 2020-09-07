@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tars.Utilities;
 
 namespace Tars.Extensions
 {
@@ -20,11 +21,10 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static bool ElementIsFirst<T>(this T[] array, T element, int startIndex = 0)
         {
-            if (array is null)
-                throw new ArgumentNullException("The array can't be null!");
+            array.IsNotNull(false);
 
-            if (element is null)
-                throw new ArgumentNullException("The element can't be null!");
+            if ((element is string elementString && elementString.IsNullOrEmptyOrWhiteSpace()) || element is null)
+                throw new ArgumentNullException($"The {nameof(element)} can be null!");
 
             var arrayToList = array.ToList();
             return arrayToList.FindIndex(startIndex, e => e.Equals(element)) == 0;
@@ -41,11 +41,10 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static bool ElementIsFirst<T>(this IEnumerable<T> enumerable, T element, int startIndex = 0)
         {
-            if (enumerable is null)
-                throw new ArgumentNullException("The array can't be null!");
+            enumerable.IsNotNull(false);
 
-            if (element is null)
-                throw new ArgumentNullException("The element can't be null!");
+            if ((element is string elementString && elementString.IsNullOrEmptyOrWhiteSpace()) || element is null)
+                throw new ArgumentNullException($"The {nameof(element)} can be null!");
 
             var arrayToList = enumerable.ToList();
             return arrayToList.FindIndex(startIndex, e => e.Equals(element)) == 0;
@@ -62,11 +61,10 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static bool ElementIsLast<T>(this T[] array, T element, int startIndex = 0)
         {
-            if (array is null)
-                throw new ArgumentNullException("The array can't be null!");
+            array.IsNotNull(false);
 
-            if (element is null)
-                throw new ArgumentNullException("The element can't be null!");
+            if ((element is string elementString && elementString.IsNullOrEmptyOrWhiteSpace()) || element is null)
+                throw new ArgumentNullException($"The {nameof(element)} can be null!");
 
             var arrayToList = array.ToList();
             return arrayToList.FindIndex(startIndex, e => e.Equals(element)) + 1 == arrayToList.Count;
@@ -83,9 +81,13 @@ namespace Tars.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static bool ElementIsLast<T>(this IEnumerable<T> enumerable, T element, int startIndex = 0)
         {
+            enumerable.IsNotNull(false);
+
+            if ((element is string elementString && elementString.IsNullOrEmptyOrWhiteSpace()) || element is null)
+                throw new NullReferenceException($"The {nameof(element)} can be null!");
+
             var list = enumerable.ToList();
-            return list is null ? throw new ArgumentNullException("The list can't be null!") : element is null ?
-                                  throw new ArgumentNullException("The element can't be null!") : list.FindIndex(startIndex, e => e.Equals(element)) + 1 == list.Count;
+            return list.FindIndex(startIndex, e => e.Equals(element)) + 1 == list.Count;
         }
     }
 }

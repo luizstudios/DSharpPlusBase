@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tars.Utilities;
 
 namespace Tars.Extensions
 {
@@ -18,13 +19,11 @@ namespace Tars.Extensions
         /// <param name="emojiNameOrId"><see cref="DiscordEmoji"/> name or id.</param>
         /// <returns>The <see cref="DiscordEmoji"/> found, or <see langword="null"/> if the bot can't find it.</returns>
         /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public static DiscordEmoji FindEmoji(this DiscordGuild guild, string emojiNameOrId)
         {
-            if (guild is null)
-                throw new ArgumentNullException("The guild can't be null!");
-
-            if (emojiNameOrId.IsNullOrEmptyOrWhiteSpace())
-                throw new ArgumentNullException("The emoji name or Id can't be null!");
+            guild.IsNotNull();
+            emojiNameOrId.IsNotNull();
 
             emojiNameOrId = emojiNameOrId.ToLower();
             ulong.TryParse(emojiNameOrId, out ulong emojiId);
@@ -40,13 +39,11 @@ namespace Tars.Extensions
         /// <param name="roleNameOrId"><see cref="DiscordRole"/> name or id.</param>
         /// <returns>The <see cref="DiscordRole"/> found, or <see langword="null"/> if the bot can't find it.</returns>
         /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public static DiscordRole FindRole(this DiscordGuild guild, string roleNameOrId)
         {
-            if (guild is null)
-                throw new ArgumentNullException("The guild can't be null!");
-
-            if (roleNameOrId.IsNullOrEmptyOrWhiteSpace())
-                throw new ArgumentNullException("The emoji name or Id can't be null!");
+            guild.IsNotNull();
+            roleNameOrId.IsNotNull();
 
             ulong.TryParse(roleNameOrId, out ulong resultId);
 
@@ -58,8 +55,12 @@ namespace Tars.Extensions
         /// </summary>
         /// <param name="guild"></param>
         /// <returns><see cref="IReadOnlyList{DiscordRole}"/> with the roles.</returns>
+        /// <exception cref="NullReferenceException"></exception>
         public static IReadOnlyList<DiscordRole> GetOrganizedRoles(this DiscordGuild guild)
-            => guild is null ? throw new ArgumentNullException("The guild can't be null!") : guild.Roles.Values.OrderByDescending(r => r.Position).ToList();
+        {
+            guild.IsNotNull();
+            return guild.Roles.Values.OrderByDescending(r => r.Position).ToList();
+        }
 
         /// <summary>
         /// Get the highest role of the Discord server following the Discord hierarchy.
@@ -67,11 +68,13 @@ namespace Tars.Extensions
         /// <param name="guild"></param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>Discord server highest <see cref="DiscordRole"/>.</returns>
+        /// <exception cref="NullReferenceException"></exception>
         public static DiscordRole GetHighestRole(this DiscordGuild guild, Func<DiscordRole, bool> predicate = null)
         {
+            guild.IsNotNull();
+
             var organizedRoles = guild.GetOrganizedRoles();
-            return guild is null ? throw new ArgumentNullException("The guild can't be null!") : predicate is null ? organizedRoles.FirstOrDefault() :
-                                                                                                                     organizedRoles.FirstOrDefault(predicate);
+            return predicate is null ? organizedRoles.FirstOrDefault() : organizedRoles.FirstOrDefault(predicate);
         }
 
         /// <summary>
@@ -80,34 +83,47 @@ namespace Tars.Extensions
         /// <param name="guild"></param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>Discord server lowest <see cref="DiscordRole"/>.</returns>
+        /// <exception cref="NullReferenceException"></exception>
         public static DiscordRole GetLowestRoleAfterEveryone(this DiscordGuild guild, Func<DiscordRole, bool> predicate = null)
         {
+            guild.IsNotNull();
+
             var organizedRoles = guild.GetOrganizedRoles();
 
             StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
 
-            return guild is null ? throw new ArgumentNullException("The guild can't be null!") :
-                                   predicate is null ? organizedRoles.LastOrDefault(r => !string.Equals(r.Name, "@everyone", stringComparison)) :
-                                                       organizedRoles.Where(r => !string.Equals(r.Name, "@everyone", stringComparison)).LastOrDefault(predicate);
+            return predicate is null ? organizedRoles.LastOrDefault(r => !string.Equals(r.Name, "@everyone", stringComparison)) :
+                                       organizedRoles.Where(r => !string.Equals(r.Name, "@everyone", stringComparison)).LastOrDefault(predicate);
         }
 
         /// <summary>
         /// Deletes a channel.
         /// </summary>
-        /// <param name="_"></param>
+        /// <param name="guild"></param>
         /// <param name="channelNameOrId">Channel name or id.</param>
         /// <param name="reason">Reason for audit logs.</param>
         /// <returns></returns>
-        public static async Task DeleteChannelAsync(this DiscordGuild _, string channelNameOrId, string reason = null)
-            => await channelNameOrId.ToDiscordChannel().DeleteAsync(reason);
+        /// <exception cref="NullReferenceException"></exception>
+        public static async Task DeleteChannelAsync(this DiscordGuild guild, string channelNameOrId, string reason = null)
+        {
+            guild.IsNotNull();
+
+            await channelNameOrId.ToDiscordChannel().DeleteAsync(reason);
+        }
 
         /// <summary>
         /// Deletes a channel.
         /// </summary>
-        /// <param name="_"></param>
+        /// <param name="guild"></param>
         /// <param name="channel">Channel object.</param>
         /// <param name="reason">Reason for audit logs.</param>
         /// <returns></returns>
-        public static async Task DeleteChannelAsync(this DiscordGuild _, DiscordChannel channel, string reason = null) => await channel.DeleteAsync(reason);
+        /// <exception cref="NullReferenceException"></exception>
+        public static async Task DeleteChannelAsync(this DiscordGuild guild, DiscordChannel channel, string reason = null)
+        {
+            guild.IsNotNull();
+
+            await channel.DeleteAsync(reason);
+        }
     }
 }

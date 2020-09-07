@@ -1,8 +1,9 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using System.Threading.Tasks;
+using Tars.Tests.Core;
 
-namespace Tars.Tests
+namespace Tars.Tests.Commands
 {
     public sealed class TestCommands : BaseCommandModule
     {
