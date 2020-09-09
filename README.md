@@ -6,6 +6,9 @@
 <a href="https://ci.appveyor.com/project/luizferbr17/tars">
 	<img src="https://ci.appveyor.com/api/projects/status/3683mub26sthphjd?svg=true" />	
 </a>
+<a href="https://www.codacy.com/gh/luizstudios/Tars?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=luizstudios/Tars&amp;utm_campaign=Badge_Grade">
+	<img src="https://app.codacy.com/project/badge/Grade/158b9c525e2a48a88aef91c2d5448aa8"/>
+</a>
 <a href="https://discord.gg/Z9BcKua">
 	<img alt="Discord" src="https://img.shields.io/discord/749718492781215754.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2">
 </a>
