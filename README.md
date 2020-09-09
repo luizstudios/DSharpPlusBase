@@ -48,9 +48,8 @@ botBase.CommandsSetup(new string[] { "A prefix of your choice" }, services: new 
 
 - Open an issue or enter our Discord:
 
-    [![Tars Chat](https://discord.com/api/guilds/749718492781215754/embed.png?style=banner1)](https://discord.gg/Z9BcKua)
+    [![Tars Chat](https://discord.com/api/guilds/749718492781215754/embed.png?style=banner2)](https://discord.gg/Z9BcKua)
 
 # Credits
 
 - [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus)
-- Interstellar film for the Tars robot logo. :ok_hand:

@@ -24,6 +24,8 @@ namespace Tars.Lavalink.Extensions
         private static LavalinkConfiguration _lavalinkConfiguration;
         private static LavalinkNodeConnection _lavalinkNodeConnection;
 
+        private static bool _wasConnectedToLavalink;
+
         /// <summary>
         /// Method to configure <see cref="LavalinkExtension"/> and connect to it using the default values of DSharpPlus.
         /// <para>Default values:</para>
@@ -104,6 +106,14 @@ namespace Tars.Lavalink.Extensions
                 try
                 {
                     _lavalinkNodeConnection = await _lavalink.ConnectAsync(_lavalinkConfiguration);
+
+                    if (!_wasConnectedToLavalink)
+                        _botBase.Discord.LogMessage("Successfully connected to Lavalink.");
+                    else
+                        _botBase.Discord.LogMessage("Connected with re-established with Lavalink.");
+
+                    if (!_wasConnectedToLavalink)
+                        _wasConnectedToLavalink = true;
                 }
                 catch (Exception exception)
                 {
@@ -128,9 +138,10 @@ namespace Tars.Lavalink.Extensions
                 tasks.Add(guild.DisconnectAsync());
             }
 
-            Task.WhenAll(tasks).GetAwaiter().GetResult();
+            foreach (LavalinkNodeConnection nodes in _lavalink?.ConnectedNodes?.Values)
+                tasks.Add(nodes.StopAsync());
 
-            _lavalinkNodeConnection?.StopAsync().GetAwaiter().GetResult();
+            Task.WhenAll(tasks).GetAwaiter().GetResult();
         }
 
         /// <summary>
