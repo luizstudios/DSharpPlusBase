@@ -4,6 +4,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.Net.Udp;
 using DSharpPlus.Net.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -273,7 +274,7 @@ namespace Tars.Core
                 this.InteractivitySetup();
 
             if ((_baseConfiguration ?? throw new NullReferenceException("The BaseConfiguration can be null! Call the DiscordSetup!")).AutoReconnect)
-                _discordClient.SocketClosed += async e => await e.Client.ConnectAsync(discordActivity, userStatus, idleSince);
+                _discordClient.SocketClosed += async (client, _) => await client.ConnectAsync(discordActivity, userStatus, idleSince);
 
             _discordClient.LogMessage($"The TarsBase was started successfully! Version: {this.TarsVersion}", eventId: LoggerEvents.Startup);
             _discordClient.LogMessage("Connecting to Discord...", eventId: LoggerEventsExtensions.Trying);

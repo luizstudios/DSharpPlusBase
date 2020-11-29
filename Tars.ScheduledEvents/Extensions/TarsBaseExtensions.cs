@@ -16,8 +16,8 @@ namespace Tars.ScheduledEvents.Extensions
         private static ConcurrentDictionary<Event, byte> _scheduledEvents;
 
         private static void AddScheduledEventAsService(TarsBase botBase)
-            => ((IServiceCollection)typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase))
-                .AddSingleton(GetScheduledEvents(botBase));
+            => (typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase) as IServiceCollection)
+               .AddSingleton(GetScheduledEvents(botBase));
 
         /// <summary>
         /// Instantiates the scheduled events class.

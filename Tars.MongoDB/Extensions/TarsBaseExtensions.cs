@@ -26,7 +26,7 @@ namespace Tars.MongoDB.Extensions
 
             _mongoClient = mongoClient ?? throw new ArgumentNullException("The MongoClient can be null!");
 
-            ((IServiceCollection)typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase)).AddSingleton(_mongoClient);
+            (typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase) as IServiceCollection).AddSingleton(_mongoClient);
         }
 
         /// <summary>

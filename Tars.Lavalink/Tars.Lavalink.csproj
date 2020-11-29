@@ -17,6 +17,9 @@ This specific library brings Tars compatibility with Lavalink to make stream aud
     <RepositoryType>OpenSource</RepositoryType>
     <PackageIcon>TarsPhoto.png</PackageIcon>
     <PackageTags>DiscordBot, DSharpPlus, Discord bot, Discord, Tars, Tars lavalink</PackageTags>
+    <AssemblyVersion>1.0.29.0</AssemblyVersion>
+    <FileVersion>1.0.29.0</FileVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,7 +31,7 @@ This specific library brings Tars compatibility with Lavalink to make stream aud
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSharpPlus.Lavalink" Version="4.0.0-nightly-00721" />
+    <PackageReference Include="DSharpPlus.Lavalink" Version="4.0.0-rc1" />
   </ItemGroup>
 
   <ItemGroup>

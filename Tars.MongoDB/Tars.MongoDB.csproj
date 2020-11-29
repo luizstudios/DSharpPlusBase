@@ -17,6 +17,9 @@ This particular library brings Tars compatibility with MongoDB to access the dat
     <PackageIcon>TarsPhoto.png</PackageIcon>
     <PackageTags>DiscordBot, DSharpPlus, Discord bot, Discord, Tars, Tars mongo db</PackageTags>
     <CodeAnalysisRuleSet>relative_or_absolute_path_to_ruleset_file</CodeAnalysisRuleSet>
+    <AssemblyVersion>1.0.6.0</AssemblyVersion>
+    <FileVersion>1.0.6.0</FileVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -24,7 +27,7 @@ This particular library brings Tars compatibility with MongoDB to access the dat
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.11.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.0-beta1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,7 +5,7 @@ using Tars.Tests.Core;
 
 namespace Tars.Tests.Commands
 {
-    public sealed class TestCommands : BaseCommandModule
+    public sealed class BasicCommands : BaseCommandModule
     {
         public TarsTest Bot { get; set; }
 

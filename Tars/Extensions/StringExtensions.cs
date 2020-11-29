@@ -193,6 +193,13 @@ namespace Tars.Extensions
         /// <param name="stringValue"></param>
         /// <returns>A <see langword="bool"/>.</returns>
         public static bool IsEmptyOrWhiteSpace(this string stringValue) => stringValue?.Length == 0 || stringValue == " ";
+
+        /// <summary>
+        /// Convert <see langword="string"/> to <see cref="DiscordUser"/>.
+        /// </summary>
+        /// <param name="stringUserOrId">Member name or id.</param>
+        /// <returns>The <see cref="DiscordUser"/> with a member.</returns>
+        public static DiscordUser ToDiscordUser(this string stringUserOrId) => stringUserOrId.ToDiscordMember();
         #endregion
 
         #region Private methods

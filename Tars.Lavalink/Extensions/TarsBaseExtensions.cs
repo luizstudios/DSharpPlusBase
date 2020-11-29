@@ -1,4 +1,5 @@
-﻿using DSharpPlus.Entities;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using DSharpPlus.Net;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Tars.Core;
@@ -25,6 +27,8 @@ namespace Tars.Lavalink.Extensions
         private static LavalinkNodeConnection _lavalinkNodeConnection;
 
         private static bool _wasConnectedToLavalink;
+
+        internal static HttpClient _httpClient;
 
         /// <summary>
         /// Method to configure <see cref="LavalinkExtension"/> and connect to it using the default values of DSharpPlus.
@@ -60,6 +64,7 @@ namespace Tars.Lavalink.Extensions
 
             RegisterExitEvent();
             RegisterLavalinkAsService(botBase);
+            HttpClientSetup();
         }
 
         /// <summary>
@@ -97,9 +102,19 @@ namespace Tars.Lavalink.Extensions
 
             RegisterExitEvent();
             RegisterLavalinkAsService(botBase);
+            HttpClientSetup();
         }
 
-        private static async Task DiscordHeartbeated(HeartbeatEventArgs _)
+        /// <summary>
+        /// Get the <see cref="LavalinkExtension"/>.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <returns>The <see cref="LavalinkExtension"/>.</returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static LavalinkExtension GetLavalink(this TarsBase _) => _lavalink ?? throw new NullReferenceException("Connect the bot to Lavalink!");
+
+        #region Private methods
+        private static async Task DiscordHeartbeated(DiscordClient client, HeartbeatEventArgs _)
         {
             if (_lavalinkNodeConnection?.IsConnected != true)
             {
@@ -108,26 +123,27 @@ namespace Tars.Lavalink.Extensions
                     _lavalinkNodeConnection = await _lavalink.ConnectAsync(_lavalinkConfiguration);
 
                     if (!_wasConnectedToLavalink)
-                        _botBase.Discord.LogMessage("Successfully connected to Lavalink.");
+                        client.LogMessage("Successfully connected to Lavalink.");
                     else
-                        _botBase.Discord.LogMessage("Connected with re-established with Lavalink.");
+                        client.LogMessage("The connection to Lavalink has been re-established.");
 
                     if (!_wasConnectedToLavalink)
                         _wasConnectedToLavalink = true;
                 }
                 catch (Exception exception)
                 {
-                    _botBase.Discord.LogMessage("An error occurred while trying to connect to lavalink.", exception, LogLevel.Error);
+                    client.LogMessage("An error occurred while trying to connect to lavalink.", exception, LogLevel.Error);
                 }
             }
         }
 
         private static void RegisterLavalinkAsService(TarsBase botBase)
-            => ((IServiceCollection)typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase)).AddSingleton(_lavalink);
+            => (typeof(TarsBase).GetField("_services", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(botBase) as IServiceCollection).AddSingleton(_lavalink);
 
         private static void RegisterExitEvent() => AppDomain.CurrentDomain.ProcessExit += Exit;
 
         // This method is a little slow :p
+        // I don't know how I can improve it
         private static void Exit(object sender, EventArgs e)
         {
             var tasks = new List<Task>();
@@ -144,12 +160,7 @@ namespace Tars.Lavalink.Extensions
             Task.WhenAll(tasks).GetAwaiter().GetResult();
         }
 
-        /// <summary>
-        /// Get the <see cref="LavalinkExtension"/>.
-        /// </summary>
-        /// <param name="_"></param>
-        /// <returns>The <see cref="LavalinkExtension"/>.</returns>
-        /// <exception cref="NullReferenceException"></exception>
-        public static LavalinkExtension GetLavalink(this TarsBase _) => _lavalink ?? throw new NullReferenceException("Connect the bot to Lavalink!");
+        private static void HttpClientSetup() => _httpClient = new HttpClient();
+        #endregion
     }
 }

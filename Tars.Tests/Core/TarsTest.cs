@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Tars.Tests.Services.Lavalink;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tars.Core;
+using Tars.Lavalink.Extensions;
 using Tars.Tests.Core.Settings;
 
 namespace Tars.Tests.Core
@@ -20,12 +22,12 @@ namespace Tars.Tests.Core
         /// <summary>
         /// Method where the bot is instatiated and initialized.
         /// </summary>
-        /// <returns></returns>
         public async Task InitializeAsync()
         {
             var botBase = new TarsBase(this);
             botBase.DiscordSetup((await this.GetOrCreateJsonConfig()).Token);
-            botBase.CommandsSetup(new string[] { "tars" }, services: new ServiceCollection().AddSingleton(this));
+            botBase.LavalinkSetup();
+            botBase.CommandsSetup(new string[] { "tars" }, services: new ServiceCollection().AddSingleton(this).AddSingleton(new MusicService(botBase.GetLavalink(), botBase.Discord)));
             await botBase.StartAsync();
         }
 

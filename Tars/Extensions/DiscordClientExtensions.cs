@@ -158,5 +158,19 @@ namespace Tars.Extensions
 
             return discordClient.CurrentUser.ToDiscordMember();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="member"></param>
+        /// <param name="role"></param>
+        /// <param name="reason"></param>
+        /// <returns></returns>
+        public static async Task GrantRoleAsync(this DiscordClient _, DiscordMember member, DiscordRole role, string reason = null) => await member.GrantRoleAsync(role, reason);
+
+        public static async Task RevokeRoleAsync(this DiscordClient _, DiscordMember member, DiscordRole role, string reason = null) => await member.RevokeRoleAsync(role, reason);
+
+        public static async Task ReplaceRolesAsync(this DiscordClient _, DiscordMember member, IEnumerable<DiscordRole> roles, string reason = null) => await member.ReplaceRolesAsync(roles, reason);
     }
 }
