@@ -23,7 +23,7 @@ nuget:
 deploy:
   provider: NuGet
   api_key:
-    secure: dCZNG8/ldkL2Sltly2fLr+4SEx13wnc/CNiB3p2+h9MdsEVkUcPeG+hy4r8gMPxR
+    secure: UP7lMLobrH+H8Va2NrVagYoUk/6M/lxVr8wMXW1faiWjZAarrSpfLsiHD8N8UYEg
   artifact: /.*(\.|\.s)nupkg/
 
 on_success:
