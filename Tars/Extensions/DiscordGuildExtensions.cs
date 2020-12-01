@@ -1,4 +1,5 @@
-﻿using DSharpPlus.Entities;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,7 +103,6 @@ namespace Tars.Extensions
         /// <param name="guild"></param>
         /// <param name="channelNameOrId">Channel name or id.</param>
         /// <param name="reason">Reason for audit logs.</param>
-        /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
         public static async Task DeleteChannelAsync(this DiscordGuild guild, string channelNameOrId, string reason = null)
         {
@@ -117,13 +117,36 @@ namespace Tars.Extensions
         /// <param name="guild"></param>
         /// <param name="channel">Channel object.</param>
         /// <param name="reason">Reason for audit logs.</param>
-        /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
         public static async Task DeleteChannelAsync(this DiscordGuild guild, DiscordChannel channel, string reason = null)
         {
             guild.IsNotNull();
 
             await channel.DeleteAsync(reason);
+        }
+
+        /// <summary>
+        /// Get the highest role of the Discord server following the Discord hierarchy and according to the permissions passed.
+        /// </summary>
+        /// <param name="guild"></param>
+        /// <param name="permissions">Permissions of the role.</param>
+        public static DiscordRole GetHighestRoleWithPermissions(this DiscordGuild guild, Permissions permissions = Permissions.None)
+        {
+            guild.IsNotNull();
+
+            return guild.GetOrganizedRoles().FirstOrDefault(r => r.Permissions.HasPermission(permissions));
+        }
+
+        /// <summary>
+        /// Get the lowest role of the Discord server following the Discord hierarchy and according to the permissions passed.
+        /// </summary>
+        /// <param name="guild"></param>
+        /// <param name="permissions"></param>
+        public static DiscordRole GetLowestRoleWithPermissions(this DiscordGuild guild, Permissions permissions = Permissions.None)
+        {
+            guild.IsNotNull();
+
+            return guild.GetOrganizedRoles().LastOrDefault(r => r.Permissions.HasPermission(permissions));
         }
     }
 }

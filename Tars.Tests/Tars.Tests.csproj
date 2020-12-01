@@ -5,6 +5,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyVersion>1.0.29.0</AssemblyVersion>
     <FileVersion>1.0.29.0</FileVersion>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

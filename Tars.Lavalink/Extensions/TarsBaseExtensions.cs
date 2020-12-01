@@ -26,7 +26,7 @@ namespace Tars.Lavalink.Extensions
         private static LavalinkConfiguration _lavalinkConfiguration;
         private static LavalinkNodeConnection _lavalinkNodeConnection;
 
-        private static bool _wasConnectedToLavalink;
+        private static bool _wasConnectedToLavalink, _socketAutoReconnect;
 
         internal static HttpClient _httpClient;
 
@@ -42,12 +42,11 @@ namespace Tars.Lavalink.Extensions
         /// <param name="resumeTimeout">Sets the time in seconds when all voice sessions are closed after the client disconnects. Defaults to 1 minute.</param>
         /// <param name="webSocketCloseTimeout">Sets the time in miliseconds to wait for Lavalink's voice WebSocket to close after leaving a voice channel. This will be the delay before the guild connection is removed. Defaults to 3 minutes.</param>
         public static void LavalinkSetup(this TarsBase botBase, bool secured = false, DiscordVoiceRegion region = null, string resumeKey = null, TimeSpan? resumeTimeout = null,
-                                         TimeSpan? webSocketCloseTimeout = null)
+                                         TimeSpan? webSocketCloseTimeout = null, bool socketAutoReconnect = true)
         {
             _botBase = botBase;
 
             var connectionEndpoint = new ConnectionEndpoint("127.0.0.1", 2333, secured);
-
             _lavalinkConfiguration = new LavalinkConfiguration
             {
                 SocketEndpoint = connectionEndpoint,
@@ -56,7 +55,8 @@ namespace Tars.Lavalink.Extensions
                 Region = region,
                 ResumeKey = resumeKey,
                 ResumeTimeout = (int)(resumeTimeout?.TotalSeconds ?? TimeSpan.FromMinutes(1).TotalSeconds),
-                WebSocketCloseTimeout = (int)(webSocketCloseTimeout?.TotalMilliseconds ?? TimeSpan.FromSeconds(3).TotalMilliseconds)
+                WebSocketCloseTimeout = (int)(webSocketCloseTimeout?.TotalMilliseconds ?? TimeSpan.FromSeconds(3).TotalMilliseconds),
+                SocketAutoReconnect = _socketAutoReconnect = socketAutoReconnect
             };
             _lavalink = botBase.Discord.UseLavalink();
 
@@ -80,12 +80,11 @@ namespace Tars.Lavalink.Extensions
         /// <param name="resumeTimeout">Sets the time in seconds when all voice sessions are closed after the client disconnects. Defaults to 1 minute.</param>
         /// <param name="webSocketCloseTimeout">Sets the time in miliseconds to wait for Lavalink's voice WebSocket to close after leaving a voice channel. This will be the delay before the guild connection is removed. Defaults to 3 minutes.</param>
         public static void LavalinkSetup(this TarsBase botBase, string hostname, int port, string password, bool secured = false, DiscordVoiceRegion region = null,
-                                         string resumeKey = null, TimeSpan? resumeTimeout = null, TimeSpan? webSocketCloseTimeout = null)
+                                         string resumeKey = null, TimeSpan? resumeTimeout = null, TimeSpan? webSocketCloseTimeout = null, bool socketAutoReconnect = true)
         {
             _botBase = botBase;
 
             var connectionEndpoint = new ConnectionEndpoint(hostname, port, secured);
-
             _lavalinkConfiguration = new LavalinkConfiguration
             {
                 SocketEndpoint = connectionEndpoint,
@@ -94,7 +93,8 @@ namespace Tars.Lavalink.Extensions
                 Region = region,
                 ResumeKey = resumeKey,
                 ResumeTimeout = (int)(resumeTimeout?.TotalSeconds ?? TimeSpan.FromMinutes(1).TotalSeconds),
-                WebSocketCloseTimeout = (int)(webSocketCloseTimeout?.TotalMilliseconds ?? TimeSpan.FromSeconds(3).TotalMilliseconds)
+                WebSocketCloseTimeout = (int)(webSocketCloseTimeout?.TotalMilliseconds ?? TimeSpan.FromSeconds(3).TotalMilliseconds),
+                SocketAutoReconnect = _socketAutoReconnect = socketAutoReconnect
             };
             _lavalink = botBase.Discord.UseLavalink();
 
@@ -116,25 +116,21 @@ namespace Tars.Lavalink.Extensions
         #region Private methods
         private static async Task DiscordHeartbeated(DiscordClient client, HeartbeatEventArgs _)
         {
-            if (_lavalinkNodeConnection?.IsConnected != true)
-            {
-                try
-                {
-                    _lavalinkNodeConnection = await _lavalink.ConnectAsync(_lavalinkConfiguration);
+            if (_lavalinkNodeConnection?.IsConnected == true)
+                return;
 
-                    if (!_wasConnectedToLavalink)
-                        client.LogMessage("Successfully connected to Lavalink.");
-                    else
-                        client.LogMessage("The connection to Lavalink has been re-established.");
+            if (_socketAutoReconnect && _wasConnectedToLavalink)
+                return;
 
-                    if (!_wasConnectedToLavalink)
-                        _wasConnectedToLavalink = true;
-                }
-                catch (Exception exception)
-                {
-                    client.LogMessage("An error occurred while trying to connect to lavalink.", exception, LogLevel.Error);
-                }
-            }
+            _lavalinkNodeConnection = await _lavalink.ConnectAsync(_lavalinkConfiguration);
+
+            if (!_wasConnectedToLavalink)
+                client.LogMessage("Successfully connected to Lavalink.");
+            else
+                client.LogMessage("The connection to Lavalink has been re-established.");
+
+            if (!_wasConnectedToLavalink)
+                _wasConnectedToLavalink = true;
         }
 
         private static void RegisterLavalinkAsService(TarsBase botBase)
@@ -150,12 +146,12 @@ namespace Tars.Lavalink.Extensions
 
             foreach (LavalinkGuildConnection guild in _lavalinkNodeConnection?.ConnectedGuilds?.Values)
             {
-                tasks.Add(guild.StopAsync());
-                tasks.Add(guild.DisconnectAsync());
+                tasks.Add(guild?.StopAsync());
+                tasks.Add(guild?.DisconnectAsync());
             }
 
             foreach (LavalinkNodeConnection nodes in _lavalink?.ConnectedNodes?.Values)
-                tasks.Add(nodes.StopAsync());
+                tasks.Add(nodes?.StopAsync());
 
             Task.WhenAll(tasks).GetAwaiter().GetResult();
         }
