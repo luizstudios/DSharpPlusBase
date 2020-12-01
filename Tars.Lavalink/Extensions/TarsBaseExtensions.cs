@@ -41,6 +41,7 @@ namespace Tars.Lavalink.Extensions
         /// <param name="resumeKey">Sets the resume key for the Lavalink connection. This will allow existing voice sessions to continue for a certain time after the client is disconnected.</param>
         /// <param name="resumeTimeout">Sets the time in seconds when all voice sessions are closed after the client disconnects. Defaults to 1 minute.</param>
         /// <param name="webSocketCloseTimeout">Sets the time in miliseconds to wait for Lavalink's voice WebSocket to close after leaving a voice channel. This will be the delay before the guild connection is removed. Defaults to 3 minutes.</param>
+        /// <param name="socketAutoReconnect">Sets whether the connection wrapper should attempt automatic reconnects should the connection drop.</param>
         public static void LavalinkSetup(this TarsBase botBase, bool secured = false, DiscordVoiceRegion region = null, string resumeKey = null, TimeSpan? resumeTimeout = null,
                                          TimeSpan? webSocketCloseTimeout = null, bool socketAutoReconnect = true)
         {
@@ -79,6 +80,7 @@ namespace Tars.Lavalink.Extensions
         /// <param name="resumeKey">Sets the resume key for the Lavalink connection. This will allow existing voice sessions to continue for a certain time after the client is disconnected.</param>
         /// <param name="resumeTimeout">Sets the time in seconds when all voice sessions are closed after the client disconnects. Defaults to 1 minute.</param>
         /// <param name="webSocketCloseTimeout">Sets the time in miliseconds to wait for Lavalink's voice WebSocket to close after leaving a voice channel. This will be the delay before the guild connection is removed. Defaults to 3 minutes.</param>
+        /// <param name="socketAutoReconnect">Sets whether the connection wrapper should attempt automatic reconnects should the connection drop.</param>
         public static void LavalinkSetup(this TarsBase botBase, string hostname, int port, string password, bool secured = false, DiscordVoiceRegion region = null,
                                          string resumeKey = null, TimeSpan? resumeTimeout = null, TimeSpan? webSocketCloseTimeout = null, bool socketAutoReconnect = true)
         {
