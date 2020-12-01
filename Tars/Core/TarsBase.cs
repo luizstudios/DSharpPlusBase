@@ -116,7 +116,7 @@ namespace Tars.Core
                                  bool useRelativeRateLimit = true, string logTimestampFormat = null, int largeThreshold = 1000, bool autoReconnect = false,
                                  int shardId = 0, int shardCount = 1, GatewayCompressionLevel gatewayCompressionLevel = GatewayCompressionLevel.Stream,
                                  int messageCacheSize = 1024, IWebProxy webProxy = null, TimeSpan? httpTimeout = null, bool reconnectIndefinitely = false,
-                                 DiscordIntents? discordIntents = null, WebSocketClientFactoryDelegate webSocketClientFactory = null,
+                                 DiscordIntents discordIntents = DiscordIntents.All, WebSocketClientFactoryDelegate webSocketClientFactory = null,
                                  UdpClientFactoryDelegate udpClientFactory = null, ILoggerFactory loggerFactory = null)
 
         {
