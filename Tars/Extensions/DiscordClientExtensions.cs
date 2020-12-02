@@ -160,17 +160,30 @@ namespace Tars.Extensions
         }
 
         /// <summary>
-        /// 
+        /// Grants a role to the member.
         /// </summary>
         /// <param name="_"></param>
-        /// <param name="member"></param>
-        /// <param name="role"></param>
-        /// <param name="reason"></param>
-        /// <returns></returns>
+        /// <param name="member">Member to give the role.</param>
+        /// <param name="role">Role to be given to the member.</param>
+        /// <param name="reason">Reason for audit logs.</param>
         public static async Task GrantRoleAsync(this DiscordClient _, DiscordMember member, DiscordRole role, string reason = null) => await member.GrantRoleAsync(role, reason);
 
+        /// <summary>
+        /// Revoke a role to the member.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="member">Member to withdraw the role.</param>
+        /// <param name="role">Role to be removed from the member.</param>
+        /// <param name="reason">Reason for audit logs.</param>
         public static async Task RevokeRoleAsync(this DiscordClient _, DiscordMember member, DiscordRole role, string reason = null) => await member.RevokeRoleAsync(role, reason);
 
+        /// <summary>
+        /// Sets the member's roles to ones specified.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="member">Member to set the roles.</param>
+        /// <param name="roles">Roles to set.</param>
+        /// <param name="reason">Reason or audit logs.</param>
         public static async Task ReplaceRolesAsync(this DiscordClient _, DiscordMember member, IEnumerable<DiscordRole> roles, string reason = null) => await member.ReplaceRolesAsync(roles, reason);
     }
 }
