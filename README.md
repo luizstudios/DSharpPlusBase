@@ -3,7 +3,7 @@
 	<img src="https://cdn.discordapp.com/attachments/478612177511645212/752351287743610930/TarsLogoGitHub.png"/>
 </a>
 
-<a href="https://ci.appveyor.com/project/luizferbr17/tars">
+<a href="https://ci.appveyor.com/project/luizfernandonb/tars">
 	<img src="https://ci.appveyor.com/api/projects/status/3683mub26sthphjd?svg=true" />	
 </a>
 <a href="https://www.codacy.com/gh/luizstudios/Tars?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=luizstudios/Tars&amp;utm_campaign=Badge_Grade">
