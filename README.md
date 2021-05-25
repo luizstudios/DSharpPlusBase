@@ -1,6 +1,6 @@
 <p align="center">
 <a href="https://discord.gg/Z9BcKua">
-	<img src="https://cdn.discordapp.com/attachments/478612177511645212/752351287743610930/TarsLogoGitHub.png"/>
+	<img src="https://cdn.discordapp.com/attachments/478612177511645212/846806601272786954/TarsLogoGitHubWithoutBlank.png"/>
 </a>
 
 <a href="https://ci.appveyor.com/project/luizfernandonb/tars">
@@ -17,7 +17,7 @@
 </a>
 </p>
 
-A simple framework to facilitate the construction of bots for Discord using the [C#](https://github.com/dotnet/csharplang) language, [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus) library and [.NET Standard 2.0](https://github.com/dotnet/standard).
+A simple library to facilitate the construction of bots for Discord using the [C#](https://github.com/dotnet/csharplang) language, [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus) library and [.NET Standard 2.0](https://github.com/dotnet/standard).
 
 # Installing
 
